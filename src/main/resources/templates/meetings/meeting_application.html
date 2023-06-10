@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모임 신청</title>
+    <!-- Bootstrap (CSS, JQUERY, JAVASCRIPT, POPPER) 포함 -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <link rel="stylesheet" th:href="@{/css/meetings/meeting-application.css}">
+</head>
+<body>
+<!-- 헤더 대처, 추후 교체 필요 -->
+<div>
+    <section class="jumbotron text-center">
+        <br/>
+        <h5>여기는 헤더 영역</h5>
+    </section>
+</div>
+</body>
+<div class="container">
+    <div class="row">
+        <!-- 왼쪽 칼럼 -->
+        <div class="col-md-6">
+            <img src="/images/meetingDetail.png" width="500" height="250">
+        </div>
+        <!-- 오른쪽 칼럼 -->
+        <div class="col-md-6">
+            <h3>반려견 누구보다 잘 키우기 </h3>
+            <p>반려견을 처음 키우시는 분을 위한 기초 지식 반려견의 언어란?</p>
+            <br/>
+            <hr>
+            <div class="info">
+                <h5>일시</h5>
+                <label>05월 30일(화) 11:00 ~ 07월 30일(일) 15:00</label>
+            </div>
+            <div class="info">
+                <h5>신청</h5>
+                <label>05월 15일(화) 11:00 ~ 07월 30일(일) 15:00</label>
+            </div>
+            <div class="info">
+                <h5>비용</h5>
+                <label>유로</label>
+            </div>
+            <div class="info">
+                <h5>장소</h5>
+                <label>부산 사하구 낙동남로 11911층 현대미술관 내</label>
+            </div>
+            <div class="info">
+                <h5>인원 제한</h5>
+                <label>5명</label>
+            </div>
+            <div class="info">
+                <h5>참여 조건</h5>
+                <label>장기적인 모임 참여 가능자</label>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <hr>
+    <br/>
+    <div class="info">
+        <h5>최종 결제 금액</h5>
+        <input type="text" class="text-center" value="5000원" readonly>
+    </div>
+    <br/><br/>
+    <h4>신청자 정보</h4>
+    <hr>
+    <div class="container mt-5">
+        <form>
+            <div class="form-group">
+                <label for="inputName">이름</label>
+                <input type="text" class="form-control" id="inputName" placeholder="이름을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="inputGender">성별</label>
+                <input type="text" class="form-control" id="inputGender" placeholder="성별을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="inputProfilePicture">프로필 사진 URL</label>
+                <input type="text" class="form-control" id="inputProfilePicture" placeholder="프로필 사진 URL을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="inputPhoneNumber">전화번호</label>
+                <input type="text" class="form-control" id="inputPhoneNumber" placeholder="전화번호를 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="inputConditions">참여 조건</label>
+                <textarea class="form-control" id="inputConditions" rows="3" placeholder="참여 조건을 입력하세요"></textarea>
+            </div>
+        </form>
+    </div>
+    <br/>
+    <hr>
+    <br/>
+    <h4>결제 방법</h4>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="card" value="card">
+        <label class="form-check-label">신용 카드</label><br/>
+    </div>
+    <br/>
+    <div class="text-center">
+        <div class="container mt-5">
+            <button class="btn btn-success">결제하기</button>
+        </div>
+    </div>
+    <br/><br/><br/><br/>
+</div>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모임 목록</title>
+    <!-- Bootstrap (CSS, JQUERY, JAVASCRIPT, POPPER) 포함 -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <link rel="stylesheet" th:href="@{/css/meetings/meeting-list.css}">
+</head>
+<body>
+<!-- 헤더 대처, 추후 교체 필요 -->
+<div>
+    <section class="jumbotron text-center">
+        <br/>
+        <h5>여기는 헤더 영역</h5>
+    </section>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <aside class="col-md-3">
+            <nav class="nav flex-column text-center">
+                <h5>장소</h5>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="place" value="all">
+                    <label class="form-check-label">전체</label><br/>
+                    <input class="form-check-input" type="radio" name="place" value="online">
+                    <label class="form-check-label">온라인</label><br/>
+                    <input class="form-check-input" type="radio" name="place" value="offline">
+                    <label class="form-check-label">오프라인</label>
+                </div>
+                <h5>가격</h5>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="price" value="free">
+                    <label class="form-check-label">무료</label><br/>
+                    <input class="form-check-input" type="radio" name="price" value="paid">
+                    <label class="form-check-label">유료</label><br/>
+                </div>
+                <h5>반려견 동반</h5>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="companion" value="yes">
+                    <label class="form-check-label">반려견 동반</label><br/>
+                </div>
+                <h5>지역 축제</h5>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="festival" value="friendship">
+                    <label class="form-check-label">친목도모</label><br/>
+                    <input class="form-check-input" type="radio" name="festival" value="party">
+                    <label class="form-check-label">파티</label><br/>
+                    <input class="form-check-input" type="radio" name="festival" value="outdoor">
+                    <label class="form-check-label">야외활동</label>
+                </div>
+                <h5>기타</h5>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="etc" value="education">
+                    <label class="form-check-label">교육</label><br/>
+                    <input class="form-check-input" type="radio" name="etc" value="communication">
+                    <label class="form-check-label">소통</label><br/>
+                    <input class="form-check-input" type="radio" name="etc" value="hobby">
+                    <label class="form-check-label">취미</label><br/>
+                    <input class="form-check-input" type="radio" name="etc" value="self-improvement">
+                    <label class="form-check-label">자기계발</label><br/>
+                    <input class="form-check-input" type="radio" name="etc" value="other">
+                    <label class="form-check-label">기타</label><br/>
+                </div>
+            </nav>
+        </aside>
+        <section class="col-md-9">
+            <div class="text-right">
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-expanded="false">
+                        정렬 순
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item active" href="#">최신 순</a></li>
+                        <li><a class="dropdown-item" href="#">오래된 순</a></li>
+                    </ul>
+                </div>
+            </div>
+            <section class="jumbotron text-center">
+                <h5>여기 안에 모임 20개가 들어감, 현재는 서버 기능을 구현하지 않아서 모임이 없음</h5>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card-deck">
+                                <div class="row row-cols-1 row-cols-md-4"
+                                     th:if="${meetingDtoPage != null && !meetingDtoPage.empty}">
+                                    <div th:each="meeting, meetingStat : ${meetingDtoPage.content}"
+                                         th:classappend="${(meetingStat.index % 4 != 0) ? 'col-sm-3 mb-4' : 'col-sm-3'}">
+                                        <h4 class="card-title" th:text="${meeting.title}"></h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center mt-4">
+                    <li class="page-item"><a class="page-link" href="#"><<</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#">>></a></li>
+                </ul>
+            </nav>
+        </section>
+    </div>
+</div>
+</body>
+</html>
