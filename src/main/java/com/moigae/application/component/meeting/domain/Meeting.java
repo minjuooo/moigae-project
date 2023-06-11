@@ -4,6 +4,7 @@ import com.moigae.application.component.meeting.domain.enumeraion.MeetingCategor
 import com.moigae.application.component.meeting.domain.enumeraion.MeetingPrice;
 import com.moigae.application.component.meeting.domain.enumeraion.MeetingStatus;
 import com.moigae.application.component.meeting.domain.enumeraion.PetAllowedStatus;
+import com.moigae.application.core.common.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Table(name = "meeting")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Meeting {
+public class Meeting extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,14 +35,14 @@ public class Meeting {
     private String nickName;
 
     //호스트 소개글
-    @Column(name = "description")
+    @Column(name = "host_description")
     private String hostDescription;
 
     //대표 이미지 - 1장 추가허는 컬럼
     //................................................................
 
     //모임 소개글
-    @Column(name = "description")
+    @Column(name = "meeting_description")
     private String meetingDescription;
 
     //모집 기간 - 시작 날짜
