@@ -39,7 +39,7 @@ public class User {
     @Column(name = "birth")
     private LocalDate birth;
 
-    @Column
+    @Column(name = "address")
     @Embedded
     private Address address;
 
