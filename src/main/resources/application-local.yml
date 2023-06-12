@@ -17,3 +17,13 @@ spring:
     username: root
     password: hong
     url: jdbc:mysql://localhost:3306/day?serverTimezone=Asia/Seoul
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2 # AWS 리전 설정
+    credentials:
+      accessKey: AKIARM3PCPVY4MO62BEU # AWS access key, kosta 계정으로 수정 필요
+      secretKey: UT1m5sDL+ZNk7smmdOjtO5mvLRyP9eYpxy/u26C7 # AWS secret key, kosta 계정으로 수정 필요
+    s3:
+      bucket: s3-moment # AWS bucket 설정, 수정 필요

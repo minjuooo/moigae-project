@@ -10,7 +10,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
-    <link rel="stylesheet" th:href="@{/css/meetings/meeting-list.css}">
+    <link rel="stylesheet" th:href="@{/css/meeting-list.css}">
 </head>
 <body>
 <!-- 헤더 대처, 추후 교체 필요 -->
@@ -72,27 +72,38 @@
         <section class="col-md-9">
             <div class="text-right">
                 <div class="dropdown">
-                    <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown"
+                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown"
                             aria-expanded="false">
-                        정렬 순
+                        최신 순
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark">
                         <li><a class="dropdown-item active" href="#">최신 순</a></li>
                         <li><a class="dropdown-item" href="#">오래된 순</a></li>
+                        <li><a class="dropdown-item" href="#">인기 순</a></li>
                     </ul>
                 </div>
             </div>
             <section class="jumbotron text-center">
-                <h5>여기 안에 모임 20개가 들어감, 현재는 서버 기능을 구현하지 않아서 모임이 없음</h5>
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="card-deck">
-                                <div class="row row-cols-1 row-cols-md-4"
-                                     th:if="${meetingDtoPage != null && !meetingDtoPage.empty}">
-                                    <div th:each="meeting, meetingStat : ${meetingDtoPage.content}"
-                                         th:classappend="${(meetingStat.index % 4 != 0) ? 'col-sm-3 mb-4' : 'col-sm-3'}">
-                                        <h4 class="card-title" th:text="${meeting.title}"></h4>
+                            <div class="row row-cols-1 row-cols-md-4"
+                                 th:if="${meetingDtoPage != null && !meetingDtoPage.empty}">
+                                <div th:each="meeting, meetingStat : ${meetingDtoPage.content}"
+                                     class="col"
+                                     th:classappend="${(meetingStat.index % 4 != 0) ? 'col-sm-3 mb-4' : 'col-sm-3'}">
+                                    <h5 class="card-title" th:text="${meeting.meetingTitle}"></h5>
+                                    <div class="card">
+                                        <div class="card-body d-flex flex-column align-items-center">
+                                            <ul class="list-group list-group-flush">
+                                                <img class="list-group-item" th:src="${meeting.path}"/>
+                                                <li class="list-group-item">
+                                                    <a th:href="@{/meetings/{id}(id=${meeting.id})}"
+                                                       class="btn btn-primary">지금 바로 확인하기 🔍</a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -101,17 +112,34 @@
                 </div>
             </section>
             <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center mt-4">
-                    <li class="page-item"><a class="page-link" href="#"><<</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                    <li class="page-item"><a class="page-link" href="#">>></a></li>
+                <ul class="pagination">
+                    <li class="page-item" th:unless="${meetingDtoPage.first}">
+                        <a class="page-link" th:href="@{/meetings(page=${meetingDtoPage.number - 1})}"><<</a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, meetingDtoPage.totalPages - 1)}"
+                        th:class="${i == meetingDtoPage.number ? 'active' : ''}">
+                        <a class="page-link-list" th:href="@{/meetings(page=${i})}">[[${i + 1}]]</a>
+                    </li>
+                    <li class="page-item" th:unless="${meetingDtoPage.last}">
+                        <a class="page-link" th:href="@{/meetings(page=${meetingDtoPage.number + 1})}">>></a>
+                    </li>
                 </ul>
             </nav>
         </section>
     </div>
 </div>
+<script>
+    // dropdown item들을 선택
+    let dropdownItems = document.querySelectorAll(".dropdown-item");
+    // 각 item에 클릭 이벤트를 연결
+    dropdownItems.forEach((item) => {
+        item.addEventListener("click", function (event) {
+            // 클릭한 item의 text 매핑
+            let selectedText = event.target.textContent;
+            // 버튼의 text를 클릭한 item의 text로 변경
+            document.getElementById("dropdownMenuButton").textContent = selectedText;
+        });
+    });
+</script>
 </body>
 </html>

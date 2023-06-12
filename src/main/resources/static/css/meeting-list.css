@@ -1,0 +1,42 @@
+.col-md-3 {
+    margin-top: 120px;
+}
+
+nav .form-check-input {
+    width: 20px;
+}
+
+nav .form-check {
+    margin-bottom: 30px;
+}
+
+.dropdown {
+    margin-bottom: 15px;
+}
+
+.col-md-9 {
+    padding-right: 200px;
+}
+
+.jumbotron text-center {
+    padding-right: 200px;
+}
+
+.pagination {
+    margin-top: 100px;
+    justify-content: center;
+    font-size: calc(1rem + 4px); /* 기본 폰트 크기에 10px를 더합니다. */
+    margin-bottom: 100px;
+}
+
+.pagination .page-link-list {
+    margin: 5px;
+}
+
+body {
+    background-color: white;
+}
+
+.container-fluid, .row, .col-md-3, .col-md-9, .jumbotron, .card {
+    background-color: white;
+}

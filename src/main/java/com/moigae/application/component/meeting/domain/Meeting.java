@@ -4,8 +4,10 @@ import com.moigae.application.component.meeting.domain.enumeraion.MeetingCategor
 import com.moigae.application.component.meeting.domain.enumeraion.MeetingPrice;
 import com.moigae.application.component.meeting.domain.enumeraion.MeetingStatus;
 import com.moigae.application.component.meeting.domain.enumeraion.PetAllowedStatus;
+import com.moigae.application.component.meeting_image.domain.MeetingImage;
 import com.moigae.application.core.common.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,8 +40,10 @@ public class Meeting extends BaseEntity {
     @Column(name = "host_description")
     private String hostDescription;
 
-    //대표 이미지 - 1장 추가허는 컬럼
-    //................................................................
+    //대표 이미지 - 1장 추가
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JoinColumn(name = "meeting_image_id")
+    private MeetingImage meetingImage;
 
     //모임 소개글
     @Column(name = "meeting_description")
@@ -87,8 +91,7 @@ public class Meeting extends BaseEntity {
     private MeetingContact meetingContact;
 
     //모임 정보 자유 작성 - 사진 첨부 X
-    @Column(name = "meeting_free_form_details")
-    @Lob
+    @Column(name = "meeting_free_form_details", length = 5000)
     private String meetingFreeFormDetails;
 
     //모임 상태(참여 가능, 인원 마감, 미팅 종료)
@@ -96,5 +99,33 @@ public class Meeting extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MeetingStatus meetingStatus;
 
-    //@Builder 패턴
+    @Builder
+    public Meeting(String meetingTitle, MeetingCategory meetingCategory, String nickName, String hostDescription,
+                   MeetingImage meetingImage, String meetingDescription, LocalDateTime recruitmentStartDateTime,
+                   LocalDateTime recruitmentEndDateTime, ParticipantRange participantRange,
+                   LocalDateTime meetingStartDateTime, LocalDateTime meetingEndDateTime, MeetingAddress meetingAddress,
+                   MeetingPrice meetingPrice, PetAllowedStatus petAllowedStatus, MeetingContact meetingContact,
+                   String meetingFreeFormDetails, MeetingStatus meetingStatus) {
+        this.meetingTitle = meetingTitle;
+        this.meetingCategory = meetingCategory;
+        this.nickName = nickName;
+        this.hostDescription = hostDescription;
+        this.meetingImage = meetingImage;
+        this.meetingDescription = meetingDescription;
+        this.recruitmentStartDateTime = recruitmentStartDateTime;
+        this.recruitmentEndDateTime = recruitmentEndDateTime;
+        this.participantRange = participantRange;
+        this.meetingStartDateTime = meetingStartDateTime;
+        this.meetingEndDateTime = meetingEndDateTime;
+        this.meetingAddress = meetingAddress;
+        this.meetingPrice = meetingPrice;
+        this.petAllowedStatus = petAllowedStatus;
+        this.meetingContact = meetingContact;
+        this.meetingFreeFormDetails = meetingFreeFormDetails;
+        this.meetingStatus = meetingStatus;
+    }
+
+    public void addImage(MeetingImage meetingImage) {
+        this.meetingImage = meetingImage;
+    }
 }
