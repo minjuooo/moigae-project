@@ -2,10 +2,7 @@ package com.moigae.application.component.user.domain;
 
 import com.moigae.application.component.user.domain.enumeration.Gender;
 import com.moigae.application.component.user.domain.enumeration.UserRole;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,9 +10,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
+@ToString
 public class User {
     @Id
     @Column(length = 191)
@@ -26,7 +25,7 @@ public class User {
     @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "password")
+    @Column(name = "password", length = 191)
     private String password;
 
     @Column(name = "gender")
@@ -46,7 +45,7 @@ public class User {
     @Column(name = "account")
     private String account;
 
-    @Column(name = "self_introduction", length = 100)
+    @Column(name = "self_introduction", length = 5000)
     private String hostIntroduction;
 
     @Column(name = "email")
@@ -57,11 +56,11 @@ public class User {
     private UserRole userRole;
 
     //회원 탈퇴 시, false 값일 경우 batch 처리
-    @Column(name = "flag")
+    @Column(name = "flag", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean flag;
 
     //회원 탈퇴 시, 회원 탈퇴 시점이 3개월 이상 -> batch 처리
-    @Column(name = "deactivateAt")
+    @Column(name = "deactivateAt", columnDefinition = "DATETIME(3)")
     private LocalDateTime deactivateAt;
 
     @Builder
