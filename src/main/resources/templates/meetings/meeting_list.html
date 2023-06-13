@@ -6,10 +6,9 @@
     <title>모임 목록</title>
     <!-- Bootstrap (CSS, JQUERY, JAVASCRIPT, POPPER) 포함 -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-
     <link rel="stylesheet" th:href="@{/css/meeting-list.css}">
 </head>
 <body>
@@ -26,50 +25,65 @@
             <nav class="nav flex-column text-center">
                 <h5>장소</h5>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="place" value="all">
+                    <input class="form-check-input" type="radio" name="place" value="TOTAL"
+                           th:checked="${meetingCategoryDto.place eq 'total'}">
                     <label class="form-check-label">전체</label><br/>
-                    <input class="form-check-input" type="radio" name="place" value="online">
+                    <input class="form-check-input" type="radio" name="place" value="ONLINE"
+                           th:checked="${meetingCategoryDto.place eq 'online'}">
                     <label class="form-check-label">온라인</label><br/>
-                    <input class="form-check-input" type="radio" name="place" value="offline">
+                    <input class="form-check-input" type="radio" name="place" value="OFFLINE"
+                           th:checked="${meetingCategoryDto.place eq 'offline'}">
                     <label class="form-check-label">오프라인</label>
                 </div>
                 <h5>가격</h5>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="price" value="free">
+                    <input class="form-check-input" type="radio" name="price" value="FREE"
+                           th:checked="${meetingCategoryDto.price eq 'free'}">
                     <label class="form-check-label">무료</label><br/>
-                    <input class="form-check-input" type="radio" name="price" value="paid">
+                    <input class="form-check-input" type="radio" name="price" value="PAY"
+                           th:checked="${meetingCategoryDto.price eq 'pay'}">
                     <label class="form-check-label">유료</label><br/>
                 </div>
                 <h5>반려견 동반</h5>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="companion" value="yes">
+                    <input class="form-check-input" type="radio" name="companion" value="PET_FRIENDLY"
+                           th:checked="${meetingCategoryDto.companion eq 'petFriendly'}">
                     <label class="form-check-label">반려견 동반</label><br/>
                 </div>
                 <h5>지역 축제</h5>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="festival" value="friendship">
+                    <input class="form-check-input" type="radio" name="festival" value="FELLOWSHIP"
+                           th:checked="${meetingCategoryDto.festival eq 'fellowship'}">
                     <label class="form-check-label">친목도모</label><br/>
-                    <input class="form-check-input" type="radio" name="festival" value="party">
+                    <input class="form-check-input" type="radio" name="festival" value="PARTY"
+                           th:checked="${meetingCategoryDto.festival eq 'party'}">
                     <label class="form-check-label">파티</label><br/>
-                    <input class="form-check-input" type="radio" name="festival" value="outdoor">
+                    <input class="form-check-input" type="radio" name="festival" value="OUTDOOR_ACTIVITY"
+                           th:checked="${meetingCategoryDto.festival eq 'outDoorActivity'}">
                     <label class="form-check-label">야외활동</label>
                 </div>
                 <h5>기타</h5>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="etc" value="education">
+                    <input class="form-check-input" type="radio" name="etc" value="EDUCATION"
+                           th:checked="${meetingCategoryDto.etc eq 'education'}">
                     <label class="form-check-label">교육</label><br/>
-                    <input class="form-check-input" type="radio" name="etc" value="communication">
+                    <input class="form-check-input" type="radio" name="etc" value="COMMUNICATION"
+                           th:checked="${meetingCategoryDto.etc eq 'communication'}">
                     <label class="form-check-label">소통</label><br/>
-                    <input class="form-check-input" type="radio" name="etc" value="hobby">
+                    <input class="form-check-input" type="radio" name="etc" value="HOBBY"
+                           th:checked="${meetingCategoryDto.etc eq 'hobby'}">
                     <label class="form-check-label">취미</label><br/>
-                    <input class="form-check-input" type="radio" name="etc" value="self-improvement">
+                    <input class="form-check-input" type="radio" name="etc" value="SELF_DEVELOPMENT"
+                           th:checked="${meetingCategoryDto.etc eq 'selfDevelopment'}">
                     <label class="form-check-label">자기계발</label><br/>
-                    <input class="form-check-input" type="radio" name="etc" value="other">
+                    <input class="form-check-input" type="radio" name="etc" value="OTHERS"
+                           th:checked="${meetingCategoryDto.etc eq 'others'}">
                     <label class="form-check-label">기타</label><br/>
                 </div>
             </nav>
+            <button class="btn btn-secondary mt-3" onclick="resetFilters()">필터 초기화</button>
         </aside>
-        <section class="col-md-9">
+        <section class="col-md-9" id="meeting-list">
             <div class="text-right">
                 <div class="dropdown">
                     <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -78,9 +92,9 @@
                         최신 순
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item active" href="#">최신 순</a></li>
-                        <li><a class="dropdown-item" href="#">오래된 순</a></li>
-                        <li><a class="dropdown-item" href="#">인기 순</a></li>
+                        <li><a class="dropdown-item active" th:href="@{/meetings(sort='latest')}">최신 순</a></li>
+                        <li><a class="dropdown-item" th:href="@{/meetings(sort='ordest')}">오래된 순</a></li>
+                        <li><a class="dropdown-item" th:href="@{/meetings(sort='popular')}">인기 순</a></li>
                     </ul>
                 </div>
             </div>
@@ -129,17 +143,62 @@
     </div>
 </div>
 <script>
-    // dropdown item들을 선택
-    let dropdownItems = document.querySelectorAll(".dropdown-item");
-    // 각 item에 클릭 이벤트를 연결
-    dropdownItems.forEach((item) => {
-        item.addEventListener("click", function (event) {
-            // 클릭한 item의 text 매핑
-            let selectedText = event.target.textContent;
-            // 버튼의 text를 클릭한 item의 text로 변경
-            document.getElementById("dropdownMenuButton").textContent = selectedText;
+    function applyFilters() {
+        let queryString = '';
+
+        const placeRadios = document.querySelectorAll('input[name="place"]:checked');
+        const priceRadios = document.querySelectorAll('input[name="price"]:checked');
+        const companionRadio = document.querySelector('input[name="companion"]:checked');
+        const festivalRadios = document.querySelectorAll('input[name="festival"]:checked');
+        const etcRadios = document.querySelectorAll('input[name="etc"]:checked');
+        const dropdownButton = document.getElementById('dropdownMenuButton');
+
+        placeRadios.forEach(radio => {
+            queryString += `&place=${radio.value}`;
         });
-    });
+
+        priceRadios.forEach(radio => {
+            queryString += `&price=${radio.value}`;
+        });
+
+        if (companionRadio) {
+            queryString += `&companion=${companionRadio.value}`;
+        }
+
+        festivalRadios.forEach(radio => {
+            queryString += `&festival=${radio.value}`;
+        });
+
+        etcRadios.forEach(radio => {
+            queryString += `&etc=${radio.value}`;
+        });
+
+        const selectedSort = dropdownButton.textContent.trim();
+        let sortQuery = '';
+        if (selectedSort === '최신 순') {
+            sortQuery = 'latest';
+        } else if (selectedSort === '오래된 순') {
+            sortQuery = 'ordest';
+        } else if (selectedSort === '인기 순') {
+            sortQuery = 'popular';
+        }
+
+        if (sortQuery) {
+            queryString += `&sort=${sortQuery}`;
+        }
+
+        $.ajax({
+            url: `/meetings?${queryString.substr(1)}`,
+            type: 'GET',
+            success: function (response) {
+                $('#meeting-list').html(response); // 해당 id를 가진 요소에 결과를 넣어줍니다.
+            }
+        });
+    }
+
+    function resetFilters() {
+        window.location.href = '/meetings';
+    }
 </script>
 </body>
 </html>

@@ -38,5 +38,7 @@ out/
 .vscode/
 /data
 /data/**
+
+application-hong.yml
 **/application.yml
 application.yml

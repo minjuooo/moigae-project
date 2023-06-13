@@ -24,12 +24,7 @@ public enum MeetingCategory {
     COMMUNICATION("소통"),
     HOBBY("취미"),
     SELF_DEVELOPMENT("자기계발"),
-    OTHERS("기타"),
-
-    //정렬
-    LATEST("최신 순"),
-    OLDEST("오래된 순"),
-    POPULAR("인기 순");
+    OTHERS("기타");
 
     private final String value;
 }
