@@ -5,6 +5,7 @@ import java.util.Random;
 public class PrimaryGeneratorProtoType {
     /**
      * 의미가 불분명한 매직 넘버를 상수로 선언하면 어떨까요? (홍정완) -> 최욱재
+     * 일단 기능 다되고 해보겠습니다 (최욱재) -> 홍정완
      */
     private static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789";
     private static final Random RANDOM = new Random();

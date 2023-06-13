@@ -33,6 +33,10 @@ repositories {
 }
 
 dependencies {
+    //아파치 common io
+    implementation 'commons-io:commons-io:2.8.0'
+    //modelMapper
+    implementation 'org.modelmapper:modelmapper:2.4.4'
     //스프링 부트 설정
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -41,6 +45,7 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     //타임리프 설정
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
