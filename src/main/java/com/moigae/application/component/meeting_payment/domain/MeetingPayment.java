@@ -34,6 +34,10 @@ public class MeetingPayment extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Payment payment;
 
+    //결제된 금액
+    @Column(name = "paid_amount")
+    private Long paidAmount;
+
     //정산된 금액
     @Column(name = "amount")
     private Long amount;
@@ -44,10 +48,12 @@ public class MeetingPayment extends BaseEntity {
     private RefundStatus refundStatus;
 
     @Builder
-    public MeetingPayment(User user, Meeting meeting, Payment payment, Long amount, RefundStatus refundStatus) {
+    public MeetingPayment(User user, Meeting meeting, Payment payment, Long paidAmount, Long amount,
+                          RefundStatus refundStatus) {
         this.user = user;
         this.meeting = meeting;
         this.payment = payment;
+        this.paidAmount = paidAmount;
         this.amount = amount;
         this.refundStatus = refundStatus;
     }

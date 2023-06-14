@@ -1,8 +1,0 @@
-.info {
-    display: flex;
-    align-items: center;
-    gap: 20px; /* h5와 label 사이의 간격을 조절. */
-}
-.info h5 {
-    flex-shrink: 0; /* h5가 줄어들지 않도록 설정 */
-}
