@@ -13,19 +13,26 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class MeetingCategoryDto {
-    private String place;
-    private String price;
-    private String companion;
-    private String festival;
-    private String etc;
+    private String fellowship;
+    private String party;
+    private String outdoorActivity;
+    private String education;
+    private String communication;
+    private String hobby;
+    private String selfDevelopment;
+    private String others;
 
     @Builder
-    public MeetingCategoryDto(String place, String price, String companion, String festival, String etc) {
-        this.place = place;
-        this.price = price;
-        this.companion = companion;
-        this.festival = festival;
-        this.etc = etc;
+    public MeetingCategoryDto(String fellowship, String party, String outdoorActivity, String education,
+                              String communication, String hobby, String selfDevelopment, String others) {
+        this.fellowship = fellowship;
+        this.party = party;
+        this.outdoorActivity = outdoorActivity;
+        this.education = education;
+        this.communication = communication;
+        this.hobby = hobby;
+        this.selfDevelopment = selfDevelopment;
+        this.others = others;
     }
 
     //Reflection API 도입
@@ -37,14 +44,13 @@ public class MeetingCategoryDto {
             field.setAccessible(true);
             try {
                 String value = (String) field.get(this);
-                if (value != null) {
+                if (value != null && !value.isEmpty()) {
                     list.add(value);
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
-
         return list;
     }
 }
