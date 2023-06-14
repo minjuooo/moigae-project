@@ -21,6 +21,8 @@ import java.util.Optional;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -93,5 +95,17 @@ public class FileService {
         }
 
         return Optional.empty();
+    }
+
+    public String getUrl(String html){
+        String regex = "src=\"(.*?)\"";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(html);
+
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+
+        return null;
     }
 }

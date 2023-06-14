@@ -1,9 +1,12 @@
 package com.moigae.application.component.article.domain;
 
+import com.moigae.application.component.article.domain.enumeration.Category;
+import com.moigae.application.component.user.domain.enumeration.Gender;
 import com.moigae.application.core.common.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -11,6 +14,7 @@ import javax.persistence.*;
 @Table(name = "article")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 public class Article extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,15 +23,24 @@ public class Article extends BaseEntity {
     @Column(name = "article_title")
     private String articleTitle;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 20000)
     private String content;
 
-    private Article(String articleTitle, String content) {
+    @Column(name = "category")
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
+    @Column(name = "imgurl")
+    private String imgurl;
+
+    private Article(String articleTitle, String content, Category category, String imgurl) {
         this.articleTitle = articleTitle;
         this.content = content;
+        this.category = category;
+        this.imgurl = imgurl;
     }
 
-    public static Article of(String articleTitle, String content) {
-        return new Article(articleTitle, content);
+    public static Article of(String articleTitle, String content, Category category, String imgurl) {
+        return new Article(articleTitle, content, category, imgurl);
     }
 }

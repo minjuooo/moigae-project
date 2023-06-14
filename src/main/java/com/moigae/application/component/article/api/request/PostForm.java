@@ -6,7 +6,6 @@ public class PostForm {
     // 기본 생성자
     public PostForm() {
     }
-
     // 모든 필드를 초기화하는 생성자
     public PostForm(String content) {
         this.content = content;
