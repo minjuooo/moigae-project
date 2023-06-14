@@ -90,11 +90,11 @@
       <div class="col-md-11">
         <div class="row">
           <div class="col-md-3 mb-4" th:each="article : ${articles}">
-            <div class="card" onclick="">
+            <div class="card" th:onclick="'window.location.href=\'' + @{/articles/articleDetail/{articleId}(articleId = ${article.id})} + '\''">
               <img class="card-img-top" th:src="${article.imgurl}" alt="Article image" style="width: 100%; height: 200px; object-fit: cover;">
               <div class="card-body">
-                <h5 class="card-title" th:text="${article.articleTitle}"></h5>
-                <p class="card-text" th:text="${article.createTime}"></p>
+                <p class="card-text" th:text="${#temporals.format(article.createTime, 'yyyy-MM-dd')}" style="font-size: 11px;color: #969696;"></p>
+                <p class="card-title" th:text="${#strings.abbreviate(article.articleTitle, 30)}" style="font-size: 15px;font-weight: bold"></p>
               </div>
             </div>
           </div>
@@ -106,17 +106,26 @@
 <br>
 <div class="container">
 
-  <ul class="pagination" style="display: flex;justify-content: center;">
-    <li class="page-item" th:class="${articles.first ? 'disabled' : ''}">
-      <a class="page-link" th:href="${articles.first ? '#' : ('?page=' + (startPage - 1))}">&lt;</a>
-    </li>
-    <li class="page-item" th:each="pageNumber : ${#numbers.sequence(startPage, endPage - 1)}" th:class="${pageNumber == articles.number ? 'active' : ''}">
-      <a class="page-link" th:href="${'?page=' + pageNumber}"><span th:text="${pageNumber + 1}"></span></a>
-    </li>
-    <li class="page-item" th:class="${articles.last ? 'disabled' : ''}">
-      <a class="page-link" th:href="${articles.last ? '#' : ('?page=' + (endPage))}">&gt;</a>
-    </li>
-  </ul>
+
+  <nav aria-label="Page navigation" style="display: flex;justify-content: center;">
+    <ul class="pagination">
+      <li class="page-item">
+        <a class="page-link" href="?page=0">&lt;&lt;</a>
+      </li>
+      <li class="page-item" th:class="${articles.first ? 'disabled' : ''}">
+        <a class="page-link" th:href="${articles.first ? '#' : ('?page=' + (startPage - 1))}">&lt;</a>
+      </li>
+      <li class="page-item" th:each="pageNumber : ${#numbers.sequence(startPage, endPage - 1)}" th:class="${pageNumber == articles.number ? 'active' : ''}">
+        <a class="page-link" th:href="${'?page=' + pageNumber}"><span th:text="${pageNumber + 1}"></span></a>
+      </li>
+      <li class="page-item" th:class="${articles.last ? 'disabled' : ''}">
+        <a class="page-link" th:href="${articles.last ? '#' : ('?page=' + (endPage))}">&gt;</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" th:href="${'?page=' + (articles.totalPages - 1)}">&gt;&gt;</a>
+      </li>
+    </ul>
+  </nav>
 
 </div>
 

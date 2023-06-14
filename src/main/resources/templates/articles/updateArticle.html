@@ -102,8 +102,8 @@
               게시글 내용
             </label>
             <div class="input-group">
-              <textarea name="contents" class="form-control" id="contents" th:field="*{content}"></textarea>
-              <script>
+              <textarea name="contents" th:value="${article.content}" class="form-control" id="contents" th:field="*{content}"></textarea>
+              <script th:inline="javascript">
                 CKEDITOR.replace("contents", {
                   filebrowserImageUploadUrl: "/imageArticle/upload",
                   extraPlugins : 'autogrow'
