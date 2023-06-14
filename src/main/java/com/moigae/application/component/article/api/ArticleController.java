@@ -59,10 +59,16 @@ public class ArticleController {
                               @AuthenticationPrincipal CustomUser customUser,
                               @PageableDefault(size = 12) Pageable pageable
     ) {
-        //List<Article> articles = articleRepository.findAll();
         Page<Article> articles = articleRepository.findAll(pageable);
+
+        // Calculate the page group
+        int startPage = (pageable.getPageNumber() / 10) * 10;
+        int endPage = Math.min(startPage + 10, articles.getTotalPages());
+
         model.addAttribute("customUser", customUser);
         model.addAttribute("articles", articles);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         return "articles/articleList";
     }
 }
