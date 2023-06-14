@@ -1,6 +1,6 @@
 package com.moigae.application.component.meeting.api;
 
-import com.moigae.application.component.meeting.api.request.MeetingCategoryDto;
+import com.moigae.application.component.meeting.api.request.MeetingCategoryRequest;
 import com.moigae.application.component.meeting.application.MeetingService;
 import com.moigae.application.component.meeting.dto.MeetingDto;
 import com.moigae.application.component.user.dto.CustomUser;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -24,14 +25,36 @@ public class MeetingController {
     private final MeetingService meetingService;
 
     @GetMapping
-    public String onMeeting(Model model,
-                            @AuthenticationPrincipal CustomUser customUser,
-                            @ModelAttribute MeetingCategoryDto meetingCategoryDto,
-                            @PageableDefault(size = 4) Pageable pageable) {
-        Page<MeetingDto> meetingDtoPage = meetingService.Meetings(meetingCategoryDto, pageable);
+    public String meetings(Model model,
+                           @AuthenticationPrincipal CustomUser customUser,
+                           @ModelAttribute MeetingCategoryRequest meetingCategoryRequest,
+                           @PageableDefault(size = 20) Pageable pageable) {
+        Page<MeetingDto> meetingDtoPage = meetingService.Meetings(meetingCategoryRequest, pageable);
         model.addAttribute("meetingDtoPage", meetingDtoPage);
-        model.addAttribute("meetingCategoryDto", meetingCategoryDto);
+        model.addAttribute("meetingCategoryDto", meetingCategoryRequest);
         model.addAttribute("customUser", customUser);
         return "meetings/meeting_list";
     }
+
+    @GetMapping("/{meetingId}")
+    public String detailMeeting(Model model,
+                                @PathVariable Long meetingId) {
+        MeetingDto meetingDto = meetingService.meetingDto(meetingId);
+        model.addAttribute("meetingDto", meetingDto);
+        return "meetings/meeting_detail";
+    }
+
+    @GetMapping("/{meetingId}/applications")
+    public String applicationMeeting(Model model,
+                                     @PathVariable Long meetingId) {
+        MeetingDto meetingDto = meetingService.meetingDto(meetingId);
+        model.addAttribute("meetingDto", meetingDto);
+        return "meetings/meeting_application";
+    }
+
+//    @PostMapping("/{meetingId}/applications")
+//    public String applicationMeeting(Model model,
+//                                     @PathVariable Long meetingId) {
+//        return "redirect:/{meetingId}";
+//    }
 }

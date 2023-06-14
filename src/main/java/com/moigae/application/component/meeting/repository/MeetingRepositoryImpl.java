@@ -1,6 +1,6 @@
 package com.moigae.application.component.meeting.repository;
 
-import com.moigae.application.component.meeting.api.request.MeetingCategoryDto;
+import com.moigae.application.component.meeting.api.request.MeetingCategoryRequest;
 import com.moigae.application.component.meeting.domain.Meeting;
 import com.moigae.application.component.meeting.domain.QMeeting;
 import com.moigae.application.component.meeting.dto.MeetingDto;
@@ -21,8 +21,8 @@ public class MeetingRepositoryImpl implements MeetingRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<MeetingDto> findMeetingsByCondition(MeetingCategoryDto meetingCategoryDto, Pageable pageable) {
-        if (meetingCategoryDto.toMeetingCategoryDtoList().isEmpty()) {
+    public Page<MeetingDto> findMeetingsByCondition(MeetingCategoryRequest meetingCategoryRequest, Pageable pageable) {
+        if (meetingCategoryRequest.toMeetingCategoryDtoList().isEmpty()) {
             //쿼리
             QueryResults<Meeting> results = queryFactory
                     .selectFrom(QMeeting.meeting)
@@ -41,7 +41,7 @@ public class MeetingRepositoryImpl implements MeetingRepositoryCustom {
         //쿼리
         QueryResults<Meeting> results = queryFactory
                 .selectFrom(QMeeting.meeting)
-                .where(isCategories(meetingCategoryDto))
+                .where(isCategories(meetingCategoryRequest))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
@@ -55,9 +55,9 @@ public class MeetingRepositoryImpl implements MeetingRepositoryCustom {
         return new PageImpl<>(meetingDtoList, pageable, total);
     }
 
-    private BooleanExpression isCategories(MeetingCategoryDto meetingCategoryDto) {
+    private BooleanExpression isCategories(MeetingCategoryRequest meetingCategoryRequest) {
         BooleanExpression expression = null;
-        for (String category : meetingCategoryDto.toMeetingCategoryDtoList()) {
+        for (String category : meetingCategoryRequest.toMeetingCategoryDtoList()) {
             BooleanExpression categoryExpression = QMeeting.meeting.meetingCategory.stringValue().eq(category);
             expression = isExpressionConditions(expression, categoryExpression);
         }

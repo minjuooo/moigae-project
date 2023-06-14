@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MeetingCategoryDto {
+public class MeetingCategoryRequest {
     private String fellowship;
     private String party;
     private String outdoorActivity;
@@ -23,8 +23,8 @@ public class MeetingCategoryDto {
     private String others;
 
     @Builder
-    public MeetingCategoryDto(String fellowship, String party, String outdoorActivity, String education,
-                              String communication, String hobby, String selfDevelopment, String others) {
+    public MeetingCategoryRequest(String fellowship, String party, String outdoorActivity, String education,
+                                  String communication, String hobby, String selfDevelopment, String others) {
         this.fellowship = fellowship;
         this.party = party;
         this.outdoorActivity = outdoorActivity;
