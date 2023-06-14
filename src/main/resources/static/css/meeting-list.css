@@ -3,22 +3,35 @@
 }
 
 nav .form-check-input {
-    width: 20px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 nav .form-check {
-    margin-bottom: 30px;
+    text-align: left;
+}
+
+nav. form-header {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 8px;
+}
+
+nav .form-check-label {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px; /* 필요에 따라 조절 */
 }
 
 .dropdown {
     margin-bottom: 15px;
 }
 
-.col-md-9 {
-    padding-right: 200px;
+.col-md-3 {
+    padding-left: 250px;
 }
 
-.jumbotron text-center {
+.col-md-9 {
     padding-right: 200px;
 }
 

@@ -42,3 +42,4 @@ out/
 application-hong.yml
 **/application.yml
 application.yml
+application-local.yml

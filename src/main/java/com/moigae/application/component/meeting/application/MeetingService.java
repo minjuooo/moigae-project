@@ -15,10 +15,8 @@ public class MeetingService {
     private final MeetingRepositoryCustom meetingRepositoryCustom;
 
     @Transactional(readOnly = true)
-    public Page<MeetingDto> Meetings(String sort, MeetingCategoryDto meetingCategoryDto,
-                                     String searchTitle, Pageable pageable) {
-        Page<MeetingDto> meetingDtoPage = meetingRepositoryCustom.findMeetingsByCondition(sort, meetingCategoryDto,
-                searchTitle, pageable);
+    public Page<MeetingDto> Meetings(MeetingCategoryDto meetingCategoryDto, Pageable pageable) {
+        Page<MeetingDto> meetingDtoPage = meetingRepositoryCustom.findMeetingsByCondition(meetingCategoryDto, pageable);
         return meetingDtoPage;
     }
 }

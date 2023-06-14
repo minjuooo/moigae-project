@@ -1,103 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        .fix {
+            background-color: rgb(60, 60, 60) !important;
+            width: 100%;
+            position: fixed !important;
+            animation: down 0.5s ease !important;
+        }
+        @
+        keyframes down { 0%{
+            transform: translateY(-50px)
+        }
+        100
+        %
+        {
+            transform
+            :
+                    translateY(
+                            0px
+                    )
+        }
+        }
+        .font_pala{
+            font-family: "Palatino Linotype";
+            font-weight: bold;
+        }
+        #padding{
+            padding: 15px 0 15px 0;
+        }
+        @font-face {
+            font-family: 'NanumSquareNeo-Variable';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: 'NanumSquareNeo-Variable','Palatino Linotype' !important;
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>모임 목록</title>
-    <!-- Bootstrap (CSS, JQUERY, JAVASCRIPT, POPPER) 포함 -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <link rel="stylesheet" th:href="@{/css/meeting-list.css}">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+          integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<body>
-<!-- 헤더 대처, 추후 교체 필요 -->
-<div>
-    <section class="jumbotron text-center">
-        <br/>
-        <h5>여기는 헤더 영역</h5>
-    </section>
-</div>
+<body id="meeting-list">
+<div th:include="navbar"></div>
 <div class="container-fluid">
     <div class="row">
         <aside class="col-md-3">
             <nav class="nav flex-column text-center">
-                <h5>장소</h5>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="place" value="TOTAL"
-                           th:checked="${meetingCategoryDto.place eq 'total'}">
-                    <label class="form-check-label">전체</label><br/>
-                    <input class="form-check-input" type="radio" name="place" value="ONLINE"
-                           th:checked="${meetingCategoryDto.place eq 'online'}">
-                    <label class="form-check-label">온라인</label><br/>
-                    <input class="form-check-input" type="radio" name="place" value="OFFLINE"
-                           th:checked="${meetingCategoryDto.place eq 'offline'}">
-                    <label class="form-check-label">오프라인</label>
-                </div>
-                <h5>가격</h5>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="price" value="FREE"
-                           th:checked="${meetingCategoryDto.price eq 'free'}">
-                    <label class="form-check-label">무료</label><br/>
-                    <input class="form-check-input" type="radio" name="price" value="PAY"
-                           th:checked="${meetingCategoryDto.price eq 'pay'}">
-                    <label class="form-check-label">유료</label><br/>
-                </div>
-                <h5>반려견 동반</h5>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="companion" value="PET_FRIENDLY"
-                           th:checked="${meetingCategoryDto.companion eq 'petFriendly'}">
-                    <label class="form-check-label">반려견 동반</label><br/>
-                </div>
-                <h5>지역 축제</h5>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="festival" value="FELLOWSHIP"
-                           th:checked="${meetingCategoryDto.festival eq 'fellowship'}">
+                    <div class="form-check-input"><h5>카테고리</h5></div>
+                    <br/><br/>
+                    <input class="form-check-input" type="radio" name="FELLOWSHIP" value="FELLOWSHIP"
+                           th:checked="${meetingCategoryDto.fellowship eq 'FELLOWSHIP'}">
                     <label class="form-check-label">친목도모</label><br/>
-                    <input class="form-check-input" type="radio" name="festival" value="PARTY"
-                           th:checked="${meetingCategoryDto.festival eq 'party'}">
+                    <input class="form-check-input" type="radio" name="PARTY" value="PARTY"
+                           th:checked="${meetingCategoryDto.party eq 'PARTY'}">
                     <label class="form-check-label">파티</label><br/>
-                    <input class="form-check-input" type="radio" name="festival" value="OUTDOOR_ACTIVITY"
-                           th:checked="${meetingCategoryDto.festival eq 'outDoorActivity'}">
-                    <label class="form-check-label">야외활동</label>
-                </div>
-                <h5>기타</h5>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="etc" value="EDUCATION"
-                           th:checked="${meetingCategoryDto.etc eq 'education'}">
+                    <input class="form-check-input" type="radio" name="OUTDOOR_ACTIVITY" value="OUTDOOR_ACTIVITY"
+                           th:checked="${meetingCategoryDto.outdoorActivity eq 'OUTDOOR_ACTIVITY'}">
+                    <label class="form-check-label">야외활동</label><br/>
+                    <input class="form-check-input" type="radio" name="EDUCATION" value="EDUCATION"
+                           th:checked="${meetingCategoryDto.education eq 'EDUCATION'}">
                     <label class="form-check-label">교육</label><br/>
-                    <input class="form-check-input" type="radio" name="etc" value="COMMUNICATION"
-                           th:checked="${meetingCategoryDto.etc eq 'communication'}">
+                    <input class="form-check-input" type="radio" name="COMMUNICATION" value="COMMUNICATION"
+                           th:checked="${meetingCategoryDto.communication eq 'COMMUNICATION'}">
                     <label class="form-check-label">소통</label><br/>
-                    <input class="form-check-input" type="radio" name="etc" value="HOBBY"
-                           th:checked="${meetingCategoryDto.etc eq 'hobby'}">
+                    <input class="form-check-input" type="radio" name="HOBBY" value="HOBBY"
+                           th:checked="${meetingCategoryDto.hobby eq 'HOBBY'}">
                     <label class="form-check-label">취미</label><br/>
-                    <input class="form-check-input" type="radio" name="etc" value="SELF_DEVELOPMENT"
-                           th:checked="${meetingCategoryDto.etc eq 'selfDevelopment'}">
+                    <input class="form-check-input" type="radio" name="SELF_DEVELOPMENT" value="SELF_DEVELOPMENT"
+                           th:checked="${meetingCategoryDto.selfDevelopment eq 'SELF_DEVELOPMEN'}">
                     <label class="form-check-label">자기계발</label><br/>
-                    <input class="form-check-input" type="radio" name="etc" value="OTHERS"
-                           th:checked="${meetingCategoryDto.etc eq 'others'}">
+                    <input class="form-check-input" type="radio" name="OTHERS" value="OTHERS"
+                           th:checked="${meetingCategoryDto.others eq 'OTHERS'}">
                     <label class="form-check-label">기타</label><br/>
                 </div>
+                <br/><br/>
+                <button type="button" class="btn btn-primary" onclick="resetFilters()">전체 보기</button>
             </nav>
-            <button class="btn btn-secondary mt-3" onclick="resetFilters()">필터 초기화</button>
         </aside>
-        <section class="col-md-9" id="meeting-list">
-            <div class="text-right">
-                <div class="dropdown">
-                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
-                            data-toggle="dropdown"
-                            aria-expanded="false">
-                        최신 순
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item active" th:href="@{/meetings(sort='latest')}">최신 순</a></li>
-                        <li><a class="dropdown-item" th:href="@{/meetings(sort='ordest')}">오래된 순</a></li>
-                        <li><a class="dropdown-item" th:href="@{/meetings(sort='popular')}">인기 순</a></li>
-                    </ul>
-                </div>
-            </div>
+        <section class="col-md-9">
             <section class="jumbotron text-center">
                 <div class="container">
                     <div class="row">
@@ -125,66 +118,113 @@
                     </div>
                 </div>
             </section>
+            <!--여기 로직 추가, 현재는 etc에서 너무 많은 값을 다루어서 문제가 발생.-->
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li class="page-item" th:unless="${meetingDtoPage.first}">
-                        <a class="page-link" th:href="@{/meetings(page=${meetingDtoPage.number - 1})}"><<</a>
+                        <a class="page-link" th:href="@{/meetings(page=${meetingDtoPage.number - 1},
+                        fellowship=${#httpServletRequest.getParameter('fellowship')},
+                        party=${#httpServletRequest.getParameter('party')},
+                        outdoorActivity=${#httpServletRequest.getParameter('outdoorActivity')},
+                        education=${#httpServletRequest.getParameter('education')},
+                        communication=${#httpServletRequest.getParameter('communication')},
+                        hobby=${#httpServletRequest.getParameter('hobby')},
+                        selfDevelopment=${#httpServletRequest.getParameter('selfDevelopment')},
+                        others=${#httpServletRequest.getParameter('others')})}"><<</a>
                     </li>
                     <li class="page-item" th:each="i : ${#numbers.sequence(0, meetingDtoPage.totalPages - 1)}"
                         th:class="${i == meetingDtoPage.number ? 'active' : ''}">
-                        <a class="page-link-list" th:href="@{/meetings(page=${i})}">[[${i + 1}]]</a>
+                        <a class="page-link" th:href="@{/meetings(page=${i},
+                        fellowship=${#httpServletRequest.getParameter('fellowship')},
+                        party=${#httpServletRequest.getParameter('party')},
+                        outdoorActivity=${#httpServletRequest.getParameter('outdoorActivity')},
+                        education=${#httpServletRequest.getParameter('education')},
+                        communication=${#httpServletRequest.getParameter('communication')},
+                        hobby=${#httpServletRequest.getParameter('hobby')},
+                        selfDevelopment=${#httpServletRequest.getParameter('selfDevelopment')},
+                        others=${#httpServletRequest.getParameter('others')})}">[[${i + 1}]]</a>
                     </li>
                     <li class="page-item" th:unless="${meetingDtoPage.last}">
-                        <a class="page-link" th:href="@{/meetings(page=${meetingDtoPage.number + 1})}">>></a>
+                        <a class="page-link" th:href="@{/meetings(page=${meetingDtoPage.number + 1},
+                        fellowship=${#httpServletRequest.getParameter('fellowship')},
+                        party=${#httpServletRequest.getParameter('party')},
+                        outdoorActivity=${#httpServletRequest.getParameter('outdoorActivity')},
+                        education=${#httpServletRequest.getParameter('education')},
+                        communication=${#httpServletRequest.getParameter('communication')},
+                        hobby=${#httpServletRequest.getParameter('hobby')},
+                        selfDevelopment=${#httpServletRequest.getParameter('selfDevelopment')},
+                        others=${#httpServletRequest.getParameter('others')})}">>></a>
                     </li>
                 </ul>
             </nav>
         </section>
     </div>
 </div>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous">
+</script>
 <script>
+    // 필터가 변경되면 applyFilters 함수를 호출
+    document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+        // 페이지가 로드될 때 로컬 스토리지에서 상태를 검색
+        let storedValue = localStorage.getItem(radio.name);
+        if (storedValue) {
+            radio.checked = (radio.value === storedValue);
+        }
+
+        radio.addEventListener('change', applyFilters);
+        // 라디오 버튼의 상태가 변경되면 로컬 스토리지에 상태를 저장
+        radio.addEventListener('change', function() {
+            localStorage.setItem(radio.name, radio.value);
+        });
+    });
+
     function applyFilters() {
         let queryString = '';
+        const fellowshipRadio = document.querySelector('input[name="FELLOWSHIP"]:checked');
+        const partyRadio = document.querySelector('input[name="PARTY"]:checked');
+        const outdoorActivityRadio = document.querySelector('input[name="OUTDOOR_ACTIVITY"]:checked');
+        const educationRadio = document.querySelector('input[name="EDUCATION"]:checked');
+        const communicationRadio = document.querySelector('input[name="COMMUNICATION"]:checked');
+        const hobbyRadio = document.querySelector('input[name="HOBBY"]:checked');
+        const selfDevelopmentRadio = document.querySelector('input[name="SELF_DEVELOPMENT"]:checked');
+        const othersRadio = document.querySelector('input[name="OTHERS"]:checked');
 
-        const placeRadios = document.querySelectorAll('input[name="place"]:checked');
-        const priceRadios = document.querySelectorAll('input[name="price"]:checked');
-        const companionRadio = document.querySelector('input[name="companion"]:checked');
-        const festivalRadios = document.querySelectorAll('input[name="festival"]:checked');
-        const etcRadios = document.querySelectorAll('input[name="etc"]:checked');
-        const dropdownButton = document.getElementById('dropdownMenuButton');
-
-        placeRadios.forEach(radio => {
-            queryString += `&place=${radio.value}`;
-        });
-
-        priceRadios.forEach(radio => {
-            queryString += `&price=${radio.value}`;
-        });
-
-        if (companionRadio) {
-            queryString += `&companion=${companionRadio.value}`;
+        /**
+         * 여기 로직 추가
+         */
+        if (fellowshipRadio) {
+            queryString += `&fellowship=${fellowshipRadio.value}`;
         }
 
-        festivalRadios.forEach(radio => {
-            queryString += `&festival=${radio.value}`;
-        });
-
-        etcRadios.forEach(radio => {
-            queryString += `&etc=${radio.value}`;
-        });
-
-        const selectedSort = dropdownButton.textContent.trim();
-        let sortQuery = '';
-        if (selectedSort === '최신 순') {
-            sortQuery = 'latest';
-        } else if (selectedSort === '오래된 순') {
-            sortQuery = 'ordest';
-        } else if (selectedSort === '인기 순') {
-            sortQuery = 'popular';
+        if (partyRadio) {
+            queryString += `&party=${partyRadio.value}`;
         }
 
-        if (sortQuery) {
-            queryString += `&sort=${sortQuery}`;
+        if (outdoorActivityRadio) {
+            queryString += `&outdoorActivity=${outdoorActivityRadio.value}`;
+        }
+
+        if (educationRadio) {
+            queryString += `&education=${educationRadio.value}`;
+        }
+
+        if (communicationRadio) {
+            queryString += `&communication=${communicationRadio.value}`;
+        }
+
+        if (hobbyRadio) {
+            queryString += `&hobby=${hobbyRadio.value}`;
+        }
+
+        if (selfDevelopmentRadio) {
+            queryString += `&selfDevelopment=${selfDevelopmentRadio.value}`;
+        }
+
+        if (othersRadio) {
+            queryString += `&others=${othersRadio.value}`;
         }
 
         $.ajax({
@@ -197,6 +237,16 @@
     }
 
     function resetFilters() {
+        // 필터를 초기화할 때 로컬 스토리지에서 상태를 제거
+        localStorage.removeItem('FELLOWSHIP');
+        localStorage.removeItem('PARTY');
+        localStorage.removeItem('OUTDOOR_ACTIVITY');
+        localStorage.removeItem('EDUCATION');
+        localStorage.removeItem('COMMUNICATION');
+        localStorage.removeItem('HOBBY');
+        localStorage.removeItem('SELF_DEVELOPMENT');
+        localStorage.removeItem('OTHERS');
+
         window.location.href = '/meetings';
     }
 </script>

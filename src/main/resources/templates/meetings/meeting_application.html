@@ -1,6 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        .fix {
+            background-color: rgb(60, 60, 60) !important;
+            width: 100%;
+            position: fixed !important;
+            animation: down 0.5s ease !important;
+        }
+        @
+        keyframes down { 0%{
+            transform: translateY(-50px)
+        }
+        100
+        %
+        {
+            transform
+            :
+                    translateY(
+                            0px
+                    )
+        }
+        }
+        .font_pala{
+            font-family: "Palatino Linotype";
+            font-weight: bold;
+        }
+        #padding{
+            padding: 15px 0 15px 0;
+        }
+        @font-face {
+            font-family: 'NanumSquareNeo-Variable';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: 'NanumSquareNeo-Variable','Palatino Linotype' !important;
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>모임 신청</title>
@@ -13,13 +51,7 @@
     <link rel="stylesheet" th:href="@{/css/meeting-application.css}">
 </head>
 <body>
-<!-- 헤더 대처, 추후 교체 필요 -->
-<div>
-    <section class="jumbotron text-center">
-        <br/>
-        <h5>여기는 헤더 영역</h5>
-    </section>
-</div>
+<div th:include="navbar"></div>
 </body>
 <div class="container">
     <div class="row">
