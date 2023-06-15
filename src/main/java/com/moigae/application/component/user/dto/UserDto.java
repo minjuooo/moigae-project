@@ -5,7 +5,8 @@ import com.moigae.application.component.user.domain.User;
 import com.moigae.application.component.user.domain.enumeration.Gender;
 import com.moigae.application.component.user.domain.enumeration.UserRole;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +16,8 @@ import java.util.Collection;
 import java.util.List;
 
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Setter
 public class UserDto implements UserDetails {
     private String id;
     private String userName;
@@ -29,7 +31,6 @@ public class UserDto implements UserDetails {
     private String email;
     private UserRole userRole;
 
-    public UserDto(){}
     public static UserDto of(User user) {
         return new UserDto(
                 user.getId(),
@@ -79,5 +80,45 @@ public class UserDto implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public LocalDate getBirth() {
+        return birth;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public String getHostIntroduction() {
+        return hostIntroduction;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public UserRole getUserRole() {
+        return userRole;
     }
 }

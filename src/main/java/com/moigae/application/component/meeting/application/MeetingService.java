@@ -1,7 +1,6 @@
 package com.moigae.application.component.meeting.application;
 
 import com.moigae.application.component.meeting.api.request.MeetingCategoryRequest;
-import com.moigae.application.component.meeting.domain.Meeting;
 import com.moigae.application.component.meeting.dto.MeetingDto;
 import com.moigae.application.component.meeting.repository.MeetingRepository;
 import com.moigae.application.component.meeting.repository.MeetingRepositoryCustom;
@@ -24,9 +23,7 @@ public class MeetingService {
     }
 
     @Transactional(readOnly = true)
-    public MeetingDto meetingDto(Long meetingId) {
-        Meeting meeting = meetingRepository.findById(meetingId)
-                .orElseThrow(() -> new IllegalArgumentException("미팅 아이디가 존재하지 않습니다."));
-        return MeetingDto.toMeetingDto(meeting);
+    public MeetingDto meetingFindByUUID(String meetingId) {
+        return meetingRepositoryCustom.findCustomMeetingById(meetingId);
     }
 }

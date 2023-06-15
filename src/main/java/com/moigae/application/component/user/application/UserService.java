@@ -40,4 +40,10 @@ public class UserService implements UserDetailsService {
         // customUser 객체 설정...
         return customUser;
     }
+
+    @Transactional(readOnly = true)
+    public UserDto customUserFindBy(CustomUser customUser) {
+        String userName = customUser.getName();
+        return UserDto.of(userRepository.findByUserName(userName));
+    }
 }
