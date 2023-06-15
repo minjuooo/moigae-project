@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/articles")
@@ -78,8 +79,8 @@ public class ArticleController {
     @GetMapping("/issueList")
     public String issueList(Model model,
                             @AuthenticationPrincipal CustomUser customUser,
-                            @PageableDefault(size = 10) Pageable pageable) {
-        return getArticleListByCategory(model, customUser, pageable, Category.ISSUE, "articles/articleList");
+                            @PageableDefault(size = 6) Pageable pageable) {
+        return getArticleListByCategory(model, customUser, pageable, Category.ISSUE, "articles/issueList");
     }
 
     @GetMapping("/articleDetail/{articleId}")
@@ -114,5 +115,62 @@ public class ArticleController {
         model.addAttribute("article", article);
 
         return "articles/updateArticle";
+    }
+
+    @PostMapping("/updateArticle/{articleId}")
+    public String updateArticle(
+            @PathVariable("articleId") Long articleId,
+            @ModelAttribute ArticleForm articleForm
+    ) {
+        Optional<Article> optionalArticle = articleRepository.findById(articleId);
+        if (optionalArticle.isPresent()) {
+            Article article = optionalArticle.get();
+            article.setArticleTitle(articleForm.getArticleTitle());
+            article.setContent(articleForm.getContent());
+            article.setImgurl(fileService.getUrl(articleForm.getContent()));
+            articleRepository.save(article);
+        }
+        return "redirect:/articles/articleList";
+    }
+
+    @GetMapping("/createIssue")
+    public String createIssue(Model model,
+                                @AuthenticationPrincipal CustomUser customUser) {
+        model.addAttribute("articleForm", new ArticleForm());
+        model.addAttribute("customUser", customUser);
+        return "articles/createIssue";
+    }
+    @PostMapping("/createIssue")
+    public String createIssue(
+            @ModelAttribute ArticleForm articleForm
+    ) {
+        articleForm.setCategory(Category.ISSUE);
+        articleForm.setImgurl(fileService.getUrl(articleForm.getContent()));
+        ModelMapper modelMapper = new ModelMapper();
+        Article article = modelMapper.map(articleForm, Article.class);
+        articleRepository.save(article);
+        return "redirect:/";
+    }
+
+    @GetMapping("/issueDetail/{articleId}")
+    public String getIssueDetail(
+            @AuthenticationPrincipal CustomUser customUser,
+            @PathVariable("articleId") Long articleId,
+            Model model) {
+
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Article not found with id " + articleId));
+
+        model.addAttribute("customUser", customUser);
+        model.addAttribute("article", article);
+
+        return "articles/issueDetail"; // view의 이름
+    }
+
+    @GetMapping("/aboutUs")
+    public String aboutUs(Model model,
+                              @AuthenticationPrincipal CustomUser customUser) {
+        model.addAttribute("customUser", customUser);
+        return "articles/aboutUs";
     }
 }

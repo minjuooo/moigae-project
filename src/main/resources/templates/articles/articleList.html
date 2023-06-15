@@ -75,11 +75,27 @@
       <nav class="nav flex-column text-center">
         <div><h5 class="bold">멍멍이야기</h5></div>
         <br>
-        <div><h6 class="bold">STORY</h6></div>
+        <div>
+          <h6 class="bold" onclick="window.location.href='/articles/articleList';" style="cursor: pointer;">STORY</h6>
+        </div>
         <br>
-        <div><h6 class="bold">공지사항</h6></div>
+        <div>
+          <h6 class="bold" onclick="window.location.href='/articles/issueList';" style="cursor: pointer;">공지사항</h6>
+        </div>
         <br>
-        <div><h6 class="bold">ABOUT US</h6></div>
+        <div>
+          <h6 class="bold" onclick="window.location.href='/articles/aboutUs';" style="cursor: pointer;">ABOUT US</h6>
+        </div>
+        <div>
+          <br>
+          <div>
+            <h6 class="bold" onclick="window.location.href='/articles/createArticle';" style="cursor: pointer;">게시글 작성</h6>
+          </div>
+          <br>
+          <div>
+            <h6 class="bold" onclick="window.location.href='/articles/createIssue';" style="cursor: pointer;">공지사항 작성</h6>
+          </div>
+        </div>
       </nav>
     </aside>
 
@@ -94,7 +110,7 @@
               <img class="card-img-top" th:src="${article.imgurl}" alt="Article image" style="width: 100%; height: 200px; object-fit: cover;">
               <div class="card-body">
                 <p class="card-text" th:text="${#temporals.format(article.createTime, 'yyyy-MM-dd')}" style="font-size: 11px;color: #969696;"></p>
-                <p class="card-title" th:text="${#strings.abbreviate(article.articleTitle, 30)}" style="font-size: 15px;font-weight: bold"></p>
+                <p class="card-title" th:text="${#strings.abbreviate(article.articleTitle, 15)}" style="font-size: 15px;font-weight: bold"></p>
               </div>
             </div>
           </div>
