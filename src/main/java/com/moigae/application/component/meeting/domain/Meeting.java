@@ -1,13 +1,9 @@
 package com.moigae.application.component.meeting.domain;
 
-import com.moigae.application.component.meeting.domain.enumeraion.MeetingCategory;
-import com.moigae.application.component.meeting.domain.enumeraion.MeetingPrice;
-import com.moigae.application.component.meeting.domain.enumeraion.MeetingStatus;
-import com.moigae.application.component.meeting.domain.enumeraion.PetAllowedStatus;
+import com.moigae.application.component.meeting.domain.enumeraion.*;
 import com.moigae.application.component.meeting_image.domain.MeetingImage;
 import com.moigae.application.core.common.BaseEntity;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -29,6 +25,10 @@ public class Meeting extends BaseEntity {
     //모임 이름
     @Column(name = "meeting_title")
     private String meetingTitle;
+
+    @Column(name = "meeting_type")
+    @Enumerated(EnumType.STRING)
+    private MeetingType meetingType;
 
     //카테고리
     @Column(name = "meeting_category")
@@ -65,11 +65,11 @@ public class Meeting extends BaseEntity {
     @Embedded
     private ParticipantRange participantRange;
 
-    //모임 시작 시간
+    //모임 시작 날짜
     @Column(name = "meeting_start_date_time")
     private LocalDateTime meetingStartDateTime;
 
-    //모임 종료 시간
+    //모임 종료 날짜
     @Column(name = "meeting_end_date_time")
     private LocalDateTime meetingEndDateTime;
 
@@ -102,14 +102,15 @@ public class Meeting extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MeetingStatus meetingStatus;
 
-    @Builder
-    public Meeting(String meetingTitle, MeetingCategory meetingCategory, String nickName, String hostDescription,
-                   MeetingImage meetingImage, String meetingDescription, LocalDateTime recruitmentStartDateTime,
-                   LocalDateTime recruitmentEndDateTime, ParticipantRange participantRange,
-                   LocalDateTime meetingStartDateTime, LocalDateTime meetingEndDateTime, MeetingAddress meetingAddress,
-                   MeetingPrice meetingPrice, PetAllowedStatus petAllowedStatus, MeetingContact meetingContact,
-                   String meetingFreeFormDetails, MeetingStatus meetingStatus) {
+    public Meeting(String meetingTitle, MeetingType meetingType, MeetingCategory meetingCategory, String nickName,
+                   String hostDescription, MeetingImage meetingImage, String meetingDescription,
+                   LocalDateTime recruitmentStartDateTime, LocalDateTime recruitmentEndDateTime,
+                   ParticipantRange participantRange, LocalDateTime meetingStartDateTime,
+                   LocalDateTime meetingEndDateTime, MeetingAddress meetingAddress, MeetingPrice meetingPrice,
+                   PetAllowedStatus petAllowedStatus, MeetingContact meetingContact, String meetingFreeFormDetails,
+                   MeetingStatus meetingStatus) {
         this.meetingTitle = meetingTitle;
+        this.meetingType = meetingType;
         this.meetingCategory = meetingCategory;
         this.nickName = nickName;
         this.hostDescription = hostDescription;

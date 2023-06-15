@@ -1,9 +1,9 @@
 package com.moigae.application.component.meeting.api;
 
-import com.moigae.application.component.meeting.api.request.ApplicationMeetingRequest;
 import com.moigae.application.component.meeting.api.request.MeetingCategoryRequest;
 import com.moigae.application.component.meeting.application.MeetingService;
 import com.moigae.application.component.meeting.dto.MeetingDto;
+import com.moigae.application.component.meeting_payment.application.MeetingPaymentService;
 import com.moigae.application.component.user.application.UserService;
 import com.moigae.application.component.user.dto.CustomUser;
 import com.moigae.application.component.user.dto.UserDto;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class MeetingController {
     private final MeetingService meetingService;
     private final UserService userService;
+    private final MeetingPaymentService meetingPaymentService;
 
     @GetMapping
     public String meetings(Model model,
@@ -31,9 +32,7 @@ public class MeetingController {
                            @ModelAttribute MeetingCategoryRequest meetingCategoryRequest,
                            @PageableDefault(size = 20) Pageable pageable) {
         Page<MeetingDto> meetingDtoPage = meetingService.Meetings(meetingCategoryRequest, pageable);
-        model.addAttribute("meetingDtoPage", meetingDtoPage);
-        model.addAttribute("meetingCategoryDto", meetingCategoryRequest);
-        model.addAttribute("customUser", customUser);
+        meetingModel(model, customUser, meetingCategoryRequest, meetingDtoPage);
         return "meetings/meeting_list";
     }
 
@@ -42,35 +41,58 @@ public class MeetingController {
                                 @AuthenticationPrincipal CustomUser customUser,
                                 @PathVariable String meetingId) {
         MeetingDto meetingDto = meetingService.meetingFindByUUID(meetingId);
-        model.addAttribute("meetingDto", meetingDto);
-        model.addAttribute("customUser", customUser);
-        return "meetings/meeting_detail";
+        if (meetingDto.getMeetingPrice().getValue().equals("유료")) {
+            meetingDetailModel(model, customUser, meetingDto);
+            return "meetings/meeting_detail_pay";
+        }
+        meetingDetailModel(model, customUser, meetingDto);
+        return "meetings/meeting_detail_free";
     }
 
     @GetMapping("/{meetingId}/applications")
-    public String applicationMeeting(Model model,
-                                     @AuthenticationPrincipal CustomUser customUser,
-                                     @PathVariable String meetingId) {
+    public String applicationPayMeeting(Model model,
+                                        @AuthenticationPrincipal CustomUser customUser,
+                                        @PathVariable String meetingId) {
         if (customUser == null) {
             return "redirect:/users/login";
         }
         UserDto userDto = userService.customUserFindBy(customUser);
         MeetingDto meetingDto = meetingService.meetingFindByUUID(meetingId);
-        model.addAttribute("meetingDto", meetingDto);
-        model.addAttribute("userDto", userDto);
-        model.addAttribute("customUser", customUser);
-        return "meetings/meeting_application";
+        if (meetingDto.getMeetingPrice().getValue().equals("유료")) {
+            applicationModel(model, customUser, userDto, meetingDto);
+            return "meetings/meeting_application_pay";
+        }
+        applicationModel(model, customUser, userDto, meetingDto);
+        return "meetings/meeting_application_free";
     }
 
+    //무료 모임 신청
     @PostMapping("/{meetingId}/applications")
-    public String applicationMeeting(Model model,
-                                     @AuthenticationPrincipal CustomUser customUser,
-                                     @PathVariable String meetingId,
-                                     @ModelAttribute ApplicationMeetingRequest applicationMeetingRequest) {
+    public String applicationFreeMeeting(Model model,
+                                         @AuthenticationPrincipal CustomUser customUser,
+                                         @PathVariable String meetingId) {
         if (customUser == null) {
             return "redirect:/users/login";
         }
+        meetingPaymentService.meetingFreeCreate(meetingId, customUser, meetingId);
+        return "redirect:/meetings/{meetingId}";
+    }
+
+    private static void applicationModel(Model model, CustomUser customUser, UserDto userDto, MeetingDto meetingDto) {
+        model.addAttribute("meetingDto", meetingDto);
+        model.addAttribute("userDto", userDto);
         model.addAttribute("customUser", customUser);
-        return "redirect:/{meetingId}";
+    }
+
+    private static void meetingDetailModel(Model model, CustomUser customUser, MeetingDto meetingDto) {
+        model.addAttribute("meetingDto", meetingDto);
+        model.addAttribute("customUser", customUser);
+    }
+
+    private static void meetingModel(Model model, CustomUser customUser, MeetingCategoryRequest meetingCategoryRequest,
+                                     Page<MeetingDto> meetingDtoPage) {
+        model.addAttribute("meetingDtoPage", meetingDtoPage);
+        model.addAttribute("meetingCategoryDto", meetingCategoryRequest);
+        model.addAttribute("customUser", customUser);
     }
 }

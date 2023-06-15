@@ -2,12 +2,16 @@ package com.moigae.application.component.meeting_payment.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moigae.application.component.meeting_payment.application.MeetingPaymentService;
+import com.moigae.application.component.user.dto.CustomUser;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,8 +20,13 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Slf4j
+@Controller
+@RequestMapping("/meetings")
+@RequiredArgsConstructor
 public class PaymentController {
+    private final MeetingPaymentService meetingPaymentService;
+
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final String SECRET_KEY = "test_sk_BE92LAa5PVbkGazRNzZr7YmpXyJj";
@@ -36,13 +45,16 @@ public class PaymentController {
         });
     }
 
-    @RequestMapping("/meetings/{meetingId}/success")
-    public String confirmPayment(
-            @RequestParam String paymentKey, @RequestParam String orderId, @RequestParam Long amount,
-            Model model) throws Exception {
+    @GetMapping("{meetingId}/success")
+    @ResponseBody
+    public String confirmPayment(Model model,
+                                 @PathVariable String meetingId,
+                                 @AuthenticationPrincipal CustomUser customUser,
+                                 @RequestParam String paymentKey,
+                                 @RequestParam String orderId,
+                                 @RequestParam Long amount) throws Exception {
 
         HttpHeaders headers = new HttpHeaders();
-        // headers.setBasicAuth(SECRET_KEY, ""); // spring framework 5.2 이상 버전에서 지원
         headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((SECRET_KEY + ":").getBytes()));
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -51,7 +63,6 @@ public class PaymentController {
         payloadMap.put("amount", String.valueOf(amount));
 
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
-
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
                 "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
 
@@ -59,6 +70,10 @@ public class PaymentController {
             JsonNode successNode = responseEntity.getBody();
             model.addAttribute("orderId", successNode.get("orderId").asText());
             String secret = successNode.get("secret").asText(); // 가상계좌의 경우 입금 callback 검증을 위해서 secret을 저장하기를 권장
+            /**
+             * 성공 상태 코드를 전달 받은 경우에만 DB에 저장. 즉, 결제 후 저장 로직
+             */
+            meetingPaymentService.meetingPaymentCreate(orderId, amount, customUser, meetingId);
             return "meetings/success";
         } else {
             JsonNode failNode = responseEntity.getBody();
@@ -68,8 +83,11 @@ public class PaymentController {
         }
     }
 
-    @RequestMapping("/meetings/{meetingId}/fail")
-    public String failPayment(@RequestParam String message, @RequestParam String code, Model model) {
+    @GetMapping("/{meetingId}/fail")
+    @ResponseBody
+    public String failPayment(Model model,
+                              @RequestParam String message,
+                              @RequestParam String code) {
         model.addAttribute("message", message);
         model.addAttribute("code", code);
         return "meetings/fail";

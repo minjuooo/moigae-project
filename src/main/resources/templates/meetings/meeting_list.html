@@ -189,13 +189,6 @@
             queryString += `&others=${othersRadio.value}`;
         }
 
-        // $.ajax({
-        //     url: `/meetings?${queryString.substr(1)}`,
-        //     type: 'GET',
-        //     success: function (response) {
-        //         $('#meeting-list').html(response); // 해당 id를 가진 요소에 결과를 넣어줍니다.
-        //     }
-        // });
         $.ajax({
             url: `/meetings?${queryString.substr(1)}`,
             type: 'GET',
