@@ -34,10 +34,16 @@
             <div class="info">
                 <h5>신청 하기</h5>
                 <input type="text" class="text-center" th:value="${meetingDto.meetingPrice.getPrice()}" readonly>
-                <button class="btn btn-primary"
-                        th:onclick="'window.location.href=\'/meetings/' + ${meetingDto.id} + '/applications\''">
+                <button class="btn btn-primary" id="payment-button"
+                        th:data-url="@{'/meetings/' + ${meetingDto.getId()} + '/applications'}">
                     결제 하기
                 </button>
+                <script>
+                    document.getElementById('payment-button').addEventListener('click', function () {
+                        window.location.href = this.getAttribute('data-url');
+                    });
+                </script>
+
             </div>
         </div>
     </div>

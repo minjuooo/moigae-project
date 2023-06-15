@@ -8,17 +8,16 @@ import com.moigae.application.component.meeting.domain.enumeraion.MeetingCategor
 import com.moigae.application.component.meeting.domain.enumeraion.MeetingPrice;
 import com.moigae.application.component.meeting.domain.enumeraion.PetAllowedStatus;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter
 @Setter
 @NoArgsConstructor
 public class MeetingDto {
-    private Long id;
+    private static Long payId = 100000L;
+    private String id;
     private String meetingTitle;
     private MeetingCategory meetingCategory;
     private String nickName;
@@ -39,7 +38,7 @@ public class MeetingDto {
     private String meetingStatus;
 
     @Builder
-    public MeetingDto(Long id, String meetingTitle, MeetingCategory meetingCategory,
+    public MeetingDto(String id, String meetingTitle, MeetingCategory meetingCategory,
                       String nickName, String hostDescription, String path, String meetingDescription,
                       LocalDateTime recruitmentStartDateTime, LocalDateTime recruitmentEndDateTime,
                       ParticipantRange participantRange, LocalDateTime meetingStartDateTime,
@@ -87,5 +86,81 @@ public class MeetingDto {
                 .meetingFreeFormDetails(meeting.getMeetingFreeFormDetails())
                 .meetingStatus(meeting.getMeetingStatus().getValue())
                 .build();
+    }
+
+    public Long getPayId() {
+        return payId++;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getMeetingTitle() {
+        return meetingTitle;
+    }
+
+    public MeetingCategory getMeetingCategory() {
+        return meetingCategory;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public String getHostDescription() {
+        return hostDescription;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getMeetingDescription() {
+        return meetingDescription;
+    }
+
+    public LocalDateTime getRecruitmentStartDateTime() {
+        return recruitmentStartDateTime;
+    }
+
+    public LocalDateTime getRecruitmentEndDateTime() {
+        return recruitmentEndDateTime;
+    }
+
+    public ParticipantRange getParticipantRange() {
+        return participantRange;
+    }
+
+    public LocalDateTime getMeetingStartDateTime() {
+        return meetingStartDateTime;
+    }
+
+    public LocalDateTime getMeetingEndDateTime() {
+        return meetingEndDateTime;
+    }
+
+    public MeetingAddress getMeetingAddress() {
+        return meetingAddress;
+    }
+
+    public MeetingPrice getMeetingPrice() {
+        return meetingPrice;
+    }
+
+    public PetAllowedStatus getPetAllowedStatus() {
+        return petAllowedStatus;
+    }
+
+    public MeetingContact getMeetingContact() {
+        return meetingContact;
+    }
+
+    public String getMeetingFreeFormDetails() {
+        return meetingFreeFormDetails;
+    }
+
+    public String getMeetingStatus() {
+        return meetingStatus;
     }
 }

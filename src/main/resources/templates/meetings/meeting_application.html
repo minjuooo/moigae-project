@@ -92,16 +92,6 @@
     </div>
     <br/>
     <br/>
-    <hr>
-    <br/>
-    <br/>
-    <div class="info">
-        <h5>최종 결제 금액</h5>
-        <!--        아래 내용을 전부다 빨갠색으로 바꾸기-->
-        <label th:text="${meetingDto.meetingPrice.getPrice()} + '원'"> </label>
-    </div>
-    <br/>
-    <br/>
     <br/>
     <!--    모임 신청 시, (이름, 성별, 전화번호)가 호스트에게 제공됩니다. 동의하시겠습니까? [체크박스]-->
     <!--    모임 조건을 잘 확인하셨습니까? [체크박스]-->
@@ -111,40 +101,41 @@
     <!--    결제 후, 호스트한테 어떤 데이터 전달 (이름, 성별, 전화번호)-->
     <!--    호스트는 모임 신청 현황을 관리할 수 있는 도메인이 필요하다.-->
     <br/>
-    <div class="text-center">
-        <div class="container mt-5">
-            <button class="btn btn-success">결제하기</button>
-        </div>
-    </div>
-    <br/><br/><br/><br/>
-    <div class="row no-gutters" style="text-align: center; margin: 80px 0;">
-        <h1 class="page-header" style="font-weight: bold;">결제수단 확인</h1>
-        <div style="text-align: center;font-size: 20px;">
-            <input type="radio" name="cal_info" value="card" checked><label>&nbsp;카드 결제</label>
-        </div>
-        <hr>
-        <div class="row no-gutters" style="text-align: center; margin: 50px 0;">
-            <label id="total" style="font-size: 1.5em;">
-                <input type="hidden" id="amount" name="totalAmount">
-            </label>
-        </div>
-        <div>
-            <button style="width: 100px;height: 50px;font-size: 16px;" type="button" class="btn btn-primary" id="btn-kakaopay" onclick="requestPay()">결제하기</button>
-            <a href="${path}/payment/cart">
-                <button style="width: 100px;height: 50px;font-size: 16px;" type="button" class="btn btn-outline-primary">돌아가기</button></a>
-        </div>
+    <script src="https://js.tosspayments.com/v1"></script>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const meetingId = [[${meetingDto.getId()}]];
+        const orderId = [[${meetingDto.getPayId()}]];
+        const buyerName = [[${userDto.getUserName()}]];
+        const orderName = [[${meetingDto.getMeetingTitle()}]];
+        const orderPayPrice = [[${meetingDto.getMeetingPrice.getPrice()}]];
+        /*]]>*/
+    </script>
+
+    <script>
+        const tossPayments = TossPayments("test_ck_OAQ92ymxN34qXNezQp0VajRKXvdk");
+
+        function payment() {
+            const method = "카드"; // "카드" 혹은 "가상계좌"
+
+            const paymentData = {
+                amount: orderPayPrice,
+                orderId: orderId + "__" + (Math.random() + "").substring(2),
+                orderName: orderName,
+                customerName: buyerName,
+                successUrl: window.location.origin + "/meetings/" + meetingId + "/success",
+                failUrl: window.location.origin + "/meetings/" + meetingId + "/fail",
+            };
+
+            tossPayments.requestPayment(method, paymentData);
+        }
+    </script>
+    <div>
+        <button onclick="payment()" class="btn btn-sm btn-primary">결제</button>
     </div>
 </div>
-<script>
-    let sum = 0;
-    var amount = document.getElementsByName("amount");
-
-    for (var i = 0; i < amount.length; i++) {
-        let j = parseInt(amount[i].value);
-        sum += j;
-    }
-    document.querySelector("#total").innerText = "총 결제 금액 : "+sum+"원";
-</script>
+<br/><br/><br/><br/><br/><br/><br/><br/>
 </div>
 </body>
 </html>

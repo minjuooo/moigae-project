@@ -73,4 +73,17 @@ public class MeetingRepositoryImpl implements MeetingRepositoryCustom {
         }
         return expression;
     }
+
+    @Override
+    public MeetingDto findCustomMeetingById(String meetingId) {
+        //쿼리
+        Meeting result = queryFactory
+                .selectFrom(QMeeting.meeting)
+                .where(QMeeting.meeting.id.eq(meetingId))
+                .fetchFirst();
+
+        //Dto 변환
+        MeetingDto meetingDto = MeetingDto.toMeetingDto(result);
+        return meetingDto;
+    }
 }

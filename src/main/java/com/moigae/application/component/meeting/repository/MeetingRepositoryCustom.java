@@ -7,4 +7,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface MeetingRepositoryCustom {
     Page<MeetingDto> findMeetingsByCondition(MeetingCategoryRequest meetingCategoryRequest, Pageable pageable);
+
+    MeetingDto findCustomMeetingById(String meetingId);
 }
