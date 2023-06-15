@@ -34,10 +34,10 @@ public class MeetingRepositoryImpl implements MeetingRepositoryCustom {
             List<MeetingDto> meetingDtoList = results.getResults().stream()
                     .map(MeetingDto::toMeetingDto)
                     .collect(Collectors.toList());
-            long total = results.getTotal();
 
-            return new PageImpl<>(meetingDtoList, pageable, total);
+            return new PageImpl<>(meetingDtoList, pageable, results.getTotal());
         }
+
         //쿼리
         QueryResults<Meeting> results = queryFactory
                 .selectFrom(QMeeting.meeting)
@@ -50,9 +50,26 @@ public class MeetingRepositoryImpl implements MeetingRepositoryCustom {
         List<MeetingDto> meetingDtoList = results.getResults().stream()
                 .map(MeetingDto::toMeetingDto)
                 .collect(Collectors.toList());
-        long total = results.getTotal();
 
-        return new PageImpl<>(meetingDtoList, pageable, total);
+        return new PageImpl<>(meetingDtoList, pageable, results.getTotal());
+    }
+
+    @Override
+    public MeetingDto findCustomMeetingById(String meetingId) {
+        Meeting result = queryFactory
+                .selectFrom(QMeeting.meeting)
+                .where(QMeeting.meeting.id.eq(meetingId))
+                .fetchFirst();
+
+        return MeetingDto.toMeetingDto(result);
+    }
+
+    @Override
+    public Meeting findCustomMeetingByPayId(String meetingId) {
+        return queryFactory
+                .selectFrom(QMeeting.meeting)
+                .where(QMeeting.meeting.id.eq(meetingId))
+                .fetchFirst();
     }
 
     private BooleanExpression isCategories(MeetingCategoryRequest meetingCategoryRequest) {
@@ -72,29 +89,5 @@ public class MeetingRepositoryImpl implements MeetingRepositoryCustom {
             expression = expression.or(categoryExpression);
         }
         return expression;
-    }
-
-    @Override
-    public MeetingDto findCustomMeetingById(String meetingId) {
-        //쿼리
-        Meeting result = queryFactory
-                .selectFrom(QMeeting.meeting)
-                .where(QMeeting.meeting.id.eq(meetingId))
-                .fetchFirst();
-
-        //Dto 변환
-        MeetingDto meetingDto = MeetingDto.toMeetingDto(result);
-        return meetingDto;
-    }
-
-    @Override
-    public Meeting findCustomMeetingByPayId(String meetingId) {
-        //쿼리
-        Meeting meeting = queryFactory
-                .selectFrom(QMeeting.meeting)
-                .where(QMeeting.meeting.id.eq(meetingId))
-                .fetchFirst();
-        
-        return meeting;
     }
 }

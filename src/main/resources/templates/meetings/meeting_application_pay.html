@@ -28,7 +28,7 @@
             <br/>
             <div class="info">
                 <h5>온라인/오프라인</h5>
-                <label>온라인</label>
+                <label th:text="${meetingDto.meetingType.getValue()}"> </label>
             </div>
         </div>
     </div>
@@ -91,25 +91,18 @@
         </div>
     </div>
     <br/>
-    <br/>
-    <br/>
-    <!--    모임 신청 시, (이름, 성별, 전화번호)가 호스트에게 제공됩니다. 동의하시겠습니까? [체크박스]-->
-    <!--    모임 조건을 잘 확인하셨습니까? [체크박스]-->
-
-    <!--    조건: 체크박스 중에 둘다 동의를 해야 결제가 가능하다.-->
-    <!--    호스트 - 모임 신청 현황-->
-    <!--    결제 후, 호스트한테 어떤 데이터 전달 (이름, 성별, 전화번호)-->
-    <!--    호스트는 모임 신청 현황을 관리할 수 있는 도메인이 필요하다.-->
-    <br/>
+    <hr>
+    <br/><br/><br/>
     <script src="https://js.tosspayments.com/v1"></script>
 
     <script th:inline="javascript">
         /*<![CDATA[*/
         const meetingId = [[${meetingDto.getId()}]];
-        const orderId = [[${meetingDto.getPayId()}]];
+        const orderId = [[${meetingDto.getId()}]];
         const buyerName = [[${userDto.getUserName()}]];
         const orderName = [[${meetingDto.getMeetingTitle()}]];
         const orderPayPrice = [[${meetingDto.getMeetingPrice.getPrice()}]];
+        const userId = [[${userDto.getId()}]];
         /*]]>*/
     </script>
 
@@ -121,19 +114,78 @@
 
             const paymentData = {
                 amount: orderPayPrice,
-                orderId: orderId + "__" + (Math.random() + "").substring(2),
+                orderId: orderId + userId,
                 orderName: orderName,
                 customerName: buyerName,
                 successUrl: window.location.origin + "/meetings/" + meetingId + "/success",
                 failUrl: window.location.origin + "/meetings/" + meetingId + "/fail",
             };
 
-            tossPayments.requestPayment(method, paymentData);
+            // orderId 중복 체크
+            $.ajax({
+                url: '/check-orderId',
+                type: 'POST',
+                data: JSON.stringify({
+                    orderId: paymentData.orderId
+                }),
+                contentType: "application/json",
+                success: function(data) {
+                    if (data.exists) {
+                        $('#warningModal').modal('show');
+                        $('#warningModal .modal-body').text("이미 신청한 모임입니다");
+                    } else {
+                        tossPayments.requestPayment(method, paymentData);
+                    }
+                }
+                // ,
+                // error: function(jqXHR) {
+                //     var response = JSON.parse(jqXHR.responseText);
+                //     alert(response.message);
+                // }
+            });
         }
     </script>
     <div>
-        <button onclick="payment()" class="btn btn-sm btn-primary">결제 하기</button>
+        <button id="applyButton" onclick="payment()" class="btn btn-sm btn-primary">결제 하기</button>
     </div>
+    <div id="warningModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">모임 신청</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                    <div class="modal-body">
+                        이미 신청한 모임입니다. <br/><br/>
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $("form").on("submit", function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: $(this).attr("action"),
+                    type: $(this).attr("method"),
+                    success: function() {
+                        $('#applicationModal').modal('hide');
+                        alert("신청이 완료되었습니다.");
+                    },
+                    error: function(jqXHR) {
+                        var response = JSON.parse(jqXHR.responseText);
+                        alert(response.message);
+                    }
+                });
+            });
+        });
+    </script>
 </div>
 <br/><br/><br/><br/><br/><br/><br/><br/>
 </div>

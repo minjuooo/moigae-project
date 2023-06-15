@@ -28,7 +28,7 @@
             <br/>
             <div class="info">
                 <h5>온라인/오프라인</h5>
-                <label>온라인</label>
+                <label th:text="${meetingDto.meetingType.getValue()}"> </label>
             </div>
         </div>
     </div>
@@ -91,21 +91,54 @@
         </div>
     </div>
     <br/>
-    <br/>
-    <br/>
-    <!--    모임 신청 시, (이름, 성별, 전화번호)가 호스트에게 제공됩니다. 동의하시겠습니까? [체크박스]-->
-    <!--    모임 조건을 잘 확인하셨습니까? [체크박스]-->
+    <hr>
+    <br/><br/><br/>
+    <!-- 모달 버튼 -->
+    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#applicationModal">신청 하기</button>
 
-    <!--    조건: 체크박스 중에 둘다 동의를 해야 결제가 가능하다.-->
-    <!--    호스트 - 모임 신청 현황-->
-    <!--    결제 후, 호스트한테 어떤 데이터 전달 (이름, 성별, 전화번호)-->
-    <!--    호스트는 모임 신청 현황을 관리할 수 있는 도메인이 필요하다.-->
-    <br/>
-    <div>
-        <form action="#" th:action="@{/meetings/{meetingId}/applications(meetingId=${meetingDto.id})}" method="post">
-            <button type="submit" class="btn btn-sm btn-primary">신청 하기</button>
-        </form>
+    <!-- 모달 -->
+    <div class="modal fade" id="applicationModal" tabindex="-1" role="dialog" aria-labelledby="applicationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="applicationModalLabel">모임 신청</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    모임 신청 시, 이름, 성별, 전화번호가 호스트에게 제공됩니다. <br/><br/>
+                    동의하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">아니오</button>
+                    <form th:action="@{/meetings/{meetingId}/applications(meetingId=${meetingDto.id})}" method="post">
+                        <button type="submit" class="btn btn-primary">예</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $("form").on("submit", function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: $(this).attr("action"),
+                    type: $(this).attr("method"),
+                    success: function() {
+                        $('#applicationModal').modal('hide');
+                        alert("신청이 완료되었습니다.");
+                    },
+                    error: function(jqXHR) {
+                        var response = JSON.parse(jqXHR.responseText);
+                        alert(response.message);
+                    }
+                });
+            });
+        });
+    </script>
 </div>
 <br/><br/><br/><br/><br/><br/><br/><br/>
 </div>

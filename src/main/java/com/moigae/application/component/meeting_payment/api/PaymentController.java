@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.ResponseErrorHandler;
@@ -21,8 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@Controller
-@RequestMapping("/meetings")
+@RestController
 @RequiredArgsConstructor
 public class PaymentController {
     private final MeetingPaymentService meetingPaymentService;
@@ -45,7 +43,7 @@ public class PaymentController {
         });
     }
 
-    @GetMapping("{meetingId}/success")
+    @GetMapping("/meetings/{meetingId}/success")
     @ResponseBody
     public String confirmPayment(Model model,
                                  @PathVariable String meetingId,
@@ -83,7 +81,7 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/{meetingId}/fail")
+    @GetMapping("/meetings/{meetingId}/fail")
     @ResponseBody
     public String failPayment(Model model,
                               @RequestParam String message,
@@ -91,5 +89,19 @@ public class PaymentController {
         model.addAttribute("message", message);
         model.addAttribute("code", code);
         return "meetings/fail";
+    }
+
+    //유료 모임 - 중복 결제를 방지하기 위한 컨트롤러
+    @PostMapping("/check-orderId")
+    public ResponseEntity<?> checkOrderId(@RequestBody Map<String, Object> payload) {
+        String orderId = (String) payload.get("orderId");
+        if (orderId == null) {
+            return ResponseEntity.badRequest().body("orderId가 존재하지 않습니다.");
+        }
+        boolean exists = meetingPaymentService.checkOrderId(orderId);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("exists", exists);
+
+        return ResponseEntity.ok(response);
     }
 }
