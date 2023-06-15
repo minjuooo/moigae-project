@@ -27,6 +27,8 @@ public class MeetingPaymentService {
         Meeting meeting = meetingRepositoryCustom.findCustomMeetingByPayId(meetingId);
         MeetingPayment meetingPayment = createMeetingPayment(amount, user, meeting, orderId);
 
+        isExistingPayment(user, meeting);
+
         meetingPaymentRepository.save(meetingPayment);
     }
 
@@ -36,9 +38,11 @@ public class MeetingPaymentService {
         String userId = customUser.getId();
         User user = userCustomRepository.findCustomUserById(userId);
         Meeting meeting = meetingRepositoryCustom.findCustomMeetingByPayId(meetingId);
+
+        isExistingPayment(user, meeting);
+
         orderId = orderId + "__" + (Math.random() + "").substring(2);
         MeetingPayment meetingPayment = createMeetingPayment(user, meeting, orderId);
-
         meetingPaymentRepository.save(meetingPayment);
     }
 
@@ -61,5 +65,22 @@ public class MeetingPaymentService {
                 .meeting(meeting)
                 .meetingOrderId(orderId)
                 .build();
+    }
+
+    //모임 (신청, 결제) 전 -> 모임 중복 신청 체크 로직
+    private void isExistingPayment(User user, Meeting meeting) {
+        MeetingPayment existingPayment = meetingPaymentRepository.findByUserAndMeeting(user, meeting);
+        if (existingPayment != null) {
+            throw new IllegalStateException("해당 유저는 이미 해당 모임에 신청을 완료했습니다.");
+        }
+    }
+
+    //유료 모임 - 중복 결제를 방지하기 위한 로직
+    public boolean checkOrderId(String orderId) {
+        MeetingPayment meetingPayment = meetingPaymentRepository.findByMeetingOrderId(orderId);
+        if (meetingPayment == null || meetingPayment.getMeetingOrderId() == null) {
+            return false;
+        }
+        return true;
     }
 }

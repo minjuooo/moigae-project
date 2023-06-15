@@ -6,6 +6,7 @@ import com.moigae.application.component.meeting.domain.MeetingContact;
 import com.moigae.application.component.meeting.domain.ParticipantRange;
 import com.moigae.application.component.meeting.domain.enumeraion.MeetingCategory;
 import com.moigae.application.component.meeting.domain.enumeraion.MeetingPrice;
+import com.moigae.application.component.meeting.domain.enumeraion.MeetingType;
 import com.moigae.application.component.meeting.domain.enumeraion.PetAllowedStatus;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class MeetingDto {
     private static Long payId = 100000L;
     private String id;
     private String meetingTitle;
+    private MeetingType meetingType;
     private MeetingCategory meetingCategory;
     private String nickName;
     private String hostDescription;
@@ -38,15 +40,16 @@ public class MeetingDto {
     private String meetingStatus;
 
     @Builder
-    public MeetingDto(String id, String meetingTitle, MeetingCategory meetingCategory,
+    public MeetingDto(String id, String meetingTitle, MeetingType meetingType, MeetingCategory meetingCategory,
                       String nickName, String hostDescription, String path, String meetingDescription,
                       LocalDateTime recruitmentStartDateTime, LocalDateTime recruitmentEndDateTime,
                       ParticipantRange participantRange, LocalDateTime meetingStartDateTime,
-                      LocalDateTime meetingEndDateTime, MeetingAddress meetingAddress, MeetingPrice meetingPrice,
-                      PetAllowedStatus petAllowedStatus, MeetingContact meetingContact, String meetingFreeFormDetails,
-                      String meetingStatus) {
+                      LocalDateTime meetingEndDateTime, MeetingAddress meetingAddress,
+                      MeetingPrice meetingPrice, PetAllowedStatus petAllowedStatus,
+                      MeetingContact meetingContact, String meetingFreeFormDetails, String meetingStatus) {
         this.id = id;
         this.meetingTitle = meetingTitle;
+        this.meetingType = meetingType;
         this.meetingCategory = meetingCategory;
         this.nickName = nickName;
         this.hostDescription = hostDescription;
@@ -69,6 +72,7 @@ public class MeetingDto {
         return MeetingDto.builder()
                 .id(meeting.getId())
                 .meetingTitle(meeting.getMeetingTitle())
+                .meetingType(meeting.getMeetingType())
                 .meetingCategory(meeting.getMeetingCategory())
                 .nickName(meeting.getNickName())
                 .hostDescription(meeting.getHostDescription())
@@ -162,5 +166,9 @@ public class MeetingDto {
 
     public String getMeetingStatus() {
         return meetingStatus;
+    }
+
+    public MeetingType getMeetingType() {
+        return meetingType;
     }
 }

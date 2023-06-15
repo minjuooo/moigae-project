@@ -49,7 +49,7 @@ public class MeetingPayment extends BaseEntity {
     private Long paidAmount;
 
     //정산된 금액
-    @Column(name = "amount")
+    @Column(name = "calculate_amount")
     private Long calculateAmount;
 
     //환불 체크

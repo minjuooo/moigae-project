@@ -11,12 +11,9 @@ public class UserRepositoryImpl implements UserCustomRepository {
 
     @Override
     public User findCustomUserById(String userId) {
-        //쿼리
-        User user = queryFactory
+        return queryFactory
                 .selectFrom(QUser.user)
                 .where(QUser.user.id.eq(userId))
                 .fetchFirst();
-
-        return user;
     }
 }
