@@ -58,9 +58,13 @@ public class Meeting extends BaseEntity {
     @Column(name = "recruitment_end_date_time")
     private LocalDateTime recruitmentEndDateTime;
 
-    //모집 인원 - 최소, 최대
+    //모집 인원(값 타입 1) - 최소, 최대
     @Column(name = "participant_range")
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "currentParticipants", column = @Column(nullable = true)),
+            @AttributeOverride(name = "maxParticipants", column = @Column(nullable = true))
+    })
     private ParticipantRange participantRange;
 
     //모임 시작 날짜
@@ -71,9 +75,14 @@ public class Meeting extends BaseEntity {
     @Column(name = "meeting_end_date_time")
     private LocalDateTime meetingEndDateTime;
 
-    //모임 장소
+    //모임 장소(값 타입 2)
     @Column(name = "meeting_address")
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "address", column = @Column(nullable = true)),
+            @AttributeOverride(name = "detailAddress", column = @Column(nullable = true)),
+            @AttributeOverride(name = "locationDescription", column = @Column(nullable = true))
+    })
     private MeetingAddress meetingAddress;
 
     //참가 비용
@@ -86,9 +95,16 @@ public class Meeting extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private PetAllowedStatus petAllowedStatus;
 
-    //연락수단
+    //연락수단(값 타입 3)
     @Column(name = "meeting_contact")
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "phone", column = @Column(nullable = true)),
+            @AttributeOverride(name = "email", column = @Column(nullable = true)),
+            @AttributeOverride(name = "kakaoId", column = @Column(nullable = true)),
+            @AttributeOverride(name = "link", column = @Column(nullable = true)),
+            @AttributeOverride(name = "otherLink", column = @Column(nullable = true))
+    })
     private MeetingContact meetingContact;
 
     //모임 정보 자유 작성 - 사진 첨부 X

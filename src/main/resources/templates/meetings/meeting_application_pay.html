@@ -97,6 +97,8 @@
 
     <script th:inline="javascript">
         /*<![CDATA[*/
+        const currentParticipants = [[${meetingDto.getParticipantRange().getCurrentParticipants()}]];
+        const maxParticipants = [[${meetingDto.getParticipantRange().getMaxParticipants()}]];
         const meetingId = [[${meetingDto.getId()}]];
         const orderId = [[${meetingDto.getId()}]];
         const buyerName = [[${userDto.getUserName()}]];
@@ -110,39 +112,44 @@
         const tossPayments = TossPayments("test_ck_OAQ92ymxN34qXNezQp0VajRKXvdk");
 
         function payment() {
-            const method = "카드"; // "카드" 혹은 "가상계좌"
+            if (currentParticipants >= maxParticipants) {
+                $('#warningModal').modal('show');
+                $('#warningModal .modal-body').text("참여 인원 마감으로 인한 신청 제한");
+            } else {
+                const method = "카드"; // "카드" 혹은 "가상계좌"
 
-            const paymentData = {
-                amount: orderPayPrice,
-                orderId: orderId + userId,
-                orderName: orderName,
-                customerName: buyerName,
-                successUrl: window.location.origin + "/meetings/" + meetingId + "/success",
-                failUrl: window.location.origin + "/meetings/" + meetingId + "/fail",
-            };
+                const paymentData = {
+                    amount: orderPayPrice,
+                    orderId: orderId + userId,
+                    orderName: orderName,
+                    customerName: buyerName,
+                    successUrl: window.location.origin + "/meetings/" + meetingId + "/success",
+                    failUrl: window.location.origin + "/meetings/" + meetingId + "/fail",
+                };
 
-            // orderId 중복 체크
-            $.ajax({
-                url: '/check-orderId',
-                type: 'POST',
-                data: JSON.stringify({
-                    orderId: paymentData.orderId
-                }),
-                contentType: "application/json",
-                success: function(data) {
-                    if (data.exists) {
-                        $('#warningModal').modal('show');
-                        $('#warningModal .modal-body').text("이미 신청한 모임입니다");
-                    } else {
-                        tossPayments.requestPayment(method, paymentData);
+                // orderId 중복 체크
+                $.ajax({
+                    url: '/check-orderId',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        orderId: paymentData.orderId
+                    }),
+                    contentType: "application/json",
+                    success: function (data) {
+                        if (data.exists) {
+                            $('#warningModal').modal('show');
+                            $('#warningModal .modal-body').text("이미 신청한 모임입니다");
+                        } else {
+                            tossPayments.requestPayment(method, paymentData);
+                        }
                     }
-                }
-                // ,
-                // error: function(jqXHR) {
-                //     var response = JSON.parse(jqXHR.responseText);
-                //     alert(response.message);
-                // }
-            });
+                    // ,
+                    // error: function(jqXHR) {
+                    //     var response = JSON.parse(jqXHR.responseText);
+                    //     alert(response.message);
+                    // }
+                });
+            }
         }
     </script>
     <div>
@@ -158,7 +165,7 @@
                     </button>
                 </div>
                     <div class="modal-body">
-                        이미 신청한 모임입니다. <br/><br/>
+                        <br/><br/>
                     </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
