@@ -4,6 +4,7 @@ import com.moigae.application.component.meeting.domain.enumeraion.*;
 import com.moigae.application.component.meeting_image.domain.MeetingImage;
 import com.moigae.application.core.common.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -26,6 +27,7 @@ public class Meeting extends BaseEntity {
     @Column(name = "meeting_title")
     private String meetingTitle;
 
+    //모임 - (오프라인, 온라인)
     @Column(name = "meeting_type")
     @Enumerated(EnumType.STRING)
     private MeetingType meetingType;
@@ -38,10 +40,6 @@ public class Meeting extends BaseEntity {
     //닉네임
     @Column(name = "nickName")
     private String nickName;
-
-    //호스트 소개글
-    @Column(name = "host_description")
-    private String hostDescription;
 
     //대표 이미지 - 1장 추가
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -102,8 +100,9 @@ public class Meeting extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MeetingStatus meetingStatus;
 
+    @Builder
     public Meeting(String meetingTitle, MeetingType meetingType, MeetingCategory meetingCategory, String nickName,
-                   String hostDescription, MeetingImage meetingImage, String meetingDescription,
+                   MeetingImage meetingImage, String meetingDescription,
                    LocalDateTime recruitmentStartDateTime, LocalDateTime recruitmentEndDateTime,
                    ParticipantRange participantRange, LocalDateTime meetingStartDateTime,
                    LocalDateTime meetingEndDateTime, MeetingAddress meetingAddress, MeetingPrice meetingPrice,
@@ -113,7 +112,6 @@ public class Meeting extends BaseEntity {
         this.meetingType = meetingType;
         this.meetingCategory = meetingCategory;
         this.nickName = nickName;
-        this.hostDescription = hostDescription;
         this.meetingImage = meetingImage;
         this.meetingDescription = meetingDescription;
         this.recruitmentStartDateTime = recruitmentStartDateTime;
