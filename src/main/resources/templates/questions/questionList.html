@@ -73,28 +73,18 @@
   <div class="row">
     <aside class="col-md-2">
       <nav class="nav flex-column text-center">
-        <div><h5 class="bold">멍멍이야기</h5></div>
+        <div><h5 class="bold">Q & A</h5></div>
         <br>
         <div>
-          <h6 class="bold" onclick="window.location.href='/articles/articleList';" style="cursor: pointer;">STORY</h6>
+          <h6 class="bold" onclick="window.location.href='/questions/questionList';" style="cursor: pointer;">전체</h6>
         </div>
         <br>
         <div>
-          <h6 class="bold" onclick="window.location.href='/articles/issueList';" style="cursor: pointer;">공지사항</h6>
+          <h6 class="bold" onclick="window.location.href='/articles/issueList';" style="cursor: pointer;">MY Q</h6>
         </div>
         <br>
         <div>
-          <h6 class="bold" onclick="window.location.href='/articles/aboutUs';" style="cursor: pointer;">ABOUT US</h6>
-        </div>
-        <div>
-          <br>
-          <div>
-            <h6 class="bold" onclick="window.location.href='/articles/createArticle';" style="cursor: pointer;">게시글 작성</h6>
-          </div>
-          <br>
-          <div>
-            <h6 class="bold" onclick="window.location.href='/articles/createIssue';" style="cursor: pointer;">공지사항 작성</h6>
-          </div>
+          <h6 class="bold" onclick="window.location.href='/articles/aboutUs';" style="cursor: pointer;">MY A</h6>
         </div>
       </nav>
     </aside>
@@ -103,32 +93,72 @@
       <div class="col-md-1" >
       </div>
 
-      <div class="col-md-11">
-
-          <img src="/images/공지사항.jpg"
-               style="width: 100%; height: 200px;"
-               alt="Main Image">
-          <br><br>
-
-          <div class="row">
-            <div th:each="article : ${articles}">
-              <div th:onclick="'window.location.href=\'' + @{/articles/issueDetail/{articleId}(articleId = ${article.id})} + '\''" class="shadow-sm p-3 mb-3 bg-body rounded">
-                <span th:text="${#strings.abbreviate(article.articleTitle, 30)}"  style="font-weight: bold;"></span>
-                <span class="d-flex justify-content-end"
-                        th:text="${#temporals.format(article.createTime, 'yyyy-MM-dd')}" style="font-size: 11px; color: #969696;"></span>
+      <div class="col-md-9">
+        <br>
+        <h2 style="font-weight: bold;">반려인들과 자유롭게 이야기 나누어보세요!</h2>
+        <br>
+        <form class="d-flex">
+          <button style="background-color: #d2d2d2;" class="btn btn-outline-success" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        </form>
+        <br>
+        <div class="d-flex justify-content-between">
+          <span class="btn-group">
+            <button style="border-color: #d2d2d2" type="button" class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              정렬 방법
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">최신순</a></li>
+              <li><a class="dropdown-item" href="#">조회순</a></li>
+            </ul>
+          </span>
+          <span class="justify-content-end">
+            <button type="button" class="btn btn-secondary"
+                    onclick="window.location.href='/questions/createQuestion';">&nbsp;&nbsp;글쓰기&nbsp;&nbsp;</button>
+          </span>
+        </div>
+        <br>
+        <div class="row">
+          <div th:each="question : ${questions}">
+            <hr>
+            <div th:onclick="'window.location.href=\'' + @{/questions/questionDetail/{questionId}(questionId = ${question.id})} + '\''" class="container">
+              <div style="font-weight: bold; font-size: 16px;" th:text="${#strings.abbreviate(question.questionTitle, 30)}" ></div>
+              <br>
+              <div style="font-size: 13px;" th:text="${#strings.abbreviate(question.questionContent, 30)}" ></div>
+              <div class="d-flex justify-content-between">
+                <span>
+                  <span style="color: #969696; font-size: 12px;" th:text="${question.relativeTime}"></span>
+                  <span th:text="${question.totalAnswersCount} == 0 ? '미답변' : '답변'"
+                        th:style="${question.totalAnswersCount} == 0 ? 'color: #969696; font-size: 12px' : 'color: red; font-size: 12px'"> </span>
+                </span>
+                <span class="justify-content-end" style="color: #969696; font-size: 12px;">
+                  <span>공감 </span>
+                  <span th:text="${question.sym}"></span>
+                  <span>&ensp;</span>
+                  <span>조회수 </span>
+                  <span th:text="${question.viewCount}"></span>
+                </span>
               </div>
             </div>
           </div>
+        </div>
+
+        <br>
+
+        <div class="container">
+
+        </div>
       </div>
+
+
     </div>
   </div>
 </div>
 <br>
-<br>
 <div class="container">
 
 
-  <nav aria-label="Page navigation" style="display: flex;justify-content: center;">
+<!--  <nav aria-label="Page navigation" style="display: flex;justify-content: center;">
     <ul class="pagination">
       <li class="page-item">
         <a class="page-link" href="?page=0">&lt;&lt;</a>
@@ -146,9 +176,14 @@
         <a class="page-link" th:href="${'?page=' + (articles.totalPages - 1)}">&gt;&gt;</a>
       </li>
     </ul>
-  </nav>
+  </nav>-->
 
 </div>
+
+
+
+
+
 
 
 <script

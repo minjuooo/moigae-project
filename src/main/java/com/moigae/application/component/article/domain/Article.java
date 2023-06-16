@@ -23,7 +23,7 @@ public class Article extends BaseEntity {
     @Column(name = "article_title")
     private String articleTitle;
 
-    @Column(name = "content", length = 20000)
+    @Column(name = "content", length = 16000)
     private String content;
 
     @Column(name = "category")
