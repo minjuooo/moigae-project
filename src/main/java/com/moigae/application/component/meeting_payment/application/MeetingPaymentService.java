@@ -25,10 +25,12 @@ public class MeetingPaymentService {
         String userId = customUser.getId();
         User user = userCustomRepository.findCustomUserById(userId);
         Meeting meeting = meetingRepositoryCustom.findCustomMeetingByPayId(meetingId);
-        MeetingPayment meetingPayment = createMeetingPayment(amount, user, meeting, orderId);
 
         isExistingPayment(user, meeting);
+        incrementParticipantCount(meeting);
+        isMeetingApplyCondition(meeting);
 
+        MeetingPayment meetingPayment = createMeetingPayment(amount, user, meeting, orderId);
         meetingPaymentRepository.save(meetingPayment);
     }
 
@@ -40,6 +42,8 @@ public class MeetingPaymentService {
         Meeting meeting = meetingRepositoryCustom.findCustomMeetingByPayId(meetingId);
 
         isExistingPayment(user, meeting);
+        incrementParticipantCount(meeting);
+        isMeetingApplyCondition(meeting);
 
         orderId = orderId + "__" + (Math.random() + "").substring(2);
         MeetingPayment meetingPayment = createMeetingPayment(user, meeting, orderId);
@@ -82,5 +86,15 @@ public class MeetingPaymentService {
             return false;
         }
         return true;
+    }
+
+    //모임 (유료, 무료) - 신청 시, 현재 참여 인원 +1
+    private static void incrementParticipantCount(Meeting meeting) {
+        meeting.getParticipantRange().addCurrentParticipants();
+    }
+
+    //현재 참여 인원 >= 최대 참여 인원 시, 모임 신청 불가 체크
+    private static void isMeetingApplyCondition(Meeting meeting) {
+        meeting.getParticipantRange().meetingApplyCondition();
     }
 }
