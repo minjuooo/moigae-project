@@ -27,17 +27,17 @@ public class MeetingUser {
     private Meeting meeting;
 
     @Column(name = "host_id")
-    private Long hostId;
+    private String hostId;
 
     @Builder
-    public MeetingUser(User user, Meeting meeting, Long hostId) {
+    public MeetingUser(User user, Meeting meeting, String hostId) {
         this.user = user;
         this.meeting = meeting;
         this.hostId = hostId;
     }
 
     //정적 팩토리 메소드
-    public static MeetingUser of(User user, Meeting meeting, Long hostId) {
+    public static MeetingUser of(User user, Meeting meeting, String hostId) {
         return MeetingUser.builder()
                 .user(user)
                 .meeting(meeting)
