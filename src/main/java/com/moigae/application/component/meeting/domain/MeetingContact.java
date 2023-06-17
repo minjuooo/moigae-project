@@ -1,6 +1,6 @@
 package com.moigae.application.component.meeting.domain;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +9,6 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class MeetingContact {
     //전화번호
     private String phone;
@@ -21,6 +20,15 @@ public class MeetingContact {
     private String link;
     //기타 링크
     private String otherLink;
+
+    @Builder
+    public MeetingContact(String phone, String email, String kakaoId, String link, String otherLink) {
+        this.phone = phone;
+        this.email = email;
+        this.kakaoId = kakaoId;
+        this.link = link;
+        this.otherLink = otherLink;
+    }
 
     public void updateContact(String phone, String email, String kakaoId, String link, String otherLink) {
         this.phone = phone;

@@ -6,5 +6,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MeetingRepository extends JpaRepository<Meeting, Long>, QuerydslPredicateExecutor<Meeting> {
+public interface MeetingRepository extends JpaRepository<Meeting, String>, QuerydslPredicateExecutor<Meeting> {
 }
