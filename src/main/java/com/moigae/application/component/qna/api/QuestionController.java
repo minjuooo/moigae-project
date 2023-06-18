@@ -18,13 +18,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/questions")
@@ -62,18 +60,18 @@ public class QuestionController {
                                            String viewName) {
 
 
-        Page<QuestionWithSymCountDto> questions
-                = questionService.getQuestionsWithSymCount(pageable);
+        //Page<QuestionWithSymCountDto> questions
+        //       = questionService.getQuestionsWithSymCount(pageable);
         //Page<Question> questions = questionRepository.findAll(pageable);
 
         // Calculate the page group
-        int startPage = (pageable.getPageNumber() / 10) * 10;
-        int endPage = Math.min(startPage + 10, questions.getTotalPages());
+        //int startPage = (pageable.getPageNumber() / 10) * 10;
+        //int endPage = Math.min(startPage + 10, questions.getTotalPages());
 
         model.addAttribute("customUser", customUser);
-        model.addAttribute("questions", questions);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
+        //model.addAttribute("questions", questions);
+        //model.addAttribute("startPage", startPage);
+        //model.addAttribute("endPage", endPage);
 
         return viewName;
     }
@@ -82,6 +80,16 @@ public class QuestionController {
                               @AuthenticationPrincipal CustomUser customUser,
                               @PageableDefault(size = 6) Pageable pageable) {
         return getQuestionList(model, customUser, pageable, "questions/questionList");
+    }
+
+    @GetMapping("/sort")
+    public ResponseEntity<Page<QuestionWithSymCountDto>> sortQuestions(@RequestParam String sort, Pageable pageable) {
+        System.out.println(pageable);
+        System.out.println(sort);
+        Page<QuestionWithSymCountDto> questions = questionService.getQuestionsWithSymCount(pageable, sort);
+
+        System.out.println("돌아갑니다@@@@@@@@@@@@@@@@@@@@@@@");
+        return ResponseEntity.ok(questions);
     }
 
 
