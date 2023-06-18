@@ -2,6 +2,7 @@ package com.moigae.application.component.qna.domain;
 
 import com.moigae.application.component.meeting_question.domain.MeetingQuestion;
 import com.moigae.application.component.user.domain.User;
+import com.moigae.application.core.common.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "answer")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
-public class Answer {
+public class Answer extends BaseEntity {
     @Id
     @Column(length = 191)
     @GeneratedValue(generator = "CUID")

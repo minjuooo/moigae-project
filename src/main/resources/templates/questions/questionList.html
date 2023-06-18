@@ -199,6 +199,7 @@
             let questionTitle = question.questionTitle.length > 50 ? question.questionTitle.substring(0, 30) + '...' : question.questionTitle;
             let questionContent = question.questionContent.length > 100 ? question.questionContent.substring(0, 30) + '...' : question.questionContent;
 
+            html += '<div class="container" onclick="redirectToQuestionDetail(\'' + question.id + '\')">';
             html += '<hr>';
             html += '<div>';
             html += '<div class="container">';
@@ -215,6 +216,7 @@
             html += '<span>&ensp;</span>';
             html += '<span>조회수 ' + question.viewCount + '</span>';
             html += '</span>';
+            html += '</div>';
             html += '</div>';
             html += '</div>';
             html += '</div>';
@@ -269,6 +271,9 @@
 
     fetchPage(currentPage);
   });
+  function redirectToQuestionDetail(questionId) {
+    window.location.href = '/questions/questionDetail/' + questionId;
+  }
 </script>
 
 

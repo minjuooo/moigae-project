@@ -9,9 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,10 +20,26 @@ public class QuestionService {
     @PersistenceContext
     private EntityManager entityManager;
 
+//    public Page<QuestionWithSymCountDto> getQuestionsWithSymCount(Pageable pageable, String sort, String searchTerm) {
+//        String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, COUNT(a.sym), COUNT(a)) " +
+//                "FROM com.moigae.application.component.qna.domain.Question q " +
+//                "LEFT JOIN com.moigae.application.component.qna.domain.Answer a ON a.question.id = q.id " +
+//                "WHERE q.questionTitle LIKE :searchTerm OR q.questionContent LIKE :searchTerm " +
+//                "GROUP BY q";
+//
+//        if ("views".equals(sort)) {
+//            jpql += " ORDER BY q.viewCount DESC";
+//        } else {
+//            jpql += " ORDER BY q.createTime DESC";
+//        }
+//
+//        return getQuestionWithSymCountDtos(pageable, jpql, searchTerm);
+//    }
     public Page<QuestionWithSymCountDto> getQuestionsWithSymCount(Pageable pageable, String sort, String searchTerm) {
-        String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, COUNT(a.sym), COUNT(a)) " +
+        String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, SUM(CASE WHEN s.sym = true THEN 1 ELSE 0 END), COUNT(a)) " +
                 "FROM com.moigae.application.component.qna.domain.Question q " +
                 "LEFT JOIN com.moigae.application.component.qna.domain.Answer a ON a.question.id = q.id " +
+                "LEFT JOIN com.moigae.application.component.qna.domain.Sym s ON s.question.id = q.id " +
                 "WHERE q.questionTitle LIKE :searchTerm OR q.questionContent LIKE :searchTerm " +
                 "GROUP BY q";
 
@@ -37,6 +51,7 @@ public class QuestionService {
 
         return getQuestionWithSymCountDtos(pageable, jpql, searchTerm);
     }
+
 
     private Page<QuestionWithSymCountDto> getQuestionWithSymCountDtos(Pageable pageable, String jpql, String searchTerm) {
         String countJpql = "SELECT COUNT(q) FROM com.moigae.application.component.qna.domain.Question q WHERE q.questionTitle LIKE :searchTerm OR q.questionContent LIKE :searchTerm";
@@ -62,31 +77,48 @@ public class QuestionService {
 
         return new PageImpl<>(content, pageable, total);
     }
-    /*private Page<QuestionWithSymCountDto> getQuestionWithSymCountDtos(Pageable pageable, String jpql) {
-        // 전체 레코드 수를 세는 쿼리
-        String countJpql = "SELECT COUNT(q) FROM com.moigae.application.component.qna.domain.Question q";
 
-        // 각 Question에 대해 답변 수와 'sym'의 수를 계산하는 쿼리
-        String dataJpql = jpql;
+    public QuestionWithSymCountDto getQuestionWithSymCount(String questionId) {
+        String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, SUM(CASE WHEN s.sym = true THEN 1 ELSE 0 END), COUNT(a)) " +
+                "FROM com.moigae.application.component.qna.domain.Question q " +
+                "LEFT JOIN com.moigae.application.component.qna.domain.Answer a ON a.question.id = q.id " +
+                "LEFT JOIN com.moigae.application.component.qna.domain.Sym s ON s.question.id = q.id " +
+                "WHERE q.id = :questionId " +
+                "GROUP BY q";
 
-        TypedQuery<Long> countQuery = entityManager.createQuery(countJpql, Long.class);
-        long total = countQuery.getSingleResult();
+        TypedQuery<QuestionWithSymCountDto> query = entityManager.createQuery(jpql, QuestionWithSymCountDto.class);
+        query.setParameter("questionId", questionId);
 
-        TypedQuery<QuestionWithSymCountDto> dataQuery = entityManager.createQuery(dataJpql, QuestionWithSymCountDto.class)
-                .setFirstResult(pageable.getPageNumber() * pageable.getPageSize())
-                .setMaxResults(pageable.getPageSize());
-
-        List<QuestionWithSymCountDto> results = dataQuery.getResultList();
-
-        for (QuestionWithSymCountDto qd : results) {
-            Document document = Jsoup.parse(qd.getQuestionContent());
-            String parseContent = document.text();
-            qd.setQuestionContent(parseContent);
-            qd.setRelativeTime(getRelativeTime(qd.getCreateTime()));
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            // No result found, return null or throw an exception as per your requirement
+            return null;
+        } catch (NonUniqueResultException e) {
+            // More than one result found, throw an exception or handle as per your requirement
+            throw new RuntimeException("Non unique result for questionId " + questionId);
         }
+    }
 
-        return new PageImpl<>(results, pageable, total);
-    }*/
+//    public QuestionWithSymCountDto getQuestionWithSymCount(String questionId) {
+//        String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, COUNT(a.sym), COUNT(a)) " +
+//                "FROM com.moigae.application.component.qna.domain.Question q " +
+//                "LEFT JOIN com.moigae.application.component.qna.domain.Answer a ON a.question.id = q.id " +
+//                "WHERE q.id = :questionId " +
+//                "GROUP BY q";
+//        TypedQuery<QuestionWithSymCountDto> query = entityManager.createQuery(jpql, QuestionWithSymCountDto.class);
+//        query.setParameter("questionId", questionId);
+//
+//        try {
+//            return query.getSingleResult();
+//        } catch (NoResultException e) {
+//            // No result found, return null or throw an exception as per your requirement
+//            return null;
+//        } catch (NonUniqueResultException e) {
+//            // More than one result found, throw an exception or handle as per your requirement
+//            throw new RuntimeException("Non unique result for questionId " + questionId);
+//        }
+//    }
 
     public String getRelativeTime(LocalDateTime pastTime) {
         LocalDateTime now = LocalDateTime.now();
@@ -107,5 +139,23 @@ public class QuestionService {
             return seconds + "초 전";
         }
     }
+
+
+
+
+//    public void getSymUp(String questionId, String userId) {
+//        // 상황에 따라 적절하게 변경해야 합니다.
+//        String jpql = "UPDATE com.moigae.application.component.qna.domain.Answer a " +
+//                "SET a.sym = true " + // 또는 false 등 원하는 값으로 변경
+//                "WHERE a.question.id = :questionId " +
+//                "AND a.user.id = :userId";
+//
+//        Query query = entityManager.createQuery(jpql);
+//        query.setParameter("questionId", questionId);
+//        query.setParameter("userId", userId);
+//
+//        int updatedCount = query.executeUpdate();
+//    }
+
 
 }
