@@ -6,8 +6,103 @@
 </head>
 <body>
 <div>
+    <br/><br/><br/>
     <h1>모임 만들기</h1>
+    <form th:action="@{/host-center/meetings/create}" method="post" th:object="${meetingCreateRequest}"
+          enctype="multipart/form-data">
+        <div>
+            <label><br/>모임 이름을 설정하세요.<br/></label>
+            <input id="meetingTitle" name="meetingTitle" th:field="*{meetingTitle}" type="text">
+        </div>
+        <div>
+            <label><br/>오프라인/온라인<br/></label>
+            <select id="meetingType" name="meetingType" th:field="*{meetingType}">
+                <option th:each="type : ${T(com.moigae.application.component.meeting.domain.enumeraion.MeetingType).values()}"
+                        th:value="${type}" th:text="${type.value}"></option>
+            </select>
+        </div>
+        <div>
+            <label><br/>카테고리<br/></label>
+            <select id="meetingCategory" name="meetingCategory" th:field="*{meetingCategory}">
+                <option th:each="type : ${T(com.moigae.application.component.meeting.domain.enumeraion.MeetingCategory).values()}"
+                        th:value="${type}" th:text="${type.value}"></option>
+            </select>
+        </div>
+        <div>
+            <label><br/>사람들에게 소개할 나의 닉네임을 설정해주세요.<br/></label>
+            <input id="nickName" name="nickName" th:field="*{nickName}" type="text">
+        </div>
+        <div>
+            <label><br/>대표 사진<br/></label>
+            <input id="path" name="path" th:field="*{path}" type="file">
+        </div>
+        <div>
+            <label><br/>모임 소개글<br/></label>
+            <input id="meetingDescription" name="meetingDescription" th:field="*{meetingDescription}" type="text">
+        </div>
+        <div>
+            <label><br/>모집 기간<br/></label>
+            <br/>모집 시작 기간<br/>
+            <input id="recruitmentStartDateTime" name="recruitmentStartDateTime" th:field="*{recruitmentStartDateTime}"
+                   type="datetime-local">
+            <br/>모집 종료 기간<br/>
+            <input id="recruitmentEndDateTime" name="recruitmentEndDateTime" th:field="*{recruitmentEndDateTime}"
+                   type="datetime-local">
+        </div>
+        <div>
+            <label><br/>모집 인원<br/></label>
+            최대
+            <input id="maxParticipants" name="maxParticipants" th:field="*{maxParticipants}" type="number">
+        </div>
+        <div>
+            <label><br/>모임 시간<br/></label>
+            <br/>모임 시작 시간<br/>
+            <input id="meetingStartDateTime" name="meetingStartDateTime" th:field="*{meetingStartDateTime}"
+                   type="datetime-local">
+            <br/>모임 종료 시간<br/>
+            <input id="meetingEndDateTime" name="meetingEndDateTime" th:field="*{meetingEndDateTime}"
+                   type="datetime-local">
+        </div>
+        <div>
+            <label><br/>모임 장소<br/></label>
+            <input id="address" name="address" th:field="*{address}" type="text"><br/>
+            <input id="detailAddress" name="detailAddress" th:field="*{detailAddress}" type="text"><br/>
+            <input id="locationDescription" name="locationDescription" th:field="*{locationDescription}"
+                   type="text"><br/>
+        </div>
+        <div>
+            <label><br/>참가 비용<br/></label>
+            <select id="meetingPrice" name="meetingPrice" th:field="*{meetingPrice}">
+                <option th:each="type : ${T(com.moigae.application.component.meeting.domain.enumeraion.MeetingPrice).values()}"
+                        th:value="${type}" th:text="${type.value}"></option>
+            </select>
+        </div>
+        <div>
+            <label><br/>반려견 동반 유무<br/></label>
+            <select id="petAllowedStatus" name="petAllowedStatus" th:field="*{petAllowedStatus}">
+                <option th:each="type : ${T(com.moigae.application.component.meeting.domain.enumeraion.PetAllowedStatus).values()}"
+                        th:value="${type}" th:text="${type.value}"></option>
+            </select>
+        </div>
+        <div>
+            <label><br/>연락 수단<br/></label>
+            <input id="phone" name="phone" th:field="*{phone}" type="text"><br/>
+            <input id="email" name="email" th:field="*{email}" type="text"><br/>
+            <input id="kakaoId" name="kakaoId" th:field="*{kakaoId}" type="text"><br/>
+            <input id="link" name="link" th:field="*{link}" type="text"><br/>
+            <input id="otherLink" name="otherLink" th:field="*{otherLink}" type="text"><br/>
+        </div>
+        <div>
+            <label><br/>모임 정보 자유 작성<br/></label>
+            <textarea id="meetingFreeFormDetails" name="meetingFreeFormDetails"
+                      th:field="*{meetingFreeFormDetails}"></textarea>
+        </div>
+        <div>
+            <button type="submit">만들기</button>
+        </div>
+        <input th:onclick="|location.href='@{/meetings}'|" type="button" value="취소">
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    </form>
 </div>
-목업 참고해서 호스트 센터 - 모임 등록 기능 개발, 아직 화면은 개발 x
 </body>
 </html>

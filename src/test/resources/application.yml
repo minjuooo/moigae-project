@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+      properties:
+        hibernate:
+          default_batch_fetch_size: 1000
+          format_sql: true
+          show_sql: true
+          use_sql_comments: true
+          dialect: org.hibernate.dialect.H2Dialect
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+logging:
+  level:
+    org:
+      hibernate:
+        type: trace
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    credentials:
+      accessKey: AKIARM3PCPVY4MO62BEU
+      secretKey: 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
+    s3:
+      bucket: s3-moment

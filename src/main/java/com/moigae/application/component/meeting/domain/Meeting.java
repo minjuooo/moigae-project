@@ -3,7 +3,6 @@ package com.moigae.application.component.meeting.domain;
 import com.moigae.application.component.meeting.domain.enumeraion.*;
 import com.moigae.application.component.meeting_image.domain.MeetingImage;
 import com.moigae.application.core.common.BaseEntity;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "meeting")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
 public class Meeting extends BaseEntity {
     @Id
@@ -117,13 +116,14 @@ public class Meeting extends BaseEntity {
     private MeetingStatus meetingStatus;
 
     @Builder
-    public Meeting(String meetingTitle, MeetingType meetingType, MeetingCategory meetingCategory, String nickName,
+    public Meeting(String id, String meetingTitle, MeetingType meetingType, MeetingCategory meetingCategory, String nickName,
                    MeetingImage meetingImage, String meetingDescription,
                    LocalDateTime recruitmentStartDateTime, LocalDateTime recruitmentEndDateTime,
                    ParticipantRange participantRange, LocalDateTime meetingStartDateTime,
                    LocalDateTime meetingEndDateTime, MeetingAddress meetingAddress, MeetingPrice meetingPrice,
                    PetAllowedStatus petAllowedStatus, MeetingContact meetingContact, String meetingFreeFormDetails,
                    MeetingStatus meetingStatus) {
+        this.id = id;
         this.meetingTitle = meetingTitle;
         this.meetingType = meetingType;
         this.meetingCategory = meetingCategory;

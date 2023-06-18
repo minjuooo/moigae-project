@@ -30,15 +30,17 @@ public class MeetingUser {
     private String hostId;
 
     @Builder
-    public MeetingUser(User user, Meeting meeting, String hostId) {
+    public MeetingUser(Long id, User user, Meeting meeting, String hostId) {
+        this.id = id;
         this.user = user;
         this.meeting = meeting;
         this.hostId = hostId;
     }
 
     //정적 팩토리 메소드
-    public static MeetingUser of(User user, Meeting meeting, String hostId) {
+    public static MeetingUser of(Long id, User user, Meeting meeting, String hostId) {
         return MeetingUser.builder()
+                .id(id)
                 .user(user)
                 .meeting(meeting)
                 .hostId(hostId)

@@ -43,6 +43,27 @@ class ParticipantRangeTest {
                 .withMessage("참여 인원 마감으로 인한 신청 제한");
     }
 
+    @Test
+    @DisplayName("모임 참여-인원 equals 테스트")
+    void 모임_참여_인원_equals_테스트() {
+        //given
+        ParticipantRange participantRangeOne = ParticipantRange.of(CURRENT_PARTICIPANTS, MAX_PARTICIPANTS);
+        ParticipantRange participantRangeTwo = ParticipantRange.of(CURRENT_PARTICIPANTS, MAX_PARTICIPANTS);
+        //when & then
+        assertThat(participantRangeOne).isEqualTo(participantRangeTwo);
+        assertThat(participantRangeOne.equals(participantRangeTwo)).isTrue();
+    }
+
+    @Test
+    @DisplayName("모임 참여-인원 hashCode 테스트")
+    void 모임_참여_인원_hashCode_테스트() {
+        //given
+        ParticipantRange participantRangeOne = ParticipantRange.of(CURRENT_PARTICIPANTS, MAX_PARTICIPANTS);
+        ParticipantRange participantRangeTwo = ParticipantRange.of(CURRENT_PARTICIPANTS, MAX_PARTICIPANTS);
+        //when & then
+        assertThat(participantRangeOne.hashCode()).isEqualTo(participantRangeTwo.hashCode());
+    }
+
     private void 모임_참여_인원_객체_검증() {
         assertThat(participantRange.getCurrentParticipants()).isEqualTo(0);
         assertThat(participantRange.getMaxParticipants()).isEqualTo(10);

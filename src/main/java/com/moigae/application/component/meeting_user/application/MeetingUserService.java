@@ -24,7 +24,7 @@ public class MeetingUserService {
 
     @Transactional
     public Meeting meetingUserCreate(CustomUser customUser, MeetingCreateRequest meetingCreateRequest) {
-        User user = userRepository.findByUserName(customUser.getUsername());
+        User user = userRepository.findByEmail(customUser.getUsername());
         Meeting meeting = createMeeting(meetingCreateRequest);
 
         meetingRepository.save(meeting);

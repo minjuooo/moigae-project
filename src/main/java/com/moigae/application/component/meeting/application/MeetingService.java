@@ -24,6 +24,7 @@ public class MeetingService {
 
     @Transactional(readOnly = true)
     public MeetingDto meetingFindByUUID(String meetingId) {
-        return meetingRepositoryCustom.findCustomMeetingById(meetingId);
+        MeetingDto meetingDto = meetingRepositoryCustom.findCustomMeetingById(meetingId);
+        return meetingDto;
     }
 }
