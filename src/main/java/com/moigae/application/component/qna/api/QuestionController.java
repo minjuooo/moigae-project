@@ -83,12 +83,9 @@ public class QuestionController {
     }
 
     @GetMapping("/sort")
-    public ResponseEntity<Page<QuestionWithSymCountDto>> sortQuestions(@RequestParam String sort, Pageable pageable) {
-        System.out.println(pageable);
-        System.out.println(sort);
-        Page<QuestionWithSymCountDto> questions = questionService.getQuestionsWithSymCount(pageable, sort);
+    public ResponseEntity<Page<QuestionWithSymCountDto>> sortQuestions(@RequestParam String sort, @RequestParam(required = false) String searchTerm, Pageable pageable) {
+        Page<QuestionWithSymCountDto> questions = questionService.getQuestionsWithSymCount(pageable, sort, searchTerm);
 
-        System.out.println("돌아갑니다@@@@@@@@@@@@@@@@@@@@@@@");
         return ResponseEntity.ok(questions);
     }
 

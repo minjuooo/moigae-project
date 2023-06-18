@@ -22,10 +22,11 @@ public class QuestionService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Page<QuestionWithSymCountDto> getQuestionsWithSymCount(Pageable pageable, String sort) {
+    public Page<QuestionWithSymCountDto> getQuestionsWithSymCount(Pageable pageable, String sort, String searchTerm) {
         String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, COUNT(a.sym), COUNT(a)) " +
                 "FROM com.moigae.application.component.qna.domain.Question q " +
                 "LEFT JOIN com.moigae.application.component.qna.domain.Answer a ON a.question.id = q.id " +
+                "WHERE q.questionTitle LIKE :searchTerm OR q.questionContent LIKE :searchTerm " +
                 "GROUP BY q";
 
         if ("views".equals(sort)) {
@@ -34,10 +35,34 @@ public class QuestionService {
             jpql += " ORDER BY q.createTime DESC";
         }
 
-        return getQuestionWithSymCountDtos(pageable, jpql);
+        return getQuestionWithSymCountDtos(pageable, jpql, searchTerm);
     }
 
-    private Page<QuestionWithSymCountDto> getQuestionWithSymCountDtos(Pageable pageable, String jpql) {
+    private Page<QuestionWithSymCountDto> getQuestionWithSymCountDtos(Pageable pageable, String jpql, String searchTerm) {
+        String countJpql = "SELECT COUNT(q) FROM com.moigae.application.component.qna.domain.Question q WHERE q.questionTitle LIKE :searchTerm OR q.questionContent LIKE :searchTerm";
+
+        TypedQuery<QuestionWithSymCountDto> query = entityManager.createQuery(jpql, QuestionWithSymCountDto.class);
+        TypedQuery<Long> countQuery = entityManager.createQuery(countJpql, Long.class);
+        query.setParameter("searchTerm", "%" + searchTerm + "%");
+        countQuery.setParameter("searchTerm", "%" + searchTerm + "%");
+
+        // 페이지에 해당하는 데이터만 가져옴
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
+
+        List<QuestionWithSymCountDto> content = query.getResultList();
+        Long total = countQuery.getSingleResult();
+
+        for (QuestionWithSymCountDto qd : content) {
+            Document document = Jsoup.parse(qd.getQuestionContent());
+            String parseContent = document.text();
+            qd.setQuestionContent(parseContent);
+            qd.setRelativeTime(getRelativeTime(qd.getCreateTime()));
+        }
+
+        return new PageImpl<>(content, pageable, total);
+    }
+    /*private Page<QuestionWithSymCountDto> getQuestionWithSymCountDtos(Pageable pageable, String jpql) {
         // 전체 레코드 수를 세는 쿼리
         String countJpql = "SELECT COUNT(q) FROM com.moigae.application.component.qna.domain.Question q";
 
@@ -61,7 +86,7 @@ public class QuestionService {
         }
 
         return new PageImpl<>(results, pageable, total);
-    }
+    }*/
 
     public String getRelativeTime(LocalDateTime pastTime) {
         LocalDateTime now = LocalDateTime.now();

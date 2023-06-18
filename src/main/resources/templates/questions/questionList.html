@@ -97,9 +97,9 @@
         <br>
         <h2 style="font-weight: bold;">반려인들과 자유롭게 이야기 나누어보세요!</h2>
         <br>
-        <form class="d-flex">
+        <form id="search-form" class="d-flex">
           <button style="background-color: #d2d2d2;" class="btn btn-outline-success" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <input id="search-input" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         </form>
         <br>
         <div class="d-flex justify-content-between">
@@ -165,37 +165,50 @@
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
         crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script>
   $(document).ready(function() {
     var currentPage = 0;
     var selectedSort = 'latest';
     var totalPages = 0;
+    var blockSize = 5; // 블록 사이즈 정의
+    var currentSearchTerm = ''; // 전역 변수로 검색어 저장
 
     $(".dropdown-menu a").click(function() {
       selectedSort = $(this).attr('data-sort');
       currentPage = 0;
-      fetchPage(currentPage);
+      fetchPage(currentPage, currentSearchTerm);
     });
 
-    function fetchPage(page) {
+    $("#search-form").submit(function(e) {
+      e.preventDefault();
+      currentSearchTerm = $("#search-input").val();
+      currentPage = 0;
+      fetchPage(currentPage, currentSearchTerm);
+    });
+
+    function fetchPage(page, searchTerm = '') {
       $.ajax({
         url: "/questions/sort",
-        data: { sort: selectedSort, page: page, size: 5 },
+        data: { sort: selectedSort, page: page, size: 5, searchTerm: searchTerm },
         success: function(data) {
           var html = '';
           totalPages = data.totalPages;
           $.each(data.content, function(i, question) {
             // Generate HTML with question data
+            let questionTitle = question.questionTitle.length > 50 ? question.questionTitle.substring(0, 30) + '...' : question.questionTitle;
+            let questionContent = question.questionContent.length > 100 ? question.questionContent.substring(0, 30) + '...' : question.questionContent;
+
             html += '<hr>';
             html += '<div>';
             html += '<div class="container">';
-            html += '<div style="font-weight: bold; font-size: 16px;">' + question.questionTitle + '</div>';
+            html += '<div style="font-weight: bold; font-size: 16px;">' + questionTitle + '</div>';
             html += '<br>';
-            html += '<div style="font-size: 13px;">' + question.questionContent + '</div>';
+            html += '<div style="font-size: 13px;">' + questionContent + '</div>';
             html += '<div class="d-flex justify-content-between">';
             html += '<span>';
-            html += '<span style="color: #969696; font-size: 12px;">' + question.relativeTime + '</span>';
-            html += '<span>' + (question.totalAnswersCount === 0 ? '미답변' : '답변') + '</span>';
+            html += '<span style="color: #969696; font-size: 12px;">' + question.relativeTime + "&ensp;" + '</span>';
+            html += '<span style="font-size: 12px; color:' + (question.totalAnswersCount === 0 ? '#969696' : 'red') + ';">' + (question.totalAnswersCount === 0 ? '미답변' : '답변') + '</span>';
             html += '</span>';
             html += '<span class="justify-content-end" style="color: #969696; font-size: 12px;">';
             html += '<span>공감 ' + question.sym + '</span>';
@@ -209,21 +222,23 @@
           $('#question-list').html(html);
 
           var paginationHtml = '';
-          var startPage = Math.max(0, currentPage - 2);
-          var endPage = Math.min(totalPages, startPage + 5);
+
+          var currentBlock = Math.floor(currentPage / blockSize); // 현재 페이지가 속한 블록
+          var startPage = currentBlock * blockSize; // 블록의 시작 페이지
+          var endPage = Math.min((currentBlock + 1) * blockSize, totalPages); // 블록의 끝 페이지
 
           // 맨 앞 페이지 버튼
           paginationHtml += '<li class="page-item ' + (currentPage === 0 ? 'disabled' : '') + '"><a class="page-link" href="#">&lt;&lt;</a></li>';
 
-          // 이전 버튼
-          paginationHtml += '<li class="page-item ' + (currentPage === 0 ? 'disabled' : '') + '"><a class="page-link" href="#">&lt;</a></li>';
+          // 이전 블록 버튼
+          paginationHtml += '<li class="page-item ' + (currentPage < blockSize ? 'disabled' : '') + '"><a class="page-link" href="#">&lt;</a></li>';
 
           for (var i = startPage; i < endPage; i++) {
             paginationHtml += '<li class="page-item ' + (i === currentPage ? 'active' : '') + '"><a class="page-link" href="#">' + (i + 1) + '</a></li>';
           }
 
-          // 다음 버튼
-          paginationHtml += '<li class="page-item ' + (currentPage === totalPages - 1 ? 'disabled' : '') + '"><a class="page-link" href="#">&gt;</a></li>';
+          // 다음 블록 버튼
+          paginationHtml += '<li class="page-item ' + (currentPage >= (totalPages - 1 - (totalPages - 1) % blockSize) ? 'disabled' : '') + '"><a class="page-link" href="#">&gt;</a></li>';
 
           // 맨 끝 페이지 버튼
           paginationHtml += '<li class="page-item ' + (currentPage === totalPages - 1 ? 'disabled' : '') + '"><a class="page-link" href="#">&gt;&gt;</a></li>';
@@ -236,20 +251,16 @@
               var buttonText = $(this).children().first().text();
               if (buttonText === '<<') {
                 currentPage = 0;
-                fetchPage(currentPage);
               } else if (buttonText === '<') {
-                currentPage = Math.max(0, currentPage - 1);
-                fetchPage(currentPage);
+                currentPage = Math.max(0, currentPage - blockSize);
               } else if (buttonText === '>') {
-                currentPage = Math.min(totalPages - 1, currentPage + 1);
-                fetchPage(currentPage);
+                currentPage = Math.min(totalPages - 1, currentPage + blockSize);
               } else if (buttonText === '>>') {
                 currentPage = totalPages - 1;
-                fetchPage(currentPage);
               } else if ($.isNumeric(buttonText)) {
                 currentPage = parseInt(buttonText) - 1;
-                fetchPage(currentPage);
               }
+              fetchPage(currentPage, currentSearchTerm);
             });
           });
         }
