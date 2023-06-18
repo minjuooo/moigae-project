@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 class MeetingImageTest {
+    private static final String UPDATE_INIT = "update";
 
     @Test
     @DisplayName("모임 이미지 도메인 생성 테스트")
@@ -16,6 +17,17 @@ class MeetingImageTest {
         MeetingImage meetingImage = createMeetingImage();
         //then
         모임_이미지_도메인_검증(meetingImage);
+    }
+
+    @Test
+    @DisplayName("모임 이미지 도메인 업데이트 테스트")
+    void 모임_이미지_도메인_업데이트_테스트() {
+        //given
+        MeetingImage meetingImage = createMeetingImage();
+        //when
+        meetingImage.update(UPDATE_INIT, UPDATE_INIT, UPDATE_INIT, UPDATE_INIT);
+        //then
+        모임_이미지_도메인_업데이트_검증(meetingImage);
     }
 
     private static MeetingImage createMeetingImage() {
@@ -32,5 +44,12 @@ class MeetingImageTest {
         assertThat(meetingImage.getName()).isEqualTo("이미지 이름");
         assertThat(meetingImage.getS3Key()).isEqualTo("s3-key");
         assertThat(meetingImage.getPath()).isEqualTo("이미지 경로");
+    }
+
+    private static void 모임_이미지_도메인_업데이트_검증(MeetingImage meetingImage) {
+        assertThat(meetingImage.getOriginName()).isEqualTo(UPDATE_INIT);
+        assertThat(meetingImage.getName()).isEqualTo(UPDATE_INIT);
+        assertThat(meetingImage.getS3Key()).isEqualTo(UPDATE_INIT);
+        assertThat(meetingImage.getPath()).isEqualTo(UPDATE_INIT);
     }
 }

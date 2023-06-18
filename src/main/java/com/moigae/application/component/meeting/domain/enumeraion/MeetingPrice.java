@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum MeetingPrice {
-    FREE("무료", 0),
-    PAY("유료", 100);  // 가격은 나중에 설정 가능, 디폴트 백원 -> 테스트 용도
+    PAY("유료", 100),  // 가격은 나중에 설정 가능, 디폴트 백원 -> 테스트 용도
+    FREE("무료", 0);
+    
     private final String value;
     private int price;
 

@@ -40,7 +40,7 @@ class MeetingUserTest {
     @DisplayName("모임 유저 객체 생성 테스트")
     void 모임_유저_객체_생성_테스트() {
         //given & when
-        MeetingUser meetingUser = MeetingUser.of(user, meeting, "hostId");
+        MeetingUser meetingUser = MeetingUser.of(1L, user, meeting, "hostId");
         //then
         모임_유저_객체_검증(meetingUser);
     }
@@ -79,6 +79,7 @@ class MeetingUserTest {
     }
 
     private static void 모임_유저_객체_검증(MeetingUser meetingUser) {
+        assertThat(meetingUser.getId()).isEqualTo(1L);
         assertThat(meetingUser.getMeeting().getMeetingTitle()).isEqualTo("타이틀");
         assertThat(meetingUser.getUser().getUserName()).isEqualTo("홍정완");
         assertThat(meetingUser.getHostId()).isEqualTo("hostId");

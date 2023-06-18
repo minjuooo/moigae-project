@@ -14,9 +14,6 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class MeetingCreateRequest {
-    //모임 객체 - 기본 키
-    private String id;
-
     //모임 이름
     private String meetingTitle;
 
@@ -76,7 +73,7 @@ public class MeetingCreateRequest {
     private MeetingStatus meetingStatus = MeetingStatus.AVAILABLE;
 
     @Builder
-    public MeetingCreateRequest(String id, String meetingTitle, MeetingType meetingType,
+    public MeetingCreateRequest(String meetingTitle, MeetingType meetingType,
                                 MeetingCategory meetingCategory, String nickName, MultipartFile path,
                                 String meetingDescription, LocalDateTime recruitmentStartDateTime,
                                 LocalDateTime recruitmentEndDateTime, Integer currentParticipants,
@@ -86,7 +83,6 @@ public class MeetingCreateRequest {
                                 PetAllowedStatus petAllowedStatus, String phone, String email,
                                 String kakaoId, String link, String otherLink, String meetingFreeFormDetails,
                                 MeetingStatus meetingStatus) {
-        this.id = id;
         this.meetingTitle = meetingTitle;
         this.meetingType = meetingType;
         this.meetingCategory = meetingCategory;

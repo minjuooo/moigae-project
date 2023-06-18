@@ -6,16 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum MeetingCategory {
-    //카테고리
-//    TOTAL("전체"),
-//    ONLINE("온라인"),
-//    OFFLINE("오프라인"),
-
-//    FREE("무료"),
-//    PAY("유료"),
-
-//    PET_FRIENDLY("반려견 동반"),
-
     // 시그니처 추가하기.
     FELLOWSHIP("친목도모"),
     PARTY("파티"),
