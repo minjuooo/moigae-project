@@ -33,7 +33,7 @@
             <br/><br/>
             <div class="info">
                 <h5>신청 하기</h5>
-                <input type="text" class="text-center" th:value="${meetingDto.meetingPrice.getPrice()}" readonly>
+                <input type="text" class="text-center" th:value="${meetingDto.getPrice()}" readonly>
                 <button class="btn btn-primary" id="payment-button"
                         th:data-url="@{'/meetings/' + ${meetingDto.getId()} + '/applications'}">
                     결제 하기

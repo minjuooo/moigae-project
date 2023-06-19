@@ -32,7 +32,10 @@ public class MeetingDto {
     private LocalDateTime meetingStartDateTime;
     private LocalDateTime meetingEndDateTime;
     private MeetingAddress meetingAddress;
+    // 긴급 수정 - 홍정완
+    private int price = MeetingPrice.PAY.getPrice();
     private MeetingPrice meetingPrice;
+    //
     private PetAllowedStatus petAllowedStatus;
     private MeetingContact meetingContact;
     private String meetingFreeFormDetails;
@@ -40,12 +43,12 @@ public class MeetingDto {
 
     @Builder
     public MeetingDto(String id, String meetingTitle, MeetingType meetingType, MeetingCategory meetingCategory,
-                      String nickName, String path, String meetingDescription,
-                      LocalDateTime recruitmentStartDateTime, LocalDateTime recruitmentEndDateTime,
-                      ParticipantRange participantRange, LocalDateTime meetingStartDateTime,
-                      LocalDateTime meetingEndDateTime, MeetingAddress meetingAddress,
-                      MeetingPrice meetingPrice, PetAllowedStatus petAllowedStatus,
-                      MeetingContact meetingContact, String meetingFreeFormDetails, String meetingStatus) {
+                      String nickName, String path, String meetingDescription, LocalDateTime recruitmentStartDateTime,
+                      LocalDateTime recruitmentEndDateTime, ParticipantRange participantRange,
+                      LocalDateTime meetingStartDateTime, LocalDateTime meetingEndDateTime,
+                      MeetingAddress meetingAddress, int price, MeetingPrice meetingPrice,
+                      PetAllowedStatus petAllowedStatus, MeetingContact meetingContact, String meetingFreeFormDetails,
+                      String meetingStatus) {
         this.id = id;
         this.meetingTitle = meetingTitle;
         this.meetingType = meetingType;
@@ -59,6 +62,7 @@ public class MeetingDto {
         this.meetingStartDateTime = meetingStartDateTime;
         this.meetingEndDateTime = meetingEndDateTime;
         this.meetingAddress = meetingAddress;
+        this.price = price;
         this.meetingPrice = meetingPrice;
         this.petAllowedStatus = petAllowedStatus;
         this.meetingContact = meetingContact;
@@ -81,6 +85,7 @@ public class MeetingDto {
                 .meetingStartDateTime(meeting.getMeetingStartDateTime())
                 .meetingEndDateTime(meeting.getMeetingEndDateTime())
                 .meetingAddress(meeting.getMeetingAddress())
+                .price(meeting.getMeetingPrice().getPrice())
                 .meetingPrice(meeting.getMeetingPrice())
                 .petAllowedStatus(meeting.getPetAllowedStatus())
                 .meetingContact(meeting.getMeetingContact())
@@ -163,5 +168,9 @@ public class MeetingDto {
 
     public MeetingType getMeetingType() {
         return meetingType;
+    }
+
+    public int getPrice() {
+        return price;
     }
 }
