@@ -84,10 +84,14 @@ public class Meeting extends BaseEntity {
     })
     private MeetingAddress meetingAddress;
 
-    //참가 비용
+    //유료, 무료 상태
     @Column(name = "meeting_price")
     @Enumerated(EnumType.STRING)
     private MeetingPrice meetingPrice;
+
+    //참가 비용
+    @Column(name = "meeting_amount")
+    private Integer meetingAmount;
 
     //반려견 동반 유무
     @Column(name = "pet_allowed_status")
@@ -116,13 +120,13 @@ public class Meeting extends BaseEntity {
     private MeetingStatus meetingStatus;
 
     @Builder
-    public Meeting(String id, String meetingTitle, MeetingType meetingType, MeetingCategory meetingCategory, String nickName,
-                   MeetingImage meetingImage, String meetingDescription,
+    public Meeting(String id, String meetingTitle, MeetingType meetingType, MeetingCategory meetingCategory,
+                   String nickName, MeetingImage meetingImage, String meetingDescription,
                    LocalDateTime recruitmentStartDateTime, LocalDateTime recruitmentEndDateTime,
                    ParticipantRange participantRange, LocalDateTime meetingStartDateTime,
                    LocalDateTime meetingEndDateTime, MeetingAddress meetingAddress, MeetingPrice meetingPrice,
-                   PetAllowedStatus petAllowedStatus, MeetingContact meetingContact, String meetingFreeFormDetails,
-                   MeetingStatus meetingStatus) {
+                   Integer meetingAmount, PetAllowedStatus petAllowedStatus, MeetingContact meetingContact,
+                   String meetingFreeFormDetails, MeetingStatus meetingStatus) {
         this.id = id;
         this.meetingTitle = meetingTitle;
         this.meetingType = meetingType;
@@ -137,6 +141,7 @@ public class Meeting extends BaseEntity {
         this.meetingEndDateTime = meetingEndDateTime;
         this.meetingAddress = meetingAddress;
         this.meetingPrice = meetingPrice;
+        this.meetingAmount = meetingAmount;
         this.petAllowedStatus = petAllowedStatus;
         this.meetingContact = meetingContact;
         this.meetingFreeFormDetails = meetingFreeFormDetails;
