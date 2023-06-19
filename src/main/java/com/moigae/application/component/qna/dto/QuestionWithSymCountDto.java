@@ -40,5 +40,16 @@ public class QuestionWithSymCountDto {
         this.sym = symCount;
         this.totalAnswersCount = totalAnswersCount;
     }
+
+    public QuestionWithSymCountDto(Question question, long symCount) {
+        this.id = question.getId();
+        this.userId = question.getUserId();
+        this.questionTitle = question.getQuestionTitle();
+        this.questionContent = question.getQuestionContent();
+        this.viewCount = question.getViewCount();
+        this.createTime = question.getCreateTime();
+        this.updateTime = question.getUpdateTime();
+        this.sym = symCount;
+    }
 }
 

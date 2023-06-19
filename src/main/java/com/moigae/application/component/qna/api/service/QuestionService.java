@@ -36,9 +36,8 @@ public class QuestionService {
 //        return getQuestionWithSymCountDtos(pageable, jpql, searchTerm);
 //    }
     public Page<QuestionWithSymCountDto> getQuestionsWithSymCount(Pageable pageable, String sort, String searchTerm) {
-        String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, SUM(CASE WHEN s.sym = true THEN 1 ELSE 0 END), COUNT(a)) " +
+        String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, COUNT(CASE WHEN s.sym = true THEN 1 ELSE null END)) " +
                 "FROM com.moigae.application.component.qna.domain.Question q " +
-                "LEFT JOIN com.moigae.application.component.qna.domain.Answer a ON a.question.id = q.id " +
                 "LEFT JOIN com.moigae.application.component.qna.domain.Sym s ON s.question.id = q.id " +
                 "WHERE q.questionTitle LIKE :searchTerm OR q.questionContent LIKE :searchTerm " +
                 "GROUP BY q";
@@ -79,12 +78,18 @@ public class QuestionService {
     }
 
     public QuestionWithSymCountDto getQuestionWithSymCount(String questionId) {
-        String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, SUM(CASE WHEN s.sym = true THEN 1 ELSE 0 END), COUNT(a)) " +
+       /* String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, SUM(CASE WHEN s.sym = true THEN 1 ELSE 0 END), COUNT(a)) " +
                 "FROM com.moigae.application.component.qna.domain.Question q " +
                 "LEFT JOIN com.moigae.application.component.qna.domain.Answer a ON a.question.id = q.id " +
                 "LEFT JOIN com.moigae.application.component.qna.domain.Sym s ON s.question.id = q.id " +
                 "WHERE q.id = :questionId " +
+                "GROUP BY q";*/
+        String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, COUNT(CASE WHEN s.sym = true THEN 1 ELSE null END)) " +
+                "FROM com.moigae.application.component.qna.domain.Question q " +
+                "LEFT JOIN com.moigae.application.component.qna.domain.Sym s ON s.question.id = q.id " +
+                "WHERE q.id = :questionId " +
                 "GROUP BY q";
+
 
         TypedQuery<QuestionWithSymCountDto> query = entityManager.createQuery(jpql, QuestionWithSymCountDto.class);
         query.setParameter("questionId", questionId);

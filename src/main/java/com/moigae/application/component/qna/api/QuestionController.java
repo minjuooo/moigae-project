@@ -26,10 +26,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,41 +67,28 @@ public class QuestionController {
         questionRepository.save(question);
         return "redirect:/questions/questionList";
     }
-    //
-    //          Question    question
+
 
     public String getQuestionList(Model model,
                                            @AuthenticationPrincipal CustomUser customUser,
                                            @PageableDefault(size = 10) Pageable pageable,
                                            String viewName) {
-
-
-        //Page<QuestionWithSymCountDto> questions
-        //       = questionService.getQuestionsWithSymCount(pageable);
-        //Page<Question> questions = questionRepository.findAll(pageable);
-
-        // Calculate the page group
-        //int startPage = (pageable.getPageNumber() / 10) * 10;
-        //int endPage = Math.min(startPage + 10, questions.getTotalPages());
-
         model.addAttribute("customUser", customUser);
-        //model.addAttribute("questions", questions);
-        //model.addAttribute("startPage", startPage);
-        //model.addAttribute("endPage", endPage);
-
+        System.out.println("imused11111");
         return viewName;
     }
     @GetMapping("/questionList")
     public String articleList(Model model,
                               @AuthenticationPrincipal CustomUser customUser,
                               @PageableDefault(size = 6) Pageable pageable) {
+        System.out.println("imused2222");
         return getQuestionList(model, customUser, pageable, "questions/questionList");
     }
 
     @GetMapping("/sort")
     public ResponseEntity<Page<QuestionWithSymCountDto>> sortQuestions(@RequestParam String sort, @RequestParam(required = false) String searchTerm, Pageable pageable) {
         Page<QuestionWithSymCountDto> questions = questionService.getQuestionsWithSymCount(pageable, sort, searchTerm);
-
+        System.out.println("imused33333");
         return ResponseEntity.ok(questions);
     }
 
@@ -162,13 +151,14 @@ public class QuestionController {
 
     @PostMapping("/symUp/{questionId}/{userId}")
     @ResponseBody
+    @Transactional
     public Map<String, Long> symUp(
             @PathVariable("questionId") String questionId,
             @PathVariable("userId") String userId
     ){
 
         User user = userRepository.findById(userId)
-                .orElseThrow(()->new ResourceNotFoundException("User not found with id " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Question not found with id " + questionId));
 
@@ -176,16 +166,9 @@ public class QuestionController {
         boolean toggle = false;
         if (sym == null) {
             sym = new Sym(question, user, true);
-        }else{
-            if(sym.isSym()){
-                toggle = false;
-            }else{
-                toggle = true;
-            }
+        } else {
+            toggle = !sym.isSym();
             sym.setSym(toggle);
-            sym.setQuestion(question);
-            sym.setUser(user);
-
         }
         symRepository.save(sym);
 
@@ -195,8 +178,8 @@ public class QuestionController {
         Map<String, Long> response = new HashMap<>();
         response.put("newSymValue", symLen);
         return response;
-
     }
+
     @PostMapping("/addAnswer/{questionId}/{userId}")
     @ResponseBody
     public Map<String, String> addAnswer(
@@ -236,4 +219,39 @@ public class QuestionController {
 
         return answerDtos;
     }
+
+    @DeleteMapping("/deleteAnswer/{answerId}")
+    @ResponseBody
+    public Map<String, String> deleteAnswer(@PathVariable String answerId) {
+        answerRepository.deleteById(answerId);
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "success");
+
+        return response;
+    }
+
+    @PostMapping("/editAnswer/{id}")
+    @ResponseBody
+    @Transactional
+    public Map<String, String> editAnswer(
+            @PathVariable String id,
+            @RequestParam String answerContent
+    ){
+        Answer answer = answerRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Answer not found with id " + id));
+        answer.setAnswerContent(answerContent);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "success");
+
+        return response;
+    }
+
+//    public String getMyQuestionList(Model model,
+//                                  @AuthenticationPrincipal CustomUser customUser,
+//                                  @PageableDefault(size = 10) Pageable pageable,
+//                                  String viewName) {
+//        model.addAttribute("customUser", customUser);
+//        return viewName;
+//    }
 }

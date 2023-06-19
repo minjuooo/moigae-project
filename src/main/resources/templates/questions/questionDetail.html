@@ -106,7 +106,7 @@
         <div th:utext="${question.questionContent}"></div>
         <br>
         <div class="d-flex justify-content-center">
-          <div class="btn btn-primary">
+          <div id="sympathy" class="btn btn-primary">
             <span>공감 </span>
             <span><i class="fa-regular fa-thumbs-up"></i></span>
             <span> </span>
@@ -194,7 +194,7 @@
   let userId = '[[${customUser.id}]]';
   let questionId = '[[${question.id}]]';
 
-  $(".btn.btn-primary").click(function() {
+  $("#sympathy").click(function() {
     // AJAX 요청을 서버에 보냅니다.
     $.ajax({
       url: '/questions/symUp/' + questionId + '/' + userId,  // symUp 엔드포인트에 요청을 보냅니다.
@@ -202,6 +202,8 @@
       success: function(response) {  // 서버로부터 성공적인 응답을 받았을 때의 동작을 정의합니다.
         // 응답으로부터 반환된 값으로 'sym' 요소의 텍스트를 업데이트합니다.
         $("#sym").text(response.newSymValue);
+        console.log("sym success");
+        console.log(response.newSymValue);
       },
       error: function(error) {  // 요청이 실패했을 때의 동작을 정의합니다.
         console.log(error);
@@ -247,7 +249,7 @@
 
         var formattedDate = year + '-' + month + '-' + day;  // 연월일을 결합하여 날짜 포맷을 완성합니다.
         var answerHtml = `
-        <div class="container">
+        <div class="container" data-id="${answerDtos.id}">
           <div style="margin-bottom: 10px; font-size: 20px;font-weight: bold;">답변</div>
           <div>${answerDtos.answerContent}</div>
           <br>
@@ -264,14 +266,26 @@
             </span>
             <span style="font-weight: bold;" class="justify-content-end">
               <span>
-                <button class="btn btn-warning">&emsp;수정&emsp;</button>
+                <button onclick="editAnswer(this)" class="btn btn-warning">&emsp;수정&emsp;</button>
               </span>
               <span>&ensp;</span>
               <span>
-                <button class="btn btn-danger">&emsp;삭제&emsp;</button>
+                <button onclick="deleteAnswer(this)" class="btn btn-danger">&emsp;삭제&emsp;</button>
               </span>
             </span>
           </div>
+          <br>
+          <div id="editContent" style="display: none;">
+            <textarea class="form-control" rows="3"></textarea>
+            <div class="d-flex justify-content-end">
+              <span>
+                <button onclick="cancelEdit(this)" id="cancel" style="margin-top: 10px;" class="btn btn-secondary">취소</button>
+                <span>&ensp;</span>
+                <button onclick="submitEdit(this)" id="answerEdit" style="margin-top: 10px;" class="btn btn-warning">댓글 수정</button>
+              </span>
+            </div>
+          </div>
+
           <hr>
         </div>
       `;
@@ -284,7 +298,65 @@
       console.log(error);
     }
   });
+  function deleteAnswer(button) {
+    // 댓글의 기본키를 가져옵니다.
+    var answerId = $(button).closest('.container').data('id');
 
+    // AJAX 요청을 서버에 보냅니다.
+    $.ajax({
+      url: '/questions/deleteAnswer/' + answerId,
+      type: 'DELETE',
+      success: function(response) {
+        if (response.status === "success") {
+          console.log("success");
+          // 성공하면 페이지를 새로고침 합니다.
+          location.reload();
+        }
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    });
+  }
+
+  function editAnswer(button) {
+    // 가장 가까운 '.container' 요소 안에 있는 'editContent' textarea를 찾습니다.
+    var editContent = $(button).closest('.container').find('#editContent');
+    var container = $(button).closest('.container');
+    var content = container.find('div').eq(1).text();  // 기존 댓글 내용을 가져옵니다.
+    container.find('textarea').val(content);  // textarea에 기존 댓글 내용을 입력합니다.
+    editContent.css('display', 'block');
+  }
+
+  function cancelEdit(button) {
+    var editContent = $(button).closest('.container').find('#editContent');
+    editContent.css('display', 'none');
+  }
+
+  function submitEdit(button) {
+    var container = $(button).closest('.container');
+    var content = container.find('textarea').val();  // 수정된 댓글 내용을 가져옵니다.
+    var id = container.data('id');  // 댓글의 ID를 가져옵니다.
+
+    // AJAX 요청을 서버에 보냅니다.
+    $.ajax({
+      url: '/questions/editAnswer/' + id,
+      type: 'POST',
+      data: {
+        answerContent: content  // 수정된 댓글 내용을 서버로 보냅니다.
+      },
+      success: function(response) {
+        if (response.status === "success") {
+          console.log("success");
+          // 성공하면 페이지를 새로고침 합니다.
+          location.reload();
+        }
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    });
+  }
 </script>
 </body>
 </html>
