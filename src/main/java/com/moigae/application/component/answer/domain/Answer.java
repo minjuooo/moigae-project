@@ -1,9 +1,12 @@
-package com.moigae.application.component.qna.domain;
+package com.moigae.application.component.answer.domain;
 
-import com.moigae.application.component.meeting_question.domain.MeetingQuestion;
+import com.moigae.application.component.question.domain.Question;
 import com.moigae.application.component.user.domain.User;
 import com.moigae.application.core.common.BaseEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -11,7 +14,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "answer")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Data
+@Getter
+@Setter
 public class Answer extends BaseEntity {
     @Id
     @Column(length = 191)
