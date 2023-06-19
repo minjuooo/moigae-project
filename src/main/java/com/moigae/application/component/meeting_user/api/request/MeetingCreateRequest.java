@@ -55,6 +55,7 @@ public class MeetingCreateRequest {
 
     //참가 비용
     private MeetingPrice meetingPrice;
+    private Integer priceInput;
 
     //반려견 동반 유무
     private PetAllowedStatus petAllowedStatus;
@@ -73,15 +74,14 @@ public class MeetingCreateRequest {
     private MeetingStatus meetingStatus = MeetingStatus.AVAILABLE;
 
     @Builder
-    public MeetingCreateRequest(String meetingTitle, MeetingType meetingType,
-                                MeetingCategory meetingCategory, String nickName, MultipartFile path,
-                                String meetingDescription, LocalDateTime recruitmentStartDateTime,
-                                LocalDateTime recruitmentEndDateTime, Integer currentParticipants,
-                                Integer maxParticipants, LocalDateTime meetingStartDateTime,
+    public MeetingCreateRequest(String meetingTitle, MeetingType meetingType, MeetingCategory meetingCategory,
+                                String nickName, MultipartFile path, String meetingDescription,
+                                LocalDateTime recruitmentStartDateTime, LocalDateTime recruitmentEndDateTime,
+                                Integer currentParticipants, Integer maxParticipants, LocalDateTime meetingStartDateTime,
                                 LocalDateTime meetingEndDateTime, String address, String detailAddress,
-                                String locationDescription, MeetingPrice meetingPrice,
-                                PetAllowedStatus petAllowedStatus, String phone, String email,
-                                String kakaoId, String link, String otherLink, String meetingFreeFormDetails,
+                                String locationDescription, MeetingPrice meetingPrice, Integer priceInput,
+                                PetAllowedStatus petAllowedStatus, String phone, String email, String kakaoId,
+                                String link, String otherLink, String meetingFreeFormDetails,
                                 MeetingStatus meetingStatus) {
         this.meetingTitle = meetingTitle;
         this.meetingType = meetingType;
@@ -99,6 +99,7 @@ public class MeetingCreateRequest {
         this.detailAddress = detailAddress;
         this.locationDescription = locationDescription;
         this.meetingPrice = meetingPrice;
+        this.priceInput = priceInput;
         this.petAllowedStatus = petAllowedStatus;
         this.phone = phone;
         this.email = email;

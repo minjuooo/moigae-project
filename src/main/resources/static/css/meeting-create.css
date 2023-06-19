@@ -1,0 +1,24 @@
+
+#meetingFreeFormDetails {
+    width: 400px;
+    height: 150px;
+}
+
+#meetingDescription {
+    width: 400px;
+    height: 150px;
+}
+
+h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+input[type="text"] {
+    width: 330px;
+}
+
+input[type="number"] {
+    width: 330px;
+}

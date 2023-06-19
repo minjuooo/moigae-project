@@ -64,9 +64,10 @@ public class User {
     private LocalDateTime deactivateAt;
 
     @Builder
-    public User(String userName, String password, Gender gender, String phone, LocalDate birth,
+    public User(String id, String userName, String password, Gender gender, String phone, LocalDate birth,
                 Address address, String account, String hostIntroduction, String email, UserRole userRole,
                 boolean flag, LocalDateTime deactivateAt) {
+        this.id = id;
         this.userName = userName;
         this.password = password;
         this.gender = gender;
