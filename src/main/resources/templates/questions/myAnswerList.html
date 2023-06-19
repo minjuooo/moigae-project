@@ -95,7 +95,7 @@
 
       <div class="col-md-9">
         <br>
-        <h2 style="font-weight: bold;">반려인들과 자유롭게 이야기 나누어보세요!</h2>
+        <h2 style="font-weight: bold;">내가 답변한 질문들을 모아봤어요!</h2>
         <br>
         <form id="search-form" class="d-flex">
           <button style="background-color: #d2d2d2;" class="btn btn-outline-success" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -189,7 +189,7 @@
 
     function fetchPage(page, searchTerm = '') {
       $.ajax({
-        url: "/questions/sort",
+        url: "/questions/sortMyA",
         data: { sort: selectedSort, page: page, size: 5, searchTerm: searchTerm },
         success: function(data) {
           var html = '';

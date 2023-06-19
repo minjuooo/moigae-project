@@ -74,21 +74,21 @@ public class QuestionController {
                                            @PageableDefault(size = 10) Pageable pageable,
                                            String viewName) {
         model.addAttribute("customUser", customUser);
-        System.out.println("imused11111");
+
         return viewName;
     }
     @GetMapping("/questionList")
-    public String articleList(Model model,
+    public String questionList(Model model,
                               @AuthenticationPrincipal CustomUser customUser,
                               @PageableDefault(size = 6) Pageable pageable) {
-        System.out.println("imused2222");
+
         return getQuestionList(model, customUser, pageable, "questions/questionList");
     }
 
     @GetMapping("/sort")
     public ResponseEntity<Page<QuestionWithSymCountDto>> sortQuestions(@RequestParam String sort, @RequestParam(required = false) String searchTerm, Pageable pageable) {
         Page<QuestionWithSymCountDto> questions = questionService.getQuestionsWithSymCount(pageable, sort, searchTerm);
-        System.out.println("imused33333");
+
         return ResponseEntity.ok(questions);
     }
 
@@ -247,11 +247,56 @@ public class QuestionController {
         return response;
     }
 
-//    public String getMyQuestionList(Model model,
-//                                  @AuthenticationPrincipal CustomUser customUser,
-//                                  @PageableDefault(size = 10) Pageable pageable,
-//                                  String viewName) {
-//        model.addAttribute("customUser", customUser);
-//        return viewName;
-//    }
+    public String getMyQuestionList(Model model,
+                                  @AuthenticationPrincipal CustomUser customUser,
+                                  @PageableDefault(size = 10) Pageable pageable,
+                                  String viewName) {
+        model.addAttribute("customUser", customUser);
+        return viewName;
+    }
+    @GetMapping("/myQuestionList")
+    public String myQuestionList(Model model,
+                               @AuthenticationPrincipal CustomUser customUser,
+                               @PageableDefault(size = 6) Pageable pageable) {
+
+        return getMyQuestionList(model, customUser, pageable, "questions/myQuestionList");
+    }
+
+    @GetMapping("/sortMyQ")
+    public ResponseEntity<Page<QuestionWithSymCountDto>> sortMyQuestions(
+            @RequestParam String sort,
+            @RequestParam(required = false) String searchTerm,
+            Pageable pageable,
+            @AuthenticationPrincipal CustomUser customUser
+    ) {
+        Page<QuestionWithSymCountDto> questions = questionService.getQuestionsWithSymCount2(pageable, sort, searchTerm, customUser.getId());
+
+        return ResponseEntity.ok(questions);
+    }
+
+    public String getMyAnswerList(Model model,
+                                    @AuthenticationPrincipal CustomUser customUser,
+                                    @PageableDefault(size = 10) Pageable pageable,
+                                    String viewName) {
+        model.addAttribute("customUser", customUser);
+        return viewName;
+    }
+    @GetMapping("/myAnswerList")
+    public String myAnswerList(Model model,
+                                 @AuthenticationPrincipal CustomUser customUser,
+                                 @PageableDefault(size = 6) Pageable pageable) {
+
+        return getMyAnswerList(model, customUser, pageable, "questions/myAnswerList");
+    }
+    @GetMapping("/sortMyA")
+    public ResponseEntity<Page<QuestionWithSymCountDto>> sortMyAnswers(
+            @RequestParam String sort,
+            @RequestParam(required = false) String searchTerm,
+            Pageable pageable,
+            @AuthenticationPrincipal CustomUser customUser
+    ) {
+        Page<QuestionWithSymCountDto> questions = questionService.getQuestionsWithSymCount3(pageable, sort, searchTerm, customUser.getId());
+
+        return ResponseEntity.ok(questions);
+    }
 }
