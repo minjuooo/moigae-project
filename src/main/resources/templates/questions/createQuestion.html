@@ -73,28 +73,18 @@
   <div class="row">
     <aside class="col-md-2">
       <nav class="nav flex-column text-center">
-        <div><h5 class="bold">멍멍이야기</h5></div>
+        <div><h5 class="bold">Q & A</h5></div>
         <br>
         <div>
-          <h6 class="bold" onclick="window.location.href='/articles/articleList';" style="cursor: pointer;">STORY</h6>
+          <h6 class="bold" onclick="window.location.href='/questions/questionList';" style="cursor: pointer;">전체</h6>
         </div>
         <br>
         <div>
-          <h6 class="bold" onclick="window.location.href='/articles/issueList';" style="cursor: pointer;">공지사항</h6>
+          <h6 class="bold" onclick="window.location.href='/questions/myQuestionList';" style="cursor: pointer;">MY Q</h6>
         </div>
         <br>
         <div>
-          <h6 class="bold" onclick="window.location.href='/articles/aboutUs';" style="cursor: pointer;">ABOUT US</h6>
-        </div>
-        <div>
-          <br>
-          <div>
-            <h6 class="bold" onclick="window.location.href='/articles/createArticle';" style="cursor: pointer;">게시글 작성</h6>
-          </div>
-          <br>
-          <div>
-            <h6 class="bold" onclick="window.location.href='/articles/createIssue';" style="cursor: pointer;">공지사항 작성</h6>
-          </div>
+          <h6 class="bold" onclick="window.location.href='/questions/myAnswerList';" style="cursor: pointer;">MY A</h6>
         </div>
       </nav>
     </aside>
@@ -102,53 +92,45 @@
     <div class="col-md-10 d-flex">
       <div class="col-md-1" >
       </div>
-
-      <div class="col-md-11">
-
-          <img src="/images/공지사항.jpg"
-               style="width: 100%; height: 200px;"
-               alt="Main Image">
-          <br><br>
-
-          <div class="row">
-            <div th:each="article : ${articles}">
-              <div th:onclick="'window.location.href=\'' + @{/articles/issueDetail/{articleId}(articleId = ${article.id})} + '\''" class="shadow-sm p-3 mb-3 bg-body rounded">
-                <span th:text="${#strings.abbreviate(article.articleTitle, 30)}"  style="font-weight: bold;"></span>
-                <span class="d-flex justify-content-end"
-                        th:text="${#temporals.format(article.createTime, 'yyyy-MM-dd')}" style="font-size: 11px; color: #969696;"></span>
-              </div>
+      <div class="col-md-10" >
+        <form th:action="@{/questions/createQuestion}" method="post" th:object="${articleForm}">
+          <div class="mb-3">
+            <label for="" class="form-label">
+              질문 제목
+            </label>
+            <div class="input-group">
+              <input id="title" class="form-control" type="text" th:field="*{articleTitle}"
+                     placeholder="제목을 입력해주세요">
             </div>
           </div>
+          <div class="mb-3">
+            <label for="" class="form-label">
+              질문 내용
+            </label>
+            <div class="input-group">
+              <textarea name="contents" class="form-control" id="contents" th:field="*{content}"></textarea>
+              <script>
+                CKEDITOR.replace("contents", {
+                  filebrowserImageUploadUrl: "/imageArticle/upload",
+                  extraPlugins : 'autogrow'
+                });
+              </script>
+            </div>
+            <br>
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-secondary">작성 완료</button>
+            </div>
+          </div>
+
+
+
+        </form>
       </div>
     </div>
   </div>
 </div>
-<br>
-<br>
-<div class="container">
 
 
-  <nav aria-label="Page navigation" style="display: flex;justify-content: center;">
-    <ul class="pagination">
-      <li class="page-item">
-        <a class="page-link" href="?page=0">&lt;&lt;</a>
-      </li>
-      <li class="page-item" th:class="${articles.first ? 'disabled' : ''}">
-        <a class="page-link" th:href="${articles.first ? '#' : ('?page=' + (startPage - 1))}">&lt;</a>
-      </li>
-      <li class="page-item" th:each="pageNumber : ${#numbers.sequence(startPage, endPage - 1)}" th:class="${pageNumber == articles.number ? 'active' : ''}">
-        <a class="page-link" th:href="${'?page=' + pageNumber}"><span th:text="${pageNumber + 1}"></span></a>
-      </li>
-      <li class="page-item" th:class="${articles.last ? 'disabled' : ''}">
-        <a class="page-link" th:href="${articles.last ? '#' : ('?page=' + (endPage))}">&gt;</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" th:href="${'?page=' + (articles.totalPages - 1)}">&gt;&gt;</a>
-      </li>
-    </ul>
-  </nav>
-
-</div>
 
 
 <script

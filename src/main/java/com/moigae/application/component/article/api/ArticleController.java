@@ -46,7 +46,7 @@ public class ArticleController {
         ModelMapper modelMapper = new ModelMapper();
         Article article = modelMapper.map(articleForm, Article.class);
         articleRepository.save(article);
-        return "redirect:/";
+        return "redirect:/articles/articleList";
     }
 
     public String getArticleListByCategory(Model model,
@@ -149,7 +149,7 @@ public class ArticleController {
         ModelMapper modelMapper = new ModelMapper();
         Article article = modelMapper.map(articleForm, Article.class);
         articleRepository.save(article);
-        return "redirect:/";
+        return "redirect:/articles/issueList";
     }
 
     @GetMapping("/issueDetail/{articleId}")

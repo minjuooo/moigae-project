@@ -1,9 +1,10 @@
 package com.moigae.application.component.article.api.request;
 
 import com.moigae.application.component.article.domain.enumeration.Category;
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 public class ArticleForm {
     private String articleTitle;
     private String content;

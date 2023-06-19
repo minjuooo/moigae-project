@@ -33,6 +33,8 @@ repositories {
 }
 
 dependencies {
+    //Jsoup
+    implementation 'org.jsoup:jsoup:1.14.3'
     //아파치 common io
     implementation 'commons-io:commons-io:2.8.0'
     //modelMapper
