@@ -14,10 +14,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/users")
@@ -31,6 +31,7 @@ public class UserController {
     @GetMapping("/login")
     public String login(Model model,
                         @AuthenticationPrincipal CustomUser customUser) {
+
         model.addAttribute("userLoginForm", new UserLoginForm());
         model.addAttribute("customUser", customUser);
         return "users/login";
@@ -62,5 +63,33 @@ public class UserController {
        System.out.println(user);
        userRepository.save(user);
        return "redirect:/";
+    }
+
+    @GetMapping("/findId")
+    public String findId(
+            Model model,
+            @AuthenticationPrincipal CustomUser customUser
+    ){
+        model.addAttribute("customUser", customUser);
+        return "users/findId";
+    }
+    @PostMapping("/findId")
+    @ResponseBody
+    public Map<String, String> findId(
+            @RequestParam String name,
+            @RequestParam String phone
+    ){
+        User user = userRepository.findByUserNameAndPhone(name, phone);
+        String message = "";
+        if(user == null){
+            message = "해당하는 아이디를 찾을 수 없습니다.";
+        }else{
+            message = "";
+        }
+
+        Map<String, String> response = new HashMap<>();
+        response.put("status", message);
+
+        return response;
     }
 }
