@@ -40,8 +40,8 @@ public class MeetingController {
     public String detailMeeting(Model model,
                                 @AuthenticationPrincipal CustomUser customUser,
                                 @PathVariable String meetingId) {
-        MeetingDto meetingDto = meetingService.meetingFindByUUID(meetingId);
-        if (meetingDto.getMeetingPrice().getValue().equals("유료")) {
+        MeetingDto meetingDto = meetingService.meetingFindByUUIDPay(meetingId);
+        if (meetingDto.getPrice() > 0) {
             meetingDetailModel(model, customUser, meetingDto);
             return "meetings/meeting_detail_pay";
         }
@@ -57,8 +57,8 @@ public class MeetingController {
             return "redirect:/users/login";
         }
         UserDto userDto = userService.customUserFindBy(customUser);
-        MeetingDto meetingDto = meetingService.meetingFindByUUID(meetingId);
-        if (meetingDto.getMeetingPrice().getValue().equals("유료")) {
+        MeetingDto meetingDto = meetingService.meetingFindByUUIDPay(meetingId);
+        if (meetingDto.getPrice() > 0) {
             applicationModel(model, customUser, userDto, meetingDto);
             return "meetings/meeting_application_pay";
         }

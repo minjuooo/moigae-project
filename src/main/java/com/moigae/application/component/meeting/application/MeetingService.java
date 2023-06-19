@@ -1,6 +1,7 @@
 package com.moigae.application.component.meeting.application;
 
 import com.moigae.application.component.meeting.api.request.MeetingCategoryRequest;
+import com.moigae.application.component.meeting.domain.Meeting;
 import com.moigae.application.component.meeting.dto.MeetingDto;
 import com.moigae.application.component.meeting.repository.MeetingRepositoryCustom;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,18 @@ public class MeetingService {
     @Transactional(readOnly = true)
     public MeetingDto meetingFindByUUID(String meetingId) {
         MeetingDto meetingDto = meetingRepositoryCustom.findCustomMeetingById(meetingId);
+        return meetingDto;
+    }
+
+    @Transactional(readOnly = true)
+    public MeetingDto meetingFindByUUIDPay(String meetingId) {
+        Meeting meeting = meetingRepositoryCustom.findCustomMeetingByPayId(meetingId);
+        if (meeting.getMeetingAmount() == null || meeting.getMeetingAmount() == 0) {
+            MeetingDto meetingDto = MeetingDto.toMeetingDto(meeting);
+            meetingDto.setPrice(0);
+            return meetingDto;
+        }
+        MeetingDto meetingDto = MeetingDto.toMeetingDto(meeting);
         return meetingDto;
     }
 }

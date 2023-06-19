@@ -33,7 +33,7 @@ public class MeetingDto {
     private LocalDateTime meetingEndDateTime;
     private MeetingAddress meetingAddress;
     // 긴급 수정 - 홍정완
-    private int price = MeetingPrice.PAY.getPrice();
+    private Integer price;
     private MeetingPrice meetingPrice;
     //
     private PetAllowedStatus petAllowedStatus;
@@ -46,7 +46,7 @@ public class MeetingDto {
                       String nickName, String path, String meetingDescription, LocalDateTime recruitmentStartDateTime,
                       LocalDateTime recruitmentEndDateTime, ParticipantRange participantRange,
                       LocalDateTime meetingStartDateTime, LocalDateTime meetingEndDateTime,
-                      MeetingAddress meetingAddress, int price, MeetingPrice meetingPrice,
+                      MeetingAddress meetingAddress, Integer price, MeetingPrice meetingPrice,
                       PetAllowedStatus petAllowedStatus, MeetingContact meetingContact, String meetingFreeFormDetails,
                       String meetingStatus) {
         this.id = id;
@@ -85,7 +85,7 @@ public class MeetingDto {
                 .meetingStartDateTime(meeting.getMeetingStartDateTime())
                 .meetingEndDateTime(meeting.getMeetingEndDateTime())
                 .meetingAddress(meeting.getMeetingAddress())
-                .price(meeting.getMeetingPrice().getPrice())
+                .price(meeting.getMeetingAmount())
                 .meetingPrice(meeting.getMeetingPrice())
                 .petAllowedStatus(meeting.getPetAllowedStatus())
                 .meetingContact(meeting.getMeetingContact())

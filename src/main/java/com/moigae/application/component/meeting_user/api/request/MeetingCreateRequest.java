@@ -55,7 +55,7 @@ public class MeetingCreateRequest {
 
     //참가 비용
     private MeetingPrice meetingPrice;
-    private Integer priceInput;
+    private Integer price;
 
     //반려견 동반 유무
     private PetAllowedStatus petAllowedStatus;
@@ -79,7 +79,7 @@ public class MeetingCreateRequest {
                                 LocalDateTime recruitmentStartDateTime, LocalDateTime recruitmentEndDateTime,
                                 Integer currentParticipants, Integer maxParticipants, LocalDateTime meetingStartDateTime,
                                 LocalDateTime meetingEndDateTime, String address, String detailAddress,
-                                String locationDescription, MeetingPrice meetingPrice, Integer priceInput,
+                                String locationDescription, MeetingPrice meetingPrice, Integer price,
                                 PetAllowedStatus petAllowedStatus, String phone, String email, String kakaoId,
                                 String link, String otherLink, String meetingFreeFormDetails,
                                 MeetingStatus meetingStatus) {
@@ -99,7 +99,7 @@ public class MeetingCreateRequest {
         this.detailAddress = detailAddress;
         this.locationDescription = locationDescription;
         this.meetingPrice = meetingPrice;
-        this.priceInput = priceInput;
+        this.price = price;
         this.petAllowedStatus = petAllowedStatus;
         this.phone = phone;
         this.email = email;
