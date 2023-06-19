@@ -4,6 +4,7 @@ import com.moigae.application.component.meeting.domain.Meeting;
 import com.moigae.application.component.meeting.domain.MeetingAddress;
 import com.moigae.application.component.meeting.domain.MeetingContact;
 import com.moigae.application.component.meeting.domain.ParticipantRange;
+import com.moigae.application.component.meeting.domain.enumeraion.MeetingPrice;
 import com.moigae.application.component.meeting.repository.MeetingRepository;
 import com.moigae.application.component.meeting_user.api.request.MeetingCreateRequest;
 import com.moigae.application.component.meeting_user.domain.MeetingUser;
@@ -41,6 +42,10 @@ public class MeetingUserService {
     }
 
     public static Meeting createMeeting(MeetingCreateRequest meetingCreateRequest) {
+        if (meetingCreateRequest.getMeetingPrice() == MeetingPrice.PAY) {
+            meetingCreateRequest.getMeetingPrice().setPriceForPay(meetingCreateRequest.getPriceInput());
+        }
+
         return Meeting.builder()
                 .meetingTitle(meetingCreateRequest.getMeetingTitle())
                 .meetingType(meetingCreateRequest.getMeetingType())

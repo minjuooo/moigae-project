@@ -51,7 +51,7 @@ public class MeetingPaymentService {
     }
 
     //유료 - 결제
-    private static MeetingPayment createMeetingPayment(Long amount, User user, Meeting meeting, String orderId) {
+    public static MeetingPayment createMeetingPayment(Long amount, User user, Meeting meeting, String orderId) {
         return MeetingPayment.builder()
                 .user(user)
                 .tradeStatus(TradeStatus.valueOf("SUCCESS"))
@@ -62,7 +62,7 @@ public class MeetingPaymentService {
     }
 
     //무료 - 신청
-    private static MeetingPayment createMeetingPayment(User user, Meeting meeting, String orderId) {
+    public static MeetingPayment createMeetingPayment(User user, Meeting meeting, String orderId) {
         return MeetingPayment.builder()
                 .user(user)
                 .tradeStatus(TradeStatus.valueOf("APPLY"))
