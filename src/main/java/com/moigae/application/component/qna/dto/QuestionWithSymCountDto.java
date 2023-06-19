@@ -1,16 +1,11 @@
 package com.moigae.application.component.qna.dto;
 
-import com.moigae.application.component.qna.domain.Question;
-import com.moigae.application.component.user.domain.User;
+import com.moigae.application.component.question.domain.Question;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 @Builder

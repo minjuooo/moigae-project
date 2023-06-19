@@ -1,17 +1,19 @@
 package com.moigae.application.component.qna.domain;
 
+import com.moigae.application.component.question.domain.Question;
 import com.moigae.application.component.user.domain.User;
 import lombok.AccessLevel;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "sym")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Data
+@Getter
+@Setter
 public class Sym {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -20,10 +20,10 @@ public class QuestionService {
     @PersistenceContext
     private EntityManager entityManager;
 
-//    public Page<QuestionWithSymCountDto> getQuestionsWithSymCount(Pageable pageable, String sort, String searchTerm) {
+    //    public Page<QuestionWithSymCountDto> getQuestionsWithSymCount(Pageable pageable, String sort, String searchTerm) {
 //        String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, COUNT(a.sym), COUNT(a)) " +
-//                "FROM com.moigae.application.component.qna.domain.Question q " +
-//                "LEFT JOIN com.moigae.application.component.qna.domain.Answer a ON a.question.id = q.id " +
+//                "FROM com.moigae.application.component.question.domain.Question q " +
+//                "LEFT JOIN com.moigae.application.component.answer.domain.Answer a ON a.question.id = q.id " +
 //                "WHERE q.questionTitle LIKE :searchTerm OR q.questionContent LIKE :searchTerm " +
 //                "GROUP BY q";
 //
@@ -37,7 +37,7 @@ public class QuestionService {
 //    }
     public Page<QuestionWithSymCountDto> getQuestionsWithSymCount(Pageable pageable, String sort, String searchTerm) {
         String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, COUNT(CASE WHEN s.sym = true THEN 1 ELSE null END)) " +
-                "FROM com.moigae.application.component.qna.domain.Question q " +
+                "FROM com.moigae.application.component.question.domain.Question q " +
                 "LEFT JOIN com.moigae.application.component.qna.domain.Sym s ON s.question.id = q.id " +
                 "WHERE q.questionTitle LIKE :searchTerm OR q.questionContent LIKE :searchTerm " +
                 "GROUP BY q";
@@ -79,8 +79,8 @@ public class QuestionService {
 
     public QuestionWithSymCountDto getQuestionWithSymCount(String questionId) {
        /* String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, SUM(CASE WHEN s.sym = true THEN 1 ELSE 0 END), COUNT(a)) " +
-                "FROM com.moigae.application.component.qna.domain.Question q " +
-                "LEFT JOIN com.moigae.application.component.qna.domain.Answer a ON a.question.id = q.id " +
+                "FROM com.moigae.application.component.question.domain.Question q " +
+                "LEFT JOIN com.moigae.application.component.answer.domain.Answer a ON a.question.id = q.id " +
                 "LEFT JOIN com.moigae.application.component.qna.domain.Sym s ON s.question.id = q.id " +
                 "WHERE q.id = :questionId " +
                 "GROUP BY q";*/
@@ -107,8 +107,8 @@ public class QuestionService {
 
 //    public QuestionWithSymCountDto getQuestionWithSymCount(String questionId) {
 //        String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, COUNT(a.sym), COUNT(a)) " +
-//                "FROM com.moigae.application.component.qna.domain.Question q " +
-//                "LEFT JOIN com.moigae.application.component.qna.domain.Answer a ON a.question.id = q.id " +
+//                "FROM com.moigae.application.component.question.domain.Question q " +
+//                "LEFT JOIN com.moigae.application.component.answer.domain.Answer a ON a.question.id = q.id " +
 //                "WHERE q.id = :questionId " +
 //                "GROUP BY q";
 //        TypedQuery<QuestionWithSymCountDto> query = entityManager.createQuery(jpql, QuestionWithSymCountDto.class);
@@ -146,11 +146,9 @@ public class QuestionService {
     }
 
 
-
-
-//    public void getSymUp(String questionId, String userId) {
+    //    public void getSymUp(String questionId, String userId) {
 //        // 상황에 따라 적절하게 변경해야 합니다.
-//        String jpql = "UPDATE com.moigae.application.component.qna.domain.Answer a " +
+//        String jpql = "UPDATE com.moigae.application.component.answer.domain.Answer a " +
 //                "SET a.sym = true " + // 또는 false 등 원하는 값으로 변경
 //                "WHERE a.question.id = :questionId " +
 //                "AND a.user.id = :userId";
@@ -161,23 +159,23 @@ public class QuestionService {
 //
 //        int updatedCount = query.executeUpdate();
 //    }
-        public Page<QuestionWithSymCountDto> getQuestionsWithSymCount2(Pageable pageable, String sort, String searchTerm, String currentId) {
-            String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, COUNT(CASE WHEN s.sym = true THEN 1 ELSE null END)) " +
-                    "FROM com.moigae.application.component.qna.domain.Question q " +
-                    "LEFT JOIN com.moigae.application.component.qna.domain.Sym s ON s.question.id = q.id " +
-                    "WHERE (q.questionTitle LIKE :searchTerm OR q.questionContent LIKE :searchTerm) " +
-                    "AND q.user.id = :currentId " +
-                    "GROUP BY q";
+    public Page<QuestionWithSymCountDto> getQuestionsWithSymCount2(Pageable pageable, String sort, String searchTerm, String currentId) {
+        String jpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, COUNT(CASE WHEN s.sym = true THEN 1 ELSE null END)) " +
+                "FROM com.moigae.application.component.question.domain.Question q " +
+                "LEFT JOIN com.moigae.application.component.qna.domain.Sym s ON s.question.id = q.id " +
+                "WHERE (q.questionTitle LIKE :searchTerm OR q.questionContent LIKE :searchTerm) " +
+                "AND q.user.id = :currentId " +
+                "GROUP BY q";
 
 
-            if ("views".equals(sort)) {
-                jpql += " ORDER BY q.viewCount DESC";
-            } else {
-                jpql += " ORDER BY q.createTime DESC";
-            }
-
-            return getQuestionWithSymCountDtos2(pageable, jpql, searchTerm, currentId);
+        if ("views".equals(sort)) {
+            jpql += " ORDER BY q.viewCount DESC";
+        } else {
+            jpql += " ORDER BY q.createTime DESC";
         }
+
+        return getQuestionWithSymCountDtos2(pageable, jpql, searchTerm, currentId);
+    }
 
     private Page<QuestionWithSymCountDto> getQuestionWithSymCountDtos2(Pageable pageable, String jpql, String searchTerm, String currentId) {
         String countJpql = "SELECT COUNT(q) FROM com.moigae.application.component.qna.domain.Question q " +
@@ -211,11 +209,11 @@ public class QuestionService {
     public Page<QuestionWithSymCountDto> getQuestionsWithSymCount3(Pageable pageable, String sort, String searchTerm, String currentId) {
         String baseJpql = "SELECT new com.moigae.application.component.qna.dto.QuestionWithSymCountDto(q, " +
                 "(SELECT COUNT(s) FROM com.moigae.application.component.qna.domain.Sym s WHERE s.question.id = q.id AND s.sym = true)) " +
-                "FROM com.moigae.application.component.qna.domain.Question q " +
-                "WHERE q.id IN (SELECT a.question.id FROM com.moigae.application.component.qna.domain.Answer a WHERE a.user.id = :currentId)";
+                "FROM com.moigae.application.component.question.domain.Question q " +
+                "WHERE q.id IN (SELECT a.question.id FROM com.moigae.application.component.answer.domain.Answer a WHERE a.user.id = :currentId)";
 
         String searchJpql = "";
-        if(searchTerm != null && !searchTerm.isEmpty()) {
+        if (searchTerm != null && !searchTerm.isEmpty()) {
             searchJpql = " AND (q.questionTitle LIKE :searchTerm OR q.questionContent LIKE :searchTerm)";
         }
 
@@ -232,14 +230,14 @@ public class QuestionService {
     private Page<QuestionWithSymCountDto> getQuestionWithSymCountDtos3(Pageable pageable, String jpql, String searchTerm, String currentId) {
         String countJpql = "SELECT COUNT(q) FROM com.moigae.application.component.qna.domain.Question q WHERE q.id IN (SELECT a.question.id FROM com.moigae.application.component.qna.domain.Answer a WHERE a.user.id = :currentId)";
 
-        if(searchTerm != null && !searchTerm.isEmpty()) {
+        if (searchTerm != null && !searchTerm.isEmpty()) {
             countJpql += " AND (q.questionTitle LIKE :searchTerm OR q.questionContent LIKE :searchTerm)";
         }
 
         TypedQuery<QuestionWithSymCountDto> query = entityManager.createQuery(jpql, QuestionWithSymCountDto.class);
         TypedQuery<Long> countQuery = entityManager.createQuery(countJpql, Long.class);
 
-        if(searchTerm != null && !searchTerm.isEmpty()) {
+        if (searchTerm != null && !searchTerm.isEmpty()) {
             query.setParameter("searchTerm", "%" + searchTerm + "%");
             countQuery.setParameter("searchTerm", "%" + searchTerm + "%");
         }

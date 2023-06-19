@@ -1,32 +1,27 @@
 package com.moigae.application.component.qna.api;
 
+import com.moigae.application.component.answer.domain.Answer;
 import com.moigae.application.component.article.api.request.ArticleForm;
 import com.moigae.application.component.article.api.service.FileService;
-import com.moigae.application.component.article.domain.Article;
-import com.moigae.application.component.article.domain.enumeration.Category;
-import com.moigae.application.component.article.repository.ArticleRepository;
 import com.moigae.application.component.qna.api.service.QuestionService;
-import com.moigae.application.component.qna.domain.Answer;
-import com.moigae.application.component.qna.domain.Question;
 import com.moigae.application.component.qna.domain.Sym;
 import com.moigae.application.component.qna.dto.AnswerDto;
 import com.moigae.application.component.qna.dto.QuestionWithSymCountDto;
 import com.moigae.application.component.qna.repository.AnswerRepository;
 import com.moigae.application.component.qna.repository.QuestionRepository;
 import com.moigae.application.component.qna.repository.SymRepository;
+import com.moigae.application.component.question.domain.Question;
 import com.moigae.application.component.user.domain.User;
 import com.moigae.application.component.user.dto.CustomUser;
 import com.moigae.application.component.user.repository.UserRepository;
 import com.moigae.application.core.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -49,14 +44,16 @@ public class QuestionController {
     private final UserRepository userRepository;
     private final AnswerRepository answerRepository;
     private final SymRepository symRepository;
+
     @GetMapping("/createQuestion")
     public String createQuestion(Model model,
-                                @AuthenticationPrincipal CustomUser customUser) {
+                                 @AuthenticationPrincipal CustomUser customUser) {
 
         model.addAttribute("articleForm", new ArticleForm());
         model.addAttribute("customUser", customUser);
         return "questions/createQuestion";
     }
+
     @PostMapping("/createQuestion")
     public String createQuestion(
             @ModelAttribute ArticleForm articleForm,
@@ -70,17 +67,18 @@ public class QuestionController {
 
 
     public String getQuestionList(Model model,
-                                           @AuthenticationPrincipal CustomUser customUser,
-                                           @PageableDefault(size = 10) Pageable pageable,
-                                           String viewName) {
+                                  @AuthenticationPrincipal CustomUser customUser,
+                                  @PageableDefault(size = 10) Pageable pageable,
+                                  String viewName) {
         model.addAttribute("customUser", customUser);
 
         return viewName;
     }
+
     @GetMapping("/questionList")
     public String questionList(Model model,
-                              @AuthenticationPrincipal CustomUser customUser,
-                              @PageableDefault(size = 6) Pageable pageable) {
+                               @AuthenticationPrincipal CustomUser customUser,
+                               @PageableDefault(size = 6) Pageable pageable) {
 
         return getQuestionList(model, customUser, pageable, "questions/questionList");
     }
@@ -99,7 +97,7 @@ public class QuestionController {
             Model model) {
         Question question2 = questionRepository.findById(questionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Question not found with id " + questionId));
-        question2.setViewCount(question2.getViewCount()+1);
+        question2.setViewCount(question2.getViewCount() + 1);
         questionRepository.save(question2);
 
         QuestionWithSymCountDto question = questionService.getQuestionWithSymCount(questionId);
@@ -155,7 +153,7 @@ public class QuestionController {
     public Map<String, Long> symUp(
             @PathVariable("questionId") String questionId,
             @PathVariable("userId") String userId
-    ){
+    ) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
@@ -186,10 +184,10 @@ public class QuestionController {
             @PathVariable("questionId") String questionId,
             @PathVariable("userId") String userId,
             @RequestParam("answerContent") String answerContent
-    ){
+    ) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(()->new ResourceNotFoundException("User not found with id " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Question not found with id " + questionId));
 
@@ -236,9 +234,9 @@ public class QuestionController {
     public Map<String, String> editAnswer(
             @PathVariable String id,
             @RequestParam String answerContent
-    ){
+    ) {
         Answer answer = answerRepository.findById(id)
-                .orElseThrow(()->new ResourceNotFoundException("Answer not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Answer not found with id " + id));
         answer.setAnswerContent(answerContent);
 
         Map<String, String> response = new HashMap<>();
@@ -248,16 +246,17 @@ public class QuestionController {
     }
 
     public String getMyQuestionList(Model model,
-                                  @AuthenticationPrincipal CustomUser customUser,
-                                  @PageableDefault(size = 10) Pageable pageable,
-                                  String viewName) {
+                                    @AuthenticationPrincipal CustomUser customUser,
+                                    @PageableDefault(size = 10) Pageable pageable,
+                                    String viewName) {
         model.addAttribute("customUser", customUser);
         return viewName;
     }
+
     @GetMapping("/myQuestionList")
     public String myQuestionList(Model model,
-                               @AuthenticationPrincipal CustomUser customUser,
-                               @PageableDefault(size = 6) Pageable pageable) {
+                                 @AuthenticationPrincipal CustomUser customUser,
+                                 @PageableDefault(size = 6) Pageable pageable) {
 
         return getMyQuestionList(model, customUser, pageable, "questions/myQuestionList");
     }
@@ -275,19 +274,21 @@ public class QuestionController {
     }
 
     public String getMyAnswerList(Model model,
-                                    @AuthenticationPrincipal CustomUser customUser,
-                                    @PageableDefault(size = 10) Pageable pageable,
-                                    String viewName) {
+                                  @AuthenticationPrincipal CustomUser customUser,
+                                  @PageableDefault(size = 10) Pageable pageable,
+                                  String viewName) {
         model.addAttribute("customUser", customUser);
         return viewName;
     }
+
     @GetMapping("/myAnswerList")
     public String myAnswerList(Model model,
-                                 @AuthenticationPrincipal CustomUser customUser,
-                                 @PageableDefault(size = 6) Pageable pageable) {
+                               @AuthenticationPrincipal CustomUser customUser,
+                               @PageableDefault(size = 6) Pageable pageable) {
 
         return getMyAnswerList(model, customUser, pageable, "questions/myAnswerList");
     }
+
     @GetMapping("/sortMyA")
     public ResponseEntity<Page<QuestionWithSymCountDto>> sortMyAnswers(
             @RequestParam String sort,

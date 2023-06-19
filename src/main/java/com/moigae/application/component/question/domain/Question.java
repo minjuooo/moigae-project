@@ -1,9 +1,11 @@
-package com.moigae.application.component.qna.domain;
+package com.moigae.application.component.question.domain;
 
-import com.moigae.application.component.meeting.domain.Meeting;
 import com.moigae.application.component.user.domain.User;
 import com.moigae.application.core.common.BaseEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -11,7 +13,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "question")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Data
+@Getter
+@Setter
 public class Question extends BaseEntity {
     @Id
     @Column(length = 191)
@@ -29,7 +32,7 @@ public class Question extends BaseEntity {
     @Column(name = "question_content", length = 16000)
     private String questionContent;
 
-    @Column(name = "view_Count",columnDefinition = "bigint default 0")
+    @Column(name = "view_Count")
     private Long viewCount;
 
     public Question(User user, String questionTitle, String questionContent, long viewCount) {
