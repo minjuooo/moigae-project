@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -72,14 +73,16 @@ public class ArticleController {
     @GetMapping("/articleList")
     public String articleList(Model model,
                               @AuthenticationPrincipal CustomUser customUser,
-                              @PageableDefault(size = 12) Pageable pageable) {
+                              @PageableDefault(size = 12, sort = "createTime", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
         return getArticleListByCategory(model, customUser, pageable, Category.STORY, "articles/articleList");
     }
 
     @GetMapping("/issueList")
     public String issueList(Model model,
                             @AuthenticationPrincipal CustomUser customUser,
-                            @PageableDefault(size = 6) Pageable pageable) {
+                            @PageableDefault(size = 6, sort = "createTime", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
         return getArticleListByCategory(model, customUser, pageable, Category.ISSUE, "articles/issueList");
     }
 
