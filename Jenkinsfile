@@ -26,7 +26,7 @@ pipeline {
                 sshagent(credentials: ['moispring']) {
                     sh '''
                         scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/test13/build/libs/private-0.0.1-SNAPSHOT.jar ubuntu@172.31.7.214:/home/ubuntu/moigae
-                        ssh -o StrictHostKeyChecking=no -tt ubuntu@172.31.7.214 sh ./deploy.sh
+                        ssh -o StrictHostKeyChecking=no -tt ubuntu@172.31.7.214 sh /home/ubuntu/deploy.sh
                     '''
                 }
             }
