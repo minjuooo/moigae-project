@@ -54,6 +54,7 @@ dependencies {
     //Datasource 설정
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.2'
 
     //QueryDSL 설정
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
@@ -150,7 +151,8 @@ jacocoTestReport {
                             '**/*Builder',
                             '**/*Builder.*',
                             '**/request/**',
-                            '**/Q**'
+                            '**/Q**',
+                            '**/Index**'
                     ])
                 })
         )

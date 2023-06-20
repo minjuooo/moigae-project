@@ -9,12 +9,14 @@ import com.moigae.application.component.meeting_image.domain.MeetingImage;
 import com.moigae.application.component.user.domain.User;
 import com.moigae.application.component.user.domain.enumeration.Gender;
 import com.moigae.application.component.user.domain.enumeration.UserRole;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 class CartTest {
     private static final String PHONE = "010";
     private static final String EMAIL = "email";
@@ -43,6 +45,7 @@ class CartTest {
         Cart cart = Cart.of(user, meeting);
         //then
         assertThat(cart.getUser().getUserName()).isEqualTo("홍정완");
+        assertThat(cart.getMeeting().getMeetingTitle()).isEqualTo("타이틀");
         assertThat(meeting.getMeetingTitle()).isEqualTo("타이틀");
     }
 

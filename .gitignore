@@ -43,3 +43,4 @@ application-hong.yml
 application-local.yml
 application-test.yml
 application-prod.yml
+resources/application-prod.yml

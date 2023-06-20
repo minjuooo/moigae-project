@@ -31,7 +31,7 @@ public class Answer extends BaseEntity {
     @JoinColumn(name = "answer_id")
     private User user;
 
-    @Column(name = "answer_content", length = 16000)
+    @Column(name = "answer_content", length = 14000)
     private String answerContent;
 
     @Column(name = "sym", columnDefinition = "boolean default false")

@@ -1,7 +1,6 @@
 package com.moigae.application.component.article.domain;
 
 import com.moigae.application.component.article.domain.enumeration.Category;
-import com.moigae.application.component.user.domain.enumeration.Gender;
 import com.moigae.application.core.common.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,7 +22,7 @@ public class Article extends BaseEntity {
     @Column(name = "article_title")
     private String articleTitle;
 
-    @Column(name = "content", length = 16000)
+    @Column(name = "content", length = 14000)
     private String content;
 
     @Column(name = "category")
