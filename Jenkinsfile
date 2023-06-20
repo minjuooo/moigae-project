@@ -21,5 +21,16 @@ pipeline {
                 sh './gradlew clean build'
             }
         }
+        stage('Deploy') {
+        	steps {
+            	sshagent(credentials: ['moispring']) {
+        			sh '''
+        				ssh -o StrictHostKeyChecking=no ubuntu@172.31.7.214
+                        scp /var/lib/jenkins/workspace/test13/build/libs/private-0.0.1-SNAPSHOT.jar ubuntu@172.31.7.214:/home/ubuntu/moigae
+                        ssh -tt ubuntu@172.31.7.214 sh ./deploy.sh
+                    '''
+        		}
+        	}
+        }
     }
 }
