@@ -1,55 +1,55 @@
-server:
-  port: 8081
-
-spring:
-  profiles: prod
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-  #    view:     - 욱재님
-  #      prefix: /WEB-INF/views/     - 욱재님
-  #      suffix: .jsp 실험용    - 욱재님
-  jpa:
-    hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        default_batch_fetch_size: 1000
-        format_sql: true
-        show_sql: true
-        #dialect: org.hibernate.dialect.MySQL5Dialect     - 욱재님
-        dialect: org.hibernate.dialect.MariaDB103Dialect
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    #driver-class-name: com.mysql.cj.jdbc.Driver    - 욱재님
-    #username: root     - 욱재님
-    #password: qkznaks1!2!3!       - 욱재님
-    #url: jdbc:mysql://54.180.201.152:3306/LAB?serverTimezone=Asia/Seoul     - 욱재님
-    username: root
-    password: password1234
-    url: jdbc:mariadb://localhost:3307/spring_batch
-  thymeleaf:
-    enabled: true
-
+#server:
+#  port: 8081
+#
+#spring:
+#  profiles: prod
+#  mvc:
+#    pathmatch:
+#      matching-strategy: ant_path_matcher
+#  #    view:     - 욱재님
+#  #      prefix: /WEB-INF/views/     - 욱재님
+#  #      suffix: .jsp 실험용    - 욱재님
+#  jpa:
+#    hibernate:
+#      ddl-auto: none
+#    properties:
+#      hibernate:
+#        default_batch_fetch_size: 1000
+#        format_sql: true
+#        show_sql: true
+#        #dialect: org.hibernate.dialect.MySQL5Dialect     - 욱재님
+#        dialect: org.hibernate.dialect.MariaDB103Dialect
+#  datasource:
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    #driver-class-name: com.mysql.cj.jdbc.Driver    - 욱재님
+#    #username: root     - 욱재님
+#    #password: qkznaks1!2!3!       - 욱재님
+#    #url: jdbc:mysql://54.180.201.152:3306/LAB?serverTimezone=Asia/Seoul     - 욱재님
+#    username: root
+#    password: password1234
+#    url: jdbc:mariadb://localhost:3307/spring_batch
+#  thymeleaf:
+#    enabled: true
+#
+##cloud:
+##  aws:
+##    s3:
+##      bucket: study-2022-08-02-1573058426
+##    region:
+##      static: ap-northeast-2
+##    credentials:
+##      accessKey: AKIA445KDIAQ3ZKB3QVW
+##      secretKey: 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
+##      use-default-aws-credentials-chain: false
+##      instance-profile: true
+##    stack:
+##      auto: false
 #cloud:
 #  aws:
-#    s3:
-#      bucket: study-2022-08-02-1573058426
 #    region:
-#      static: ap-northeast-2
+#      static: ap-northeast-2 # AWS 리전 설정
 #    credentials:
-#      accessKey: AKIA445KDIAQ3ZKB3QVW
-#      secretKey: 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
-#      use-default-aws-credentials-chain: false
-#      instance-profile: true
-#    stack:
-#      auto: false
-cloud:
-  aws:
-    region:
-      static: ap-northeast-2 # AWS 리전 설정
-    credentials:
-      accessKey: AKIARM3PCPVY4MO62BEU # AWS access key, kosta 계정으로 수정 필요
-      secretKey: UT1m5sDL+ZNk7smmdOjtO5mvLRyP9eYpxy/u26C7 # AWS secret key, kosta 계정으로 수정 필요
-    s3:
-      bucket: s3-moment # AWS bucket 설정, 수정 필요
+#      accessKey: AKIARM3PCPVY4MO62BEU # AWS access key, kosta 계정으로 수정 필요
+#      secretKey: UT1m5sDL+ZNk7smmdOjtO5mvLRyP9eYpxy/u26C7 # AWS secret key, kosta 계정으로 수정 필요
+#    s3:
+#      bucket: s3-moment # AWS bucket 설정, 수정 필요
