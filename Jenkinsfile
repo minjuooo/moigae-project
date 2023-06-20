@@ -6,7 +6,13 @@ pipeline {
     stages {
         stage('Git Clone') {
             steps {
-                git branch: 'main', url: 'https://github.com/chldnrwo/moigae-common-private.git'
+                withCredentials([usernamePassword(credentialsId: 'github-signin', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    git branch: 'main',
+                        url: 'https://github.com/chldnrwo/moigae-common-private.git',
+                        credentialsId: 'github-signin',
+                        usernameVariable: 'USERNAME',
+                        passwordVariable: 'PASSWORD'
+                }
             }
         }
         stage('Set Permissions') {
@@ -19,5 +25,5 @@ pipeline {
                 sh './gradlew clean build'
             }
         }
-     }
+    }
 }
