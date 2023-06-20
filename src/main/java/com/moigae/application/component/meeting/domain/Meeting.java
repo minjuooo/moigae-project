@@ -41,7 +41,7 @@ public class Meeting extends BaseEntity {
     private String nickName;
 
     //대표 이미지 - 1장 추가
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "meeting_image_id")
     private MeetingImage meetingImage;
 

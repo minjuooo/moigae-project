@@ -29,7 +29,7 @@ public class Question extends BaseEntity {
     @Column(name = "question_title")
     private String questionTitle;
 
-    @Column(name = "question_content", length = 16000)
+    @Column(name = "question_content", length = 14000)
     private String questionContent;
 
     @Column(name = "view_Count")
