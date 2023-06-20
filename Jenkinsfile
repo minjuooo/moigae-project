@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Git Clone') {
             steps {
-                git branch: 'master', url: 'https://github.com/chldnrwo/CICDTest.git'
+                git branch: 'main', url: 'https://github.com/chldnrwo/moigae-common-private.git'
             }
         }
         stage('Set Permissions') {
