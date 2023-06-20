@@ -15,6 +15,7 @@ import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,8 +51,8 @@ public class PaymentController {
                                  @AuthenticationPrincipal CustomUser customUser,
                                  @RequestParam String paymentKey,
                                  @RequestParam String orderId,
-                                 @RequestParam Long amount) throws Exception {
-
+                                 @RequestParam Long amount,
+                                 HttpServletResponse response) throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((SECRET_KEY + ":").getBytes()));
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -72,11 +73,13 @@ public class PaymentController {
              * 성공 상태 코드를 전달 받은 경우에만 DB에 저장. 즉, 결제 후 저장 로직
              */
             meetingPaymentService.meetingPaymentCreate(orderId, amount, customUser, meetingId);
+            response.sendRedirect("applications");
             return "meetings/success";
         } else {
             JsonNode failNode = responseEntity.getBody();
             model.addAttribute("message", failNode.get("message").asText());
             model.addAttribute("code", failNode.get("code").asText());
+            response.sendRedirect("applications");
             return "meetings/fail";
         }
     }

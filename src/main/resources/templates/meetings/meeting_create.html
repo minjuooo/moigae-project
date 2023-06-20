@@ -53,7 +53,7 @@
                         <!--사진 이름 길면 안들어감 DB에서 터짐-->
                         <h5><br/>대표 사진<br/></h5>
                         <div>사진은 1장만 선택 가능하며, 모임 목록에 노출됩니다.</div>
-                        <input id="path" name="path" th:field="*{path}" type="file" onchange="checkImageSize(this)">
+                        <input id="path" name="path" th:field="*{path}" type="file">
                     </div>
                     <br/>
                     <div>
@@ -122,8 +122,7 @@
                             <option th:each="type : ${T(com.moigae.application.component.meeting.domain.enumeraion.MeetingPrice).values()}"
                                     th:value="${type}" th:text="${type.value}"></option>
                         </select>
-                        <input id="price" name="price" type="number" style="격display: none;"
-                               placeholder="가격을 입력하세요">
+                        <input id="price" name="price" type="number" style="display: none;" placeholder="가격을 입력하세요">
                     </div>
                     <br/>
                     <div>
@@ -182,29 +181,6 @@
     </div>
 </div>
 <script>
-    //이미지 사이즈 경고 이벤트
-    function checkImageSize(input) {
-        let file = input.files[0];
-
-        if (file) {
-            let img = new Image();
-
-            img.src = window.URL.createObjectURL(file);
-
-            img.onload = function () {
-                let width = img.naturalWidth;
-                let height = img.naturalHeight;
-
-                window.URL.revokeObjectURL(img.src);
-
-                if (width >= 252 || height >= 202) {
-                    alert("첨부 가능한 이미지 사이즈는 250x200 pixels 이하 입니다.");
-                    input.value = "";
-                }
-            };
-        }
-    }
-
     //참가 비용 이벤트
     window.onload = function () {
         var selectElement = document.getElementById('meetingPrice');
@@ -227,13 +203,8 @@
             oncomplete: function (data) {
 
                 console.log(data);
-
-                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-                // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
-                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
                 var roadAddr = data.roadAddress; // 도로명 주소 변수
                 var jibunAddr = data.jibunAddress; // 지번 주소 변수
-                // 우편번호와 주소 정보를 해당 필드에 넣는다.
 
                 if (roadAddr !== '') {
                     document.getElementById("address").value = roadAddr;
@@ -245,5 +216,16 @@
     }
 </script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    //참가 비용 유/무료 input 태그 노출
+    function displayPriceInput(selectElement) {
+        var priceInput = document.getElementById("price");
+        if (selectElement.value == "PAY") {
+            priceInput.style.display = "block";  // 유료 선택 시 input 태그 보이기
+        } else if (selectElement.value == "FREE") {
+            priceInput.style.display = "none";  // 무료 선택 시 input 태그 숨기기
+        }
+    }
+</script>
 </body>
 </html>

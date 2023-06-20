@@ -1,7 +1,6 @@
 package com.moigae.application.component.article.api.service;
 
 import com.moigae.application.component.article.api.dto.FileUploadDTO;
-import com.moigae.application.core.util.s3.S3Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -14,13 +13,13 @@ import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
-import java.io.File;
-import java.io.IOException;
-import java.security.Principal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,7 +62,7 @@ public class FileService {
         }
     }
 
-    private String putS3(File uploadFile, String fileName) {
+    public String putS3(File uploadFile, String fileName) {
         try {
             s3Client.putObject(PutObjectRequest.builder()
                             .bucket(bucket)
@@ -84,7 +83,7 @@ public class FileService {
                 .build()).toString();
     }
 
-    private Optional<File> convert(MultipartFile file) throws IOException {
+    public Optional<File> convert(MultipartFile file) throws IOException {
         File convertFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
         if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
@@ -97,7 +96,7 @@ public class FileService {
         return Optional.empty();
     }
 
-    public String getUrl(String html){
+    public String getUrl(String html) {
         String regex = "src=\"(.*?)\"";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(html);
