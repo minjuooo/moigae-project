@@ -10,7 +10,7 @@ pipeline {
                     git branch: 'main',
                         url: 'https://github.com/chldnrwo/moigae-common-private.git',
                         credentialsId: 'github-signin',
-                        credentialsVariable: 'GITHUB_TOKEN'
+                        variable: 'GITHUB_TOKEN'
                 }
             }
         }
