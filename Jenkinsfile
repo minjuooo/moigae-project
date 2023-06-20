@@ -6,13 +6,9 @@ pipeline {
     stages {
         stage('Git Clone') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'github-signin', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    git branch: 'main',
-                        url: 'https://github.com/chldnrwo/moigae-common-private.git',
-                        credentialsId: 'github-signin',
-                        usernameSecret: 'USERNAME',
-                        passwordSecret: 'PASSWORD'
-                }
+                git branch: 'main',
+                    url: 'https://github.com/chldnrwo/moigae-common-private.git',
+                    credentialsId: 'github-signin'
             }
         }
         stage('Set Permissions') {
