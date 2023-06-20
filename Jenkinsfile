@@ -6,10 +6,10 @@ pipeline {
     stages {
         stage('Git Clone') {
             steps {
-                withCredentials([string(credentialsId: 'your_credentials_id', variable: 'GITHUB_TOKEN')]) {
+                withCredentials([string(credentialsId: 'github-signin', variable: 'GITHUB_TOKEN')]) {
                     git branch: 'main',
                         url: 'https://github.com/chldnrwo/moigae-common-private.git',
-                        credentialsId: 'your_credentials_id',
+                        credentialsId: 'github-signin',
                         credentialsVariable: 'GITHUB_TOKEN'
                 }
             }
