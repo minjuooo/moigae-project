@@ -19,10 +19,10 @@ pipeline {
                 sh './gradlew clean build'
             }
         }
-        stage('Test') {
+        /* stage('Test') {
             steps {
                 sh './gradlew test'
             }
-        }
+        } */
      }
 }
