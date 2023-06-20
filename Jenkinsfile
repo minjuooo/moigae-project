@@ -10,8 +10,8 @@ pipeline {
                     git branch: 'main',
                         url: 'https://github.com/chldnrwo/moigae-common-private.git',
                         credentialsId: 'github-signin',
-                        usernameVariable: 'USERNAME',
-                        passwordVariable: 'PASSWORD'
+                        usernameSecret: 'USERNAME',
+                        passwordSecret: 'PASSWORD'
                 }
             }
         }
