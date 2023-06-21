@@ -49,3 +49,9 @@ body {
 .container-fluid, .row, .col-md-3, .col-md-9, .jumbotron, .card {
     background-color: white;
 }
+
+img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}

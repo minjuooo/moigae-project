@@ -66,7 +66,7 @@
                                     <div class="card">
                                         <div class="card-body d-flex flex-column align-items-center">
                                             <ul class="list-group list-group-flush">
-                                                <img class="list-group-item" th:src="${meeting.path}"/>
+                                                <img th:src="${meeting.path}"/>
                                                 <li class="list-group-item">
                                                     <a th:href="@{/meetings/{id}(id=${meeting.id})}"
                                                        class="btn btn-primary">지금 바로 확인하기 🔍</a>

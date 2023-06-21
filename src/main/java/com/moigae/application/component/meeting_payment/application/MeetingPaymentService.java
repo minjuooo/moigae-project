@@ -72,7 +72,7 @@ public class MeetingPaymentService {
     }
 
     //모임 (신청, 결제) 전 -> 모임 중복 신청 체크 로직
-    private void isExistingPayment(User user, Meeting meeting) {
+    public void isExistingPayment(User user, Meeting meeting) {
         MeetingPayment existingPayment = meetingPaymentRepository.findByUserAndMeeting(user, meeting);
         if (existingPayment != null) {
             throw new IllegalStateException("해당 유저는 이미 해당 모임에 신청을 완료했습니다.");
@@ -89,12 +89,12 @@ public class MeetingPaymentService {
     }
 
     //모임 (유료, 무료) - 신청 시, 현재 참여 인원 +1
-    private static void incrementParticipantCount(Meeting meeting) {
+    public static void incrementParticipantCount(Meeting meeting) {
         meeting.getParticipantRange().addCurrentParticipants();
     }
 
     //현재 참여 인원 >= 최대 참여 인원 시, 모임 신청 불가 체크
-    private static void isMeetingApplyCondition(Meeting meeting) {
+    public static void isMeetingApplyCondition(Meeting meeting) {
         meeting.getParticipantRange().meetingApplyCondition();
     }
 }

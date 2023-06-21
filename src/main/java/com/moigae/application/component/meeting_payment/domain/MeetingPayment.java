@@ -5,7 +5,6 @@ import com.moigae.application.component.meeting_payment.domain.enumeration.Refun
 import com.moigae.application.component.meeting_payment.domain.enumeration.TradeStatus;
 import com.moigae.application.component.user.domain.User;
 import com.moigae.application.core.common.BaseEntity;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "meeting_payment")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
 public class MeetingPayment extends BaseEntity {
     @Id
