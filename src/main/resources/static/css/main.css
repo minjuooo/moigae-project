@@ -1,0 +1,158 @@
+.bold {
+    font-weight: bold;
+    color: black;
+    transition: color 0.4s ease;
+}
+.bold:hover {
+    color: #005abf;
+}
+.fix {
+    background-color: rgb(60, 60, 60) !important;
+    width: 100%;
+    position: fixed !important;
+    animation: down 0.5s ease !important;
+}
+@keyframes down { 0%{
+    transform: translateY(-50px)
+}
+    100
+    %
+    {
+        transform
+        :
+                translateY(
+                        0px
+                )
+    }
+}
+.font_pala{
+    font-family: "Palatino Linotype";
+    font-weight: bold;
+}
+#padding{
+    padding: 15px 0 15px 0;
+}
+@font-face {
+    font-family: 'NanumSquareNeo-Variable';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+body {
+    font-family: 'NanumSquareNeo-Variable','Palatino Linotype' !important;
+}
+
+
+/*.fix {*/
+/*    background-color: rgb(60, 60, 60) !important;*/
+/*    width: 100%;*/
+/*    position: fixed !important;*/
+/*    animation: down 0.5s ease !important;*/
+/*}*/
+/*@keyframes down { 0%{*/
+/*    transform: translateY(-50px)*/
+/*}*/
+/*    100*/
+/*    %*/
+/*    {*/
+/*        transform*/
+/*        :*/
+/*                translateY(*/
+/*                        0px*/
+/*                )*/
+/*    }*/
+/*}*/
+/*.font_pala{*/
+/*    font-family: "Palatino Linotype";*/
+/*    font-weight: bold;*/
+/*}*/
+/*body {*/
+/*    font-family: 'NanumSquareNeo-Variable','Palatino Linotype' !important;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*}*/
+/*@font-face {*/
+/*    font-family: 'NanumSquareNeo-Variable';*/
+/*    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');*/
+/*    font-weight: normal;*/
+/*    font-style: normal;*/
+/*}*/
+/*.navbar {*/
+/*    background-color: #FFFFFF;*/
+/*}*/
+/*nav {*/
+/*    position: fixed;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    width: 100%;*/
+/*    z-index: 9999; !* 다른 요소 위에 위치하도록 설정 *!*/
+/*    height: 80px;*/
+/*}*/
+/*a.nav-link{*/
+
+/*    width: 100px;*/
+/*    height: auto;*/
+/*    font-weight: bold;*/
+/*}*/
+/*.nav-link {*/
+/*    !* 기본 스타일 *!*/
+/*    color: #000000;*/
+/*}*/
+/*.logo {*/
+/*    margin-left: 50px;*/
+/*    margin-right: 50px;*/
+/*    width: 100px; !* 원하는 가로 크기로 조정 *!*/
+/*    height: auto; !* 세로 크기는 가로에 비례하여 자동 조정 *!*/
+/*}*/
+/*.navbar-image {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    height: 100%; !* 네비게이션 바의 높이에 맞추기 위해 100%로 설정 *!*/
+/*}*/
+/*.navbar-image img {*/
+/*    height: auto;*/
+/*    max-width: 100%;*/
+/*}*/
+/*.btn.btn-primary.btn-sm{*/
+/*    margin: 8px;*/
+/*}*/
+/*a.nav-link.dropdown-toggle{*/
+/*    margin: 8px;*/
+/*    padding:4px 8px ;*/
+/*}*/
+/*.dropdown-menu .dropdown-item:hover {*/
+/*    background-color: #f8f8f8;*/
+/*    color: #005abf;*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*a.nav-link{*/
+/*    margin: 8px;*/
+/*    padding: 4px 8px;*/
+/*}*/
+/*.navbar-collapse.show {*/
+/*    background-color: #FFFFFF; !* 원하는 배경색으로 변경 *!*/
+/*}*/
+
+/*section {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*}*/
+/*.navbar-collapse.show {*/
+/*    background-color: #FFFFFF; !* 원하는 배경색으로 변경 *!*/
+/*}*/
+/*.image-container {*/
+/*    width: 80%;*/
+/*    max-width: 100%;*/
+/*    margin: 0 auto;*/
+/*    overflow: hidden;*/
+/*}*/
+
+/*.image-container img {*/
+/*    width: 100%;*/
+/*    height: auto;*/
+/*    display: block;*/
+/*}*/
+

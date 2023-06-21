@@ -4,32 +4,61 @@
 <head>
     <head>
         <style>
+            @keyframes down {
+                0% {
+                    transform: translateY(-50px);
+                }
+                100% {
+                    transform: translateY(0px);
+                }
+            }
+
+            .fix {
+                background-color: rgb(60, 60, 60) !important;
+                width: 100%;
+                position: fixed !important;
+                animation: down 0.5s ease !important;
+            }
+
+            .font_pala {
+                font-family: "Palatino Linotype";
+                font-weight: bold;
+            }
+
+            #padding {
+                padding: 15px 0 15px 0;
+            }
+
             @font-face {
                 font-family: 'NanumSquareNeo-Variable';
                 src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
                 font-weight: normal;
                 font-style: normal;
             }
+
             body {
-                font-family: 'NanumSquareNeo-Variable','Palatino Linotype' !important;
+                font-family: 'NanumSquareNeo-Variable', 'Palatino Linotype' !important;
+
             }
         </style>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Insert title here</title>
+        <title>회원가입</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     </head>
+
 <body>
 
 <div th:include="navbar"></div>
 
 <div class="container-md">
+
     <div class="row">
         <div class="col-md-5 mx-auto">
             <div class="d-flex justify-content-center">
-                <h3 style="margin-top: 20px">회원가입</h3>
+                <h2 style="margin-top: 20px">회원가입</h2>
             </div>
 
             <br>
@@ -113,10 +142,9 @@
                 <br>
                 <br>
                 <div class="d-flex justify-content-center">
-                    <input disabled id="submitButton1" class="btn btn-warning px-5" type="submit" value="작성 완료">
+                    <input id="submitButton1" class="btn px-5" type="submit"
+                           style="background-color: #005abf;color: #FFFFFF; outline: none" value="작성 완료">
                 </div>
-
-
             </form>
         </div>
     </div>
