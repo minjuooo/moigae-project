@@ -53,6 +53,7 @@
             </div>
 
             <br>
+            <div id="message"></div>
             <br>
             <div class="d-flex justify-content-center">
                 <button class="btn btn-warning px-2" onclick="history.back()">
@@ -108,9 +109,7 @@
                 name : name
             },
             success: function(response) {
-                if (response.status === "success") {
-                    console.log("success");
-                }
+                $('#message').html(response.status);
             },
             error: function(error) {
                 console.log(error);

@@ -84,7 +84,11 @@ public class UserController {
         if(user == null){
             message = "해당하는 아이디를 찾을 수 없습니다.";
         }else{
-            message = "";
+            message = "안녕하세요!<br/>" +
+                    "회원님의 아이디는<br/><br/>" +
+                    "<span style=\"color:red;\">" + user.getEmail() + "</span>" +
+                    "<br/><br/>" +
+                    "입니다!";
         }
 
         Map<String, String> response = new HashMap<>();
