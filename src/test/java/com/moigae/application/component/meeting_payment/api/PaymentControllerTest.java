@@ -74,7 +74,7 @@ class PaymentControllerTest {
                         .param("paymentKey", paymentKey)
                         .param("orderId", orderId)
                         .param("amount", String.valueOf(amount)))
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test

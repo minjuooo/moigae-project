@@ -38,7 +38,7 @@ out/
 /data/**
 
 application-hong.yml
-application-local.yml
 application-test.yml
 application-prod.yml
 resources/application-prod.yml
+application-prod.yml

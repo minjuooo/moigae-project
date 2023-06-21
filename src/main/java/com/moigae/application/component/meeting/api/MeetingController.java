@@ -32,6 +32,14 @@ public class MeetingController {
                            @ModelAttribute MeetingCategoryRequest meetingCategoryRequest,
                            @PageableDefault(size = 20) Pageable pageable) {
         Page<MeetingDto> meetingDtoPage = meetingService.Meetings(meetingCategoryRequest, pageable);
+
+        int blockSize = 10;
+        int startBlockPage = ((meetingDtoPage.getNumber() / blockSize) * blockSize) + 1;
+        int endBlockPage = startBlockPage + blockSize - 1;
+
+        model.addAttribute("startBlockPage", startBlockPage);
+        model.addAttribute("endBlockPage", endBlockPage);
+        
         meetingModel(model, customUser, meetingCategoryRequest, meetingDtoPage);
         return "meetings/meeting_list";
     }
