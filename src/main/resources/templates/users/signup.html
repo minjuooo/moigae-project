@@ -94,6 +94,7 @@
                     <div class="input-group">
                         <input id="phone" class="form-control" type="text" name="phone">
                     </div>
+                    <div id="phoneError" class="form-text">전화번호는 '-'까지 포함해서 입력해주세요.</div>
                 </div>
 
                 <br>
@@ -156,6 +157,7 @@
 
     let availableEmail = false;
     let availablePassword = false;
+    let availablePhone = false;
 
     function isGenderSelected() {
         for (let i = 0; i < gender.length; i++) {
@@ -177,7 +179,8 @@
             passwordInput1.value.trim() !== "" &&
             passwordInput2.value.trim() !== "" &&
             availableEmail &&
-            availablePassword
+            availablePassword &&
+            availablePhone
         ) {
             button.disabled = false;
         } else {
@@ -244,6 +247,29 @@
 
     passwordInput1.addEventListener("keyup", matchPassword);
     passwordInput2.addEventListener("keyup", matchPassword);
+
+    function validatePhoneNumber() {
+        const phoneInput = document.getElementById("phone");
+        const phoneNumber = phoneInput.value.trim();
+        const phoneError = document.getElementById("phoneError");
+
+        // 정규표현식 패턴
+        const pattern = /^\d{3}-\d{3,4}-\d{4}$/;
+
+        if (pattern.test(phoneNumber)) {
+            phoneError.innerText = ""; // 정규표현식에 맞을 경우 에러 메시지를 지웁니다.
+            availablePhone = true;
+        } else {
+            phoneError.innerText = "전화번호는 '-'까지 포함해서 입력해주세요."; // 정규표현식에 맞지 않을 경우 에러 메시지를 표시합니다.
+            availablePhone = false;
+        }
+
+        checkFormAndEnableButton();
+    }
+
+    const phoneInput = document.getElementById("phone");
+    phoneInput.addEventListener("keyup", validatePhoneNumber);
+
 </script>
 </body>
 </html>
