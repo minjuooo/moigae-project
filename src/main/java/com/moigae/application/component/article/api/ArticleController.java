@@ -133,7 +133,7 @@ public class ArticleController {
             article.setImgurl(fileService.getUrl(articleForm.getContent()));
             articleRepository.save(article);
         }
-        return "redirect:/articles/articleList";
+        return "redirect:/articles/issueList";
     }
 
     @GetMapping("/createIssue")
