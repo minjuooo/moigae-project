@@ -125,15 +125,20 @@ public class ArticleController {
             @PathVariable("articleId") Long articleId,
             @ModelAttribute ArticleForm articleForm
     ) {
-        Optional<Article> optionalArticle = articleRepository.findById(articleId);
-        if (optionalArticle.isPresent()) {
-            Article article = optionalArticle.get();
-            article.setArticleTitle(articleForm.getArticleTitle());
-            article.setContent(articleForm.getContent());
-            article.setImgurl(fileService.getUrl(articleForm.getContent()));
-            articleRepository.save(article);
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Article not found with id " + articleId));
+
+        article.setArticleTitle(articleForm.getArticleTitle());
+        article.setContent(articleForm.getContent());
+        article.setImgurl(fileService.getUrl(articleForm.getContent()));
+        articleRepository.save(article);
+
+        if(article.getCategory().equals(Category.STORY)){
+            return "redirect:/articles/articleList";
+        }else{
+            return "redirect:/articles/issueList";
         }
-        return "redirect:/articles/issueList";
+
     }
 
     @GetMapping("/createIssue")
