@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>모임 ID</th>
+            <th>모임 이름</th>
+            <th>카테고리</th>
+            <th>닉네임</th>
+            <th>소개글</th>
+            <!-- 추가 필드를 여기에 추가 -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="meetings : ${meetings}">
+            <td th:text="${meeting.id}"></td>
+            <td th:text="${meeting.meetingTitle}"></td>
+            <td th:text="${meeting.meetingCategory}"></td>
+            <td th:text="${meeting.nickName}"></td>
+            <td th:text="${meeting.meetingDescription}"></td>
+            <!-- 추가 필드를 여기에 추가-->
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
