@@ -72,7 +72,7 @@
 <!--네비게이션바 양정아-->
 <div>
   <header style="margin: 0">
-    <div th:include="navbar"></div>
+    <div th:include="navbarJ"></div>
   </header>
   <br><br>
   <!--  컨텐츠 시작-->
@@ -113,6 +113,10 @@
         </form>
         <br>
         <div class="d-flex justify-content-between">
+           <span class="justify-content-end">
+            <button type="button" class="btn btn-secondary" style="background-color: #005abf; color: #FFFFFF"
+                    onclick="window.location.href='/questions/createQuestion';">&nbsp;&nbsp;글쓰기&nbsp;&nbsp;</button>
+          </span>
           <span class="btn-group">
             <button style="border-color: #d2d2d2" type="button" class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               정렬 방법
@@ -121,10 +125,6 @@
               <li><a class="dropdown-item" href="#" data-sort="latest">최신순</a></li>
               <li><a class="dropdown-item" href="#" data-sort="views">조회순</a></li>
             </ul>
-          </span>
-          <span class="justify-content-end">
-            <button type="button" class="btn btn-secondary" style="background-color: #005abf; color: #FFFFFF"
-                    onclick="window.location.href='/questions/createQuestion';">&nbsp;&nbsp;글쓰기&nbsp;&nbsp;</button>
           </span>
         </div>
         <br>

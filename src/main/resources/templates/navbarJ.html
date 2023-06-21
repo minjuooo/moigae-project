@@ -1,0 +1,71 @@
+<style>
+  .nav-link:hover {
+    color: #005abf;
+  }
+</style>
+<nav class="navbar navbar-expand-md navbar-light"
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+     style="width: 100%; padding:0; height: 80px; position: fixed; top: 0; z-index: 9999; background-color: #FFFFFF">
+  <div class="container" style="">
+    <a class="navbar-brand" onclick="window.location.href='/'">
+      <img src="/images/logo.png" alt="로고" class="logo"
+           style=" margin-left: 35px; margin-right: 40px; width: 90px; height: auto; cursor: pointer;">
+    </a>
+    <span>&nbsp;</span>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/meetings"
+             style=" width: 100px; height: auto; font-weight: bold; cursor: pointer;">모임</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/questions/questionList"
+             style=" width: 100px; height: auto; font-weight: bold; cursor: pointer">모이톡</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/articles/articleList"
+             style=" width: 100px; height: auto; font-weight: bold; cursor: pointer">멍멍이야기</a>
+        </li>
+      </ul>
+    </div>
+
+    <div sec:authorize="isAnonymous()" class="form-inline my-2 my-lg-0 ml-auto">
+      <button class="btn btn-dark btn-sm my-2 my-sm-0"
+              style="background-color:#ffee64; font-weight: bolder;color:#000000; border: none"
+              onclick="window.location.href='/users/login'">로그인</button>
+      <span>&nbsp;</span>
+      <button class="btn btn-warning btn-sm my-2 my-sm-0 ml-5"
+              style="background-color:#005abf; font-weight: normal;color:#FFFFFF; border: none"
+              onclick="window.location.href='/users/signup'">회원가입</button>
+    </div>
+    <div sec:authorize="isAuthenticated()" class="form-inline my-2 my-lg-0 ml-auto">
+      <button class="btn btn-dark btn-sm my-2 my-sm-0"
+              style="background-color:#ffee64; font-weight: bolder;color:#000000; border: none"
+              onclick="window.location.href='users/host-centerMain'">호스트센터
+      </button>
+      <span>&emsp;</span>
+      <div class="btn-group">
+        <button style="background-color: #ffffff; color: #000000; border: none;font-weight: bold; font-size: 20px;"
+                class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <span style="font-weight: bold; font-size: 20px;" th:text="${ customUser.name }+님"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end"
+            style="color: #000000; font-weight: bold;"
+            onmouseover="this.style.color='#005abf';"
+            onmouseout="this.style.color='#000000';">
+          <li><a class="dropdown-item" style="cursor: pointer"
+                 onclick="window.location.href='/users/mypage'">마이페이지</a></li>
+          <li><a class="dropdown-item" style="cursor: pointer"
+                 onclick="window.location.href='/users/mypageCart'">관심모임</a></li>
+          <li><a class="dropdown-item" style="cursor: pointer"
+                 onclick="window.location.href='/users/logout'">로그아웃</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
