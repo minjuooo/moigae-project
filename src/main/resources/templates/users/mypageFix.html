@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <style>
+        .fix {
+            background-color: rgb(60, 60, 60) !important;
+            width: 100%;
+            position: fixed !important;
+            animation: down 0.5s ease !important;
+        }
+
+        @keyframes down {
+            0% {
+                transform: translateY(-50px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .font_pala {
+            font-family: "Palatino Linotype";
+            font-weight: bold;
+        }
+
+        #padding {
+            padding: 15px 0 15px 0;
+        }
+
+        @font-face {
+            font-family: 'NanumSquareNeo-Variable';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'NanumSquareNeo-Variable', 'Palatino Linotype' !important;
+        }
+
+        .nav-link:hover {
+            color: #005abf;
+        }
+
+        .nav-link-margin {
+            margin-bottom: 10px;
+        }
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>마이페이지-수정하기</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+          integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-dbszL+y3o9GMQQ3ik8yYwtI4ne/9orhz6aqrKIjjb0S1asKo49Jg4kot+UamYNlt"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div th:include="navbar"></div>
+<br><br>
+<div class="container-md">
+    <div class="row">
+        <aside class="col-md-2">
+            <nav class="nav flex-column text-center">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-margin" th:href="@{/users/mypage}" style="color: black; font-size: 20px;">마이페이지</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-margin" th:href="@{/users/mypage}" style="font-size: 18px; color:#005abf">내정보</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-margin" th:href="@{/users/mypageMoim}" style="color: black; font-size: 18px;">내모임</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-margin" th:href="@{/users/mypageCart}" style="color:black; font-size: 18px;">관심모임</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-margin" th:href="@{/users/mypageUnJoin}" style="color: black; font-size: 18px;">탈퇴하기</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <div class="col-md-10" style="margin-top: 55px">
+            <!-- 내 정보 -->
+            <h1>내 정보 수정</h1>
+            <form action="/users/update" method="post">
+            <input type="hidden" name="id" th:value="${user.id}"> <!-- 숨겨진 필드로 사용자 ID 전달 -->
+
+                <label for="name">이름:</label>
+                <input type="text" id="name" name="name" th:value="${user.name}" required><br><br>
+
+                <label for="email">이메일:</label>
+                <input type="email" id="email" name="email" th:value="${user.email}" required><br><br>
+
+                <label for="password">비밀번호:</label>
+                <input type="password" id="password" name="password" required><br><br>
+
+                <input type="submit" value="수정">
+            </form>
+        </div>
+
+    </div>
+</div>
+<!--부트스트랩 스크립트-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-dbszL+y3o9GMQQ3ik8yYwtI4ne/9orhz6aqrKIjjb0S1asKo49Jg4kot+UamYNlt"
+        crossorigin="anonymous"></script>
+</body>
+</html>

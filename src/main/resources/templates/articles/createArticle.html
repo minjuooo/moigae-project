@@ -50,7 +50,7 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Insert title here</title>
+  <title>게시글 작성</title>
   <link
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
           rel="stylesheet"
@@ -66,39 +66,48 @@
   <script src="/ckeditor/ckeditor.js"></script>
 </head>
 <body>
-
-<div th:include="navbar"></div>
-<br><br>
-<div class="container-md">
-  <div class="row">
-    <aside class="col-md-2">
-      <nav class="nav flex-column text-center">
-        <div><h5 class="bold">멍멍이야기</h5></div>
-        <br>
-        <div>
-          <h6 class="bold" onclick="window.location.href='/articles/articleList';" style="cursor: pointer;">STORY</h6>
-        </div>
-        <br>
-        <div>
-          <h6 class="bold" onclick="window.location.href='/articles/issueList';" style="cursor: pointer;">공지사항</h6>
-        </div>
-        <br>
-        <div>
-          <h6 class="bold" onclick="window.location.href='/articles/aboutUs';" style="cursor: pointer;">ABOUT US</h6>
-        </div>
-        <div>
+<!--네비게이션바 양정아-->
+<div>
+  <header style="margin: 0">
+    <div th:include="navbar"></div>
+  </header>
+  <br><br>
+  <!--  컨텐츠 시작-->
+  <div class="container-md" style="margin-top: 70px; padding: 0; margin-bottom: 100px" >
+    <div class="row" style="margin-left: 30px; margin-right: 20px">
+      <!--    사이드메뉴-->
+      <aside class="col-md-2 col-sm-12">
+        <nav class="nav flex-column text-left">
+          <div><h5 style="font-weight: bold; cursor: pointer">멍멍이야기</h5></div>
           <br>
           <div>
-            <h6 class="bold" onclick="window.location.href='/articles/createArticle';" style="cursor: pointer;">게시글 작성</h6>
+            <h6 class="bold" onclick="window.location.href='/articles/articleList';"
+                style="cursor: pointer;">STORY</h6>
           </div>
           <br>
           <div>
-            <h6 class="bold" onclick="window.location.href='/articles/createIssue';" style="cursor: pointer;">공지사항 작성</h6>
+            <h6 class="bold" onclick="window.location.href='/articles/issueList';"
+                style="cursor: pointer;">공지사항</h6>
           </div>
-        </div>
-      </nav>
-    </aside>
-
+          <br>
+          <div>
+            <h6 class="bold" onclick="window.location.href='/articles/aboutUs';"
+                style="cursor: pointer;">ABOUT US</h6>
+          </div>
+          <div>
+            <br>
+            <div>
+              <h6 class="bold" onclick="window.location.href='/articles/createArticle';"
+                  style="cursor: pointer; color: #FFEB5A">게시글 작성</h6>
+            </div>
+            <br>
+            <div>
+              <h6 class="bold" onclick="window.location.href='/articles/createIssue';"
+                  style="cursor: pointer;">공지사항 작성</h6>
+            </div>
+          </div>
+        </nav>
+      </aside>
     <div class="col-md-10 d-flex">
       <div class="col-md-1" >
       </div>
@@ -131,18 +140,12 @@
               <button class="btn btn-secondary">작성 완료</button>
             </div>
           </div>
-
-
-
         </form>
       </div>
     </div>
   </div>
 </div>
-
-
-
-
+</div>
 <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
