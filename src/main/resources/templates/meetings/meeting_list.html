@@ -94,7 +94,7 @@
                         selfDevelopment=${#httpServletRequest.getParameter('selfDevelopment')},
                         others=${#httpServletRequest.getParameter('others')})}"><<</a>
                     </li>
-                    <li class="page-item" th:each="i : ${#numbers.sequence(0, meetingDtoPage.totalPages - 1)}"
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, meetingDtoPage.totalPages -1)}"
                         th:class="${i == meetingDtoPage.number ? 'active' : ''}">
                         <a class="page-link" th:href="@{/meetings(page=${i},
                         fellowship=${#httpServletRequest.getParameter('fellowship')},
@@ -193,16 +193,17 @@
             url: `/meetings?${queryString.substr(1)}`,
             type: 'GET',
             success: function (response) {
-                // 응답 문자열을 DOM 요소로 파싱합니다.
                 let parser = new DOMParser();
                 let htmlDoc = parser.parseFromString(response, 'text/html');
 
-                // 응답에서 jumbotron 섹션만 선택합니다.
                 let updatedSection = htmlDoc.querySelector('.jumbotron');
-
-                // 기존의 jumbotron을 업데이트 된 것으로 교체합니다.
                 let oldSection = document.querySelector('.jumbotron');
                 oldSection.parentNode.replaceChild(updatedSection, oldSection);
+
+                // 페이지네이션 업데이트
+                let updatedPagination = htmlDoc.querySelector('.pagination');
+                let oldPagination = document.querySelector('.pagination');
+                oldPagination.parentNode.replaceChild(updatedPagination, oldPagination);
             }
         });
     }

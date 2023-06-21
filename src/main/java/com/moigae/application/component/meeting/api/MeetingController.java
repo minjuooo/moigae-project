@@ -30,17 +30,12 @@ public class MeetingController {
     public String meetings(Model model,
                            @AuthenticationPrincipal CustomUser customUser,
                            @ModelAttribute MeetingCategoryRequest meetingCategoryRequest,
-                           @PageableDefault(size = 20) Pageable pageable) {
+                           @PageableDefault(size = 4) Pageable pageable) {
         Page<MeetingDto> meetingDtoPage = meetingService.Meetings(meetingCategoryRequest, pageable);
-
-        int blockSize = 10;
-        int startBlockPage = ((meetingDtoPage.getNumber() / blockSize) * blockSize) + 1;
-        int endBlockPage = startBlockPage + blockSize - 1;
-
-        model.addAttribute("startBlockPage", startBlockPage);
-        model.addAttribute("endBlockPage", endBlockPage);
-        
-        meetingModel(model, customUser, meetingCategoryRequest, meetingDtoPage);
+        log.info(String.valueOf("📌📌📌📌📌 데이터 페이지 개수 : " + meetingDtoPage.getTotalPages()));
+        model.addAttribute("meetingDtoPage", meetingDtoPage);
+        model.addAttribute("meetingCategoryDto", meetingCategoryRequest);
+        model.addAttribute("customUser", customUser);
         return "meetings/meeting_list";
     }
 
@@ -50,10 +45,12 @@ public class MeetingController {
                                 @PathVariable String meetingId) {
         MeetingDto meetingDto = meetingService.meetingFindByUUIDPay(meetingId);
         if (meetingDto.getPrice() > 0) {
-            meetingDetailModel(model, customUser, meetingDto);
+            model.addAttribute("meetingDto", meetingDto);
+            model.addAttribute("customUser", customUser);
             return "meetings/meeting_detail_pay";
         }
-        meetingDetailModel(model, customUser, meetingDto);
+        model.addAttribute("meetingDto", meetingDto);
+        model.addAttribute("customUser", customUser);
         return "meetings/meeting_detail_free";
     }
 
@@ -67,10 +64,14 @@ public class MeetingController {
         UserDto userDto = userService.customUserFindBy(customUser);
         MeetingDto meetingDto = meetingService.meetingFindByUUIDPay(meetingId);
         if (meetingDto.getPrice() > 0) {
-            applicationModel(model, customUser, userDto, meetingDto);
+            model.addAttribute("meetingDto", meetingDto);
+            model.addAttribute("userDto", userDto);
+            model.addAttribute("customUser", customUser);
             return "meetings/meeting_application_pay";
         }
-        applicationModel(model, customUser, userDto, meetingDto);
+        model.addAttribute("meetingDto", meetingDto);
+        model.addAttribute("userDto", userDto);
+        model.addAttribute("customUser", customUser);
         return "meetings/meeting_application_free";
     }
 
@@ -84,23 +85,5 @@ public class MeetingController {
         }
         meetingPaymentService.meetingFreeCreate(meetingId, customUser, meetingId);
         return "redirect:/meetings/{meetingId}";
-    }
-
-    private static void applicationModel(Model model, CustomUser customUser, UserDto userDto, MeetingDto meetingDto) {
-        model.addAttribute("meetingDto", meetingDto);
-        model.addAttribute("userDto", userDto);
-        model.addAttribute("customUser", customUser);
-    }
-
-    private static void meetingDetailModel(Model model, CustomUser customUser, MeetingDto meetingDto) {
-        model.addAttribute("meetingDto", meetingDto);
-        model.addAttribute("customUser", customUser);
-    }
-
-    private static void meetingModel(Model model, CustomUser customUser, MeetingCategoryRequest meetingCategoryRequest,
-                                     Page<MeetingDto> meetingDtoPage) {
-        model.addAttribute("meetingDtoPage", meetingDtoPage);
-        model.addAttribute("meetingCategoryDto", meetingCategoryRequest);
-        model.addAttribute("customUser", customUser);
     }
 }
