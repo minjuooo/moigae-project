@@ -96,4 +96,25 @@ public class UserController {
 
         return response;
     }
+
+    @PostMapping("/existEmail")
+    @ResponseBody
+    public Map<String, Object> existEmail(
+            @RequestBody Map<String, String> req) {
+
+        Map<String, Object> map = new HashMap<>();
+
+//        MemberDtoAddRole member = service.getByEmail(req.get("email"));
+        User user = userRepository.findByEmail(req.get("email"));
+
+        if (user == null) {
+            map.put("status", "not exist");
+            map.put("message", "사용가능한 이메일입니다.");
+        } else {
+            map.put("status", "exist");
+            map.put("message", "이미 존재하는 이메일입니다.");
+        }
+
+        return map;
+    }
 }
