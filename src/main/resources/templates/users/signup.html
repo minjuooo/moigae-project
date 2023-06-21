@@ -142,7 +142,7 @@
                 <br>
                 <br>
                 <div class="d-flex justify-content-center">
-                    <input id="submitButton1" class="btn px-5" type="submit"
+                    <input id="submitButton1" class="btn px-5" data-bs-toggle="modal" data-bs-target="#signUpModal"
                            style="background-color: #005abf;color: #FFFFFF; outline: none" value="작성 완료">
                 </div>
             </form>
@@ -151,7 +151,7 @@
 </div>
 
 <!-- 가입 완료 Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -159,11 +159,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                회원가입이 완료되었습니다.\n
+                회원가입이 완료되었습니다.<br>
                 로그인 후 모임을 시작해보세요
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" id="confirmDelete">확인</button>
+                <button type="button" class="btn btn-primary" onclick="window.location.href='/users/login';">확인</button>
             </div>
         </div>
     </div>
@@ -298,6 +298,34 @@
     const phoneInput = document.getElementById("phone");
     phoneInput.addEventListener("keyup", validatePhoneNumber);
 
+    $("#submitButton1").click(function() {
+        // AJAX 요청을 서버에 보냅니다.
+        var email = $("#emailInput1").val();
+        var password = $("#passwordInput1").val();
+        var name = $("#name").val();
+        var gender = $('input[name="gender"]:checked').val();
+        var phone = $("#phone").val();
+
+        $.ajax({
+            url: '/users/signup',
+            type: 'POST',
+            data: {
+                email: email,
+                password: password,
+                name: name,
+                gender: gender,
+                phone: phone
+            },
+            success: function(response) {
+                if (response.status === "success") {
+                    console.log("success");
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
 </script>
 </body>
 </html>

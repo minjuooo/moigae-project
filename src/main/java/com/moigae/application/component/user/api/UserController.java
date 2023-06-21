@@ -3,6 +3,7 @@ package com.moigae.application.component.user.api;
 import com.moigae.application.component.user.api.request.UserLoginForm;
 import com.moigae.application.component.user.application.UserService;
 import com.moigae.application.component.user.domain.User;
+import com.moigae.application.component.user.domain.enumeration.Gender;
 import com.moigae.application.component.user.dto.CustomUser;
 import com.moigae.application.component.user.dto.UserDto;
 import com.moigae.application.component.user.repository.UserRepository;
@@ -53,16 +54,21 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(
-            @ModelAttribute UserDto userDto
+    @ResponseBody
+    public void signup(
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam String name,
+            @RequestParam String gender,
+            @RequestParam String phone
     ) {
-       System.out.println(userDto);
-       userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-       ModelMapper modelMapper = new ModelMapper();
-       User user = modelMapper.map(userDto, User.class);
-       System.out.println(user);
+       User user = new User();
+       user.setEmail(email);
+       user.setPassword(passwordEncoder.encode(password));
+       user.setUserName(name);
+       user.setGender(Gender.valueOf(gender.toUpperCase()));
+       user.setPhone(phone);
        userRepository.save(user);
-       return "redirect:/";
     }
 
     @GetMapping("/findId")
