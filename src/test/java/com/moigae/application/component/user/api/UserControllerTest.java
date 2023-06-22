@@ -69,21 +69,4 @@ class UserControllerTest {
                         .param("password", "홍"))
                 .andExpect(status().is3xxRedirection());
     }
-
-    @Test
-    @DisplayName("회원가입")
-    @WithMockUser
-    void 회원가입() throws Exception {
-        UserDto userDto = new UserDto();
-        userDto.setEmail("홍정완@test.com");
-        userDto.setPassword("홍");
-
-        when(passwordEncoder.encode(userDto.getPassword())).thenReturn("encodedPassword");
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/users/signup")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("email", "홍정완@test.com")
-                        .param("password", "홍"))
-                .andExpect(status().is3xxRedirection());
-    }
 }

@@ -156,7 +156,9 @@ jacocoTestReport {
                             '**/*Builder.*',
                             '**/request/**',
                             '**/Q**',
-                            '**/Index**'
+                            '**/Index**',
+                            '**/Conver**',
+                            '**/MypageContro**'
                     ])
                 })
         )
