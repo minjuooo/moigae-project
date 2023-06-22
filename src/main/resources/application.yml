@@ -33,3 +33,6 @@ cloud:
       instance-profile: true
     stack:
       auto: false
+email:
+  account: moigae222@gmail.com
+  password: beuxtqcyjxdatbub

@@ -49,24 +49,56 @@
                         <div id="emailText" class="form-text">이메일 인증을 진행해주세요.</div>
                         <div id="permissionGroup" style="display: none;">
                             <br>
-                            <input id="permission" class="form-control" type="text" name="permission">
+                            <div class="input-group">
+                                <input id="permission" class="form-control" type="text" name="permission">
+                                <button id="permissionButton" type="button" class="btn btn-outline-secondary">확인</button>
+                            </div>
                             <div id="permissionText" class="form-text">이메일이 전송되었습니다.<br>인증번호를 입력해주세요.</div>
                         </div>
                     </div>
-
-                   <!-- <br>
-                    <div id="message"></div>
+                    <br>
+                    <div id="newPasswordGroup" style="display: none;">
+                        <label for="" class="form-label">
+                            새 비밀번호
+                        </label>
+                        <div class="input-group">
+                            <input id="newPassword" class="form-control" type="password" name="newPassword">
+                        </div>
+                        <label for="" class="form-label">
+                            새 비밀번호 확인
+                        </label>
+                        <div class="input-group">
+                            <input id="newPassword2" class="form-control" type="password" name="newPassword2">
+                        </div>
+                        <div id="passwordText1" class="form-text"></div>
+                    </div>
                     <br>
                     <div class="d-flex justify-content-center">
-                        <button class="btn btn-warning px-2" onclick="history.back()">
-                            &nbsp;뒤로가기&nbsp;
+                        <button disabled id="submitButton1" class="btn btn-dark px-5"
+                                data-bs-toggle="modal" data-bs-target="#signUpModal">
+                            확인
                         </button>
-                        <span>&ensp;&ensp;&ensp;</span>
-                        <button disabled id="submitButton1" class="btn btn-dark px-2">
-                            &ensp;&ensp;확인&ensp;&ensp;
-                        </button>
-                    </div>-->
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 새 비밀번호 Modal -->
+<div style="z-index: 10000;" class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">비밀번호 변경 완료</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                비밀번호 변경이 완료되었습니다.<br>
+                로그인 후 모임을 시작해보세요
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="window.location.href='/users/login';">확인</button>
             </div>
         </div>
     </div>
@@ -91,7 +123,88 @@
             contentType: 'application/json', // JSON 형식으로 전송
             data: JSON.stringify({ email: email}),
             success: function(response) {
+                console.log("success");
 
+                $("#permissionButton").click(function() {
+                    var inputNumber = $("#permission").val();
+                    if(inputNumber == response.number){
+                        $("#newPasswordGroup").css("display", "block");
+                        $("#permissionText").text("인증되었습니다.");
+
+                        var passwordInput1 = document.getElementById("newPassword");
+                        var passwordInput2 = document.getElementById("newPassword2");
+
+                        let availablePassword = false;
+
+                        if (passwordInput1 && passwordInput2) {
+                            // 이벤트 리스너 추가하는 코드...
+                        } else {
+                            console.log("Elements with IDs newPassword1 and newPassword2 not found");
+                        }
+                        function checkFormAndEnableButton() {
+                            const button = document.querySelector("#submitButton1");
+                            if (
+                                passwordInput1.value.trim() !== "" &&
+                                passwordInput2.value.trim() !== "" &&
+                                availablePassword
+                            ) {
+                                button.disabled = false;
+                            } else {
+                                button.disabled = true;
+                            }
+                        }
+
+
+                        passwordInput1.addEventListener("input", checkFormAndEnableButton)
+                        passwordInput2.addEventListener("input", checkFormAndEnableButton)
+
+                        const passwordText1 = document.querySelector("#passwordText1");
+
+                        function matchPassword() {
+                            availablePassword = false;
+
+                            const value1 = passwordInput1.value;
+                            const value2 = passwordInput2.value;
+
+                            if (value1 == value2) {
+                                passwordText1.innerText = "패스워드가 일치합니다.";
+                                availablePassword = true;
+                            } else {
+                                passwordText1.innerText = "패스워드가 일치하지 않습니다.";
+                            }
+
+                            checkFormAndEnableButton();
+                        }
+
+                        passwordInput1.addEventListener("keyup", matchPassword);
+                        passwordInput2.addEventListener("keyup", matchPassword);
+                    }else{
+                        alert("유효하지 않은 인증번호입니다.")
+                    }
+                })
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    })
+
+    $("#submitButton1").click(function() {
+        // AJAX 요청을 서버에 보냅니다.
+        var email = $("#email").val();
+        var password = $("#newPassword").val();
+
+        $.ajax({
+            url: '/users/newPassword',
+            type: 'POST',
+            contentType: 'application/json', // JSON 형식으로 전송
+            data: JSON.stringify({ email: email, password: password }),
+            success: function(response) {
+                if (response.status === "success") {
+                    console.log("success");
+                }else{
+                    alert("오류가 발생했습니다 처음부터 다시 시도해주세요.")
+                }
             },
             error: function(error) {
                 console.log(error);
