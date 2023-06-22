@@ -110,7 +110,6 @@ public class UserController {
 
         Map<String, Object> map = new HashMap<>();
 
-//        MemberDtoAddRole member = service.getByEmail(req.get("email"));
         User user = userRepository.findByEmail(req.get("email"));
 
         if (user == null) {
@@ -122,5 +121,62 @@ public class UserController {
         }
 
         return map;
+    }
+
+    @GetMapping("/findPassWord")
+    public String findPassWord(
+            Model model,
+            @AuthenticationPrincipal CustomUser customUser
+    ){
+        model.addAttribute("customUser", customUser);
+        return "users/findPassWord";
+    }
+
+    @PostMapping("/findPassWord")
+    @ResponseBody
+    public Map<String, String> findPassWord(
+            @RequestBody Map<String, String> req) {
+        User user = userRepository
+                .findByEmailAndUserNameAndPhone(req.get("email"), req.get("name"), req.get("phone"));
+        String message = "";
+        if(user == null){
+            message = "empty";
+        }else{
+            message = "present";
+        }
+
+        Map<String, String> response = new HashMap<>();
+        response.put("status", message);
+
+        return response;
+    }
+
+    @GetMapping("/permission/{email}")
+    public String permission(
+            Model model,
+            @AuthenticationPrincipal CustomUser customUser,
+            @PathVariable String email){
+        model.addAttribute("customUser", customUser);
+        model.addAttribute("email");
+        return "users/permission";
+    }
+
+    @PostMapping("/permission")
+    @ResponseBody
+    public Map<String, String> permission(
+            @RequestBody Map<String, String> req) {
+        System.out.println(req.get("email"));
+
+
+        String message = "";
+//        if(user == null){
+//            message = "empty";
+//        }else{
+//            message = "present";
+//        }
+        Map<String, String> response = new HashMap<>();
+        response.put("status", message);
+
+        return response;
     }
 }
