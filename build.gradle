@@ -33,6 +33,10 @@ repositories {
 }
 
 dependencies {
+    //spring-context
+    implementation 'org.springframework:spring-context-support:5.3.10'
+    //javax mail
+    implementation 'com.sun.mail:javax.mail:1.6.2'
     //Jsoup
     implementation 'org.jsoup:jsoup:1.14.3'
     //아파치 common io

@@ -3,6 +3,7 @@ package com.moigae.application.component.user.api;
 import com.moigae.application.component.user.api.request.UserLoginForm;
 import com.moigae.application.component.user.application.UserService;
 import com.moigae.application.component.user.domain.User;
+import com.moigae.application.component.user.domain.enumeration.Gender;
 import com.moigae.application.component.user.dto.CustomUser;
 import com.moigae.application.component.user.dto.UserDto;
 import com.moigae.application.component.user.repository.UserRepository;
@@ -53,16 +54,21 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(
-            @ModelAttribute UserDto userDto
+    @ResponseBody
+    public void signup(
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam String name,
+            @RequestParam String gender,
+            @RequestParam String phone
     ) {
-       System.out.println(userDto);
-       userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-       ModelMapper modelMapper = new ModelMapper();
-       User user = modelMapper.map(userDto, User.class);
-       System.out.println(user);
+       User user = new User();
+       user.setEmail(email);
+       user.setPassword(passwordEncoder.encode(password));
+       user.setUserName(name);
+       user.setGender(Gender.valueOf(gender.toUpperCase()));
+       user.setPhone(phone);
        userRepository.save(user);
-       return "redirect:/";
     }
 
     @GetMapping("/findId")
@@ -104,7 +110,6 @@ public class UserController {
 
         Map<String, Object> map = new HashMap<>();
 
-//        MemberDtoAddRole member = service.getByEmail(req.get("email"));
         User user = userRepository.findByEmail(req.get("email"));
 
         if (user == null) {
@@ -116,5 +121,62 @@ public class UserController {
         }
 
         return map;
+    }
+
+    @GetMapping("/findPassWord")
+    public String findPassWord(
+            Model model,
+            @AuthenticationPrincipal CustomUser customUser
+    ){
+        model.addAttribute("customUser", customUser);
+        return "users/findPassWord";
+    }
+
+    @PostMapping("/findPassWord")
+    @ResponseBody
+    public Map<String, String> findPassWord(
+            @RequestBody Map<String, String> req) {
+        User user = userRepository
+                .findByEmailAndUserNameAndPhone(req.get("email"), req.get("name"), req.get("phone"));
+        String message = "";
+        if(user == null){
+            message = "empty";
+        }else{
+            message = "present";
+        }
+
+        Map<String, String> response = new HashMap<>();
+        response.put("status", message);
+
+        return response;
+    }
+
+    @GetMapping("/permission/{email}")
+    public String permission(
+            Model model,
+            @AuthenticationPrincipal CustomUser customUser,
+            @PathVariable String email){
+        model.addAttribute("customUser", customUser);
+        model.addAttribute("email");
+        return "users/permission";
+    }
+
+    @PostMapping("/permission")
+    @ResponseBody
+    public Map<String, String> permission(
+            @RequestBody Map<String, String> req) {
+        System.out.println(req.get("email"));
+
+
+        String message = "";
+//        if(user == null){
+//            message = "empty";
+//        }else{
+//            message = "present";
+//        }
+        Map<String, String> response = new HashMap<>();
+        response.put("status", message);
+
+        return response;
     }
 }
