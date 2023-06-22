@@ -11,8 +11,9 @@ public class CustomUser implements UserDetails {
     private String password;
     private String id;
     private String name;
+    private boolean admin;
 
-    // 기타 필요한 필드들...
+// 기타 필요한 필드들...
 
     // getters and setters
     @Override
@@ -73,6 +74,14 @@ public class CustomUser implements UserDetails {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
 }
