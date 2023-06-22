@@ -57,6 +57,7 @@ class CartTest {
         //then
         assertThat(cart.getUser().getUserName()).isEqualTo("홍정완");
         assertThat(meeting.getMeetingTitle()).isEqualTo("타이틀");
+        assertThat(cart.getId()).isNull();
     }
 
     private User createUser() {

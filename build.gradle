@@ -160,7 +160,8 @@ jacocoTestReport {
                             '**/Q**',
                             '**/Index**',
                             '**/Conver**',
-                            '**/MypageContro**'
+                            '**/MypageContro**',
+                            '**/repository/**'
                     ])
                 })
         )
