@@ -1,6 +1,7 @@
 package com.moigae.application.component.user.api;
 
 import com.moigae.application.component.user.api.request.UserLoginForm;
+import com.moigae.application.component.user.api.service.MailSendService;
 import com.moigae.application.component.user.application.UserService;
 import com.moigae.application.component.user.domain.User;
 import com.moigae.application.component.user.domain.enumeration.Gender;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +31,7 @@ public class UserController {
     private final PrimaryGenerator primaryGenerator;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MailSendService mailSendService;
     @GetMapping("/login")
     public String login(Model model,
                         @AuthenticationPrincipal CustomUser customUser) {
@@ -166,16 +169,27 @@ public class UserController {
     public Map<String, String> permission(
             @RequestBody Map<String, String> req) {
         System.out.println(req.get("email"));
+        String auth = mailSendService.joinEmail(req.get("email"));
 
-
-        String message = "";
-//        if(user == null){
-//            message = "empty";
-//        }else{
-//            message = "present";
-//        }
         Map<String, String> response = new HashMap<>();
-        response.put("status", message);
+        response.put("number", auth);
+
+        return response;
+    }
+
+    @PostMapping("/newPassword")
+    @ResponseBody
+    @Transactional
+    public Map<String, String> newPassword(
+            @RequestBody Map<String, String> req) {
+        String email = req.get("email");
+        String password = req.get("password");
+
+        User user = userRepository.findByEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "success");
 
         return response;
     }
