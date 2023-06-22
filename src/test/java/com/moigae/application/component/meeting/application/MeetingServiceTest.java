@@ -25,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @MockMvcTest
@@ -100,8 +101,26 @@ class MeetingServiceTest {
     }
 
     @Test
-    @DisplayName("UUID로 모임 조회 및 결제 테스트")
-    void meetingFindByUUIDPayTest() {
+    @DisplayName("UUID로 모임 조회 및 결제 테스트 - meeting_amount가 null or 0")
+    void meetingFindByUUIDPayTestAmountNullOrZero() {
+        //given
+        String meetingId = "meetingIdFindByPay";
+        Meeting meeting = createMeetingAmountZero(meetingId);
+        meetingRepository.save(meeting);
+
+        //when
+        when(meetingRepositoryCustom.findCustomMeetingByPayId(meetingId)).thenReturn(meeting);
+        MeetingDto result = meetingService.meetingFindByUUIDPay(meetingId);
+
+        //then
+        log.info(String.valueOf(result));
+        verify(meetingRepositoryCustom, times(1)).findCustomMeetingByPayId(meetingId);
+        assertEquals(0, result.getPrice());
+    }
+
+    @Test
+    @DisplayName("UUID로 모임 조회 및 결제 테스트 - meeting_amount가 null x 그리고 not 0")
+    void meetingFindByUUIDPayTestAmountNotNullAndNotZero() {
         //given
         String meetingId = "meetingIdFindByPay";
         Meeting meeting = createMeeting(meetingId);
@@ -114,8 +133,8 @@ class MeetingServiceTest {
         //then
         log.info(String.valueOf(result));
         verify(meetingRepositoryCustom, times(1)).findCustomMeetingByPayId(meetingId);
+        assertEquals(100, result.getPrice());
     }
-
 
     private static MeetingImage createMeetingImage() {
         return MeetingImage.builder()
@@ -144,7 +163,26 @@ class MeetingServiceTest {
                 .meetingCategory(meetingCategory)
                 .nickName("닉네임")
                 .meetingImage(meetingImage)
-                .meetingAmount(1000)
+                .meetingAmount(100)
+                .meetingDescription("모임 소개")
+                .participantRange(participantRange)
+                .meetingAddress(meetingAddress)
+                .meetingPrice(meetingPrice)
+                .petAllowedStatus(petAllowedStatus)
+                .meetingContact(meetingContact)
+                .meetingFreeFormDetails("모임 정보 자유 작성")
+                .meetingStatus(meetingStatus)
+                .build();
+    }
+
+    private Meeting createMeetingAmountZero(String meetingId) {
+        return Meeting.builder()
+                .id(meetingId)
+                .meetingTitle("타이틀")
+                .meetingType(meetingType)
+                .meetingCategory(meetingCategory)
+                .nickName("닉네임")
+                .meetingImage(meetingImage)
                 .meetingDescription("모임 소개")
                 .participantRange(participantRange)
                 .meetingAddress(meetingAddress)

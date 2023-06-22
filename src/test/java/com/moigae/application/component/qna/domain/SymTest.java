@@ -44,6 +44,7 @@ class SymTest {
         // when
         User newUser = createUser();
         Question newQuestion = new Question(newUser, "새로운 질문 제목", "새로운 질문 내용", VIEW_COUNT);
+        sym.setId(1L);
         sym.setUser(newUser);
         sym.setQuestion(newQuestion);
         sym.setSym(false);
@@ -74,6 +75,7 @@ class SymTest {
     }
 
     private static void 공감_도메인_setter_검증(Sym sym, Question newQuestion) {
+        assertThat(sym.getId()).isEqualTo(1L);
         assertThat(sym.getQuestion()).isEqualTo(newQuestion);
         assertThat(sym.getUser().getUserName()).isEqualTo("홍정완");
         assertThat(sym.isSym()).isFalse();

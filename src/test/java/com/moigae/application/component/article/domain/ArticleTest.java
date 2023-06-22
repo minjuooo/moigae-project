@@ -18,6 +18,7 @@ class ArticleTest {
     void 아티클_도메인_생성_테스트() {
         //given & when
         Article article = Article.of(ARTICLE_TITLE, ARTICLE_CONTENT, Category.STORY, ARTICLE_URL);
+        article.setId(1L);
         //then
         아티클_도메인_setter_검증(article, ARTICLE_TITLE, ARTICLE_CONTENT, Category.STORY, ARTICLE_URL);
     }
@@ -27,6 +28,7 @@ class ArticleTest {
     void 아티클_도메인_setter_테스트() {
         // given
         Article article = Article.of(ARTICLE_TITLE, ARTICLE_CONTENT, Category.STORY, ARTICLE_URL);
+        article.setId(1L);
         String newTitle = "New Title";
         String newContent = "New Content";
         Category newCategory = Category.ISSUE;
@@ -43,6 +45,7 @@ class ArticleTest {
     }
 
     private static void 아티클_도메인_setter_검증(Article article, String newTitle, String newContent, Category newCategory, String newUrl) {
+        assertThat(article.getId()).isEqualTo(1L);
         assertThat(article.getArticleTitle()).isEqualTo(newTitle);
         assertThat(article.getContent()).isEqualTo(newContent);
         assertThat(article.getCategory()).isEqualTo(newCategory);
