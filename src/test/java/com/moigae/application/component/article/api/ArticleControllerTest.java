@@ -101,4 +101,31 @@ class ArticleControllerTest {
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/articles/articleList"))  // Redirect URL 수정
                 .andDo(MockMvcResultHandlers.print());
     }
+
+    @Test
+    @DisplayName("이슈 생성")
+    public void createIssueTest() throws Exception {
+        ArticleForm articleForm = new ArticleForm();
+        articleForm.setCategory(Category.ISSUE);
+        articleForm.setContent("Test Content");
+
+        when(fileService.getUrl(articleForm.getContent())).thenReturn("http://test.url");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/articles/createIssue")
+                        .flashAttr("articleForm", articleForm))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/articles/issueList"))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    @DisplayName("aboutUs 조회")
+    public void aboutUsTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/articles/aboutUs")
+                        .with(user(new CustomUser())))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("articles/aboutUs"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("customUser"))
+                .andDo(MockMvcResultHandlers.print());
+    }
 }

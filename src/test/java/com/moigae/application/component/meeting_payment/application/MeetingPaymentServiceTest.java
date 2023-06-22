@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -120,6 +121,52 @@ class MeetingPaymentServiceTest {
         verify(userCustomRepository).findCustomUserById(customUser.getId());
         verify(meetingRepositoryCustom).findCustomMeetingByPayId(meetingId);
         verify(meetingPaymentRepository).save(any(MeetingPayment.class));
+    }
+
+    @Test
+    @DisplayName("isExistingPayment - 중복 결제")
+    public void isExistingPayment_ExistingPayment() {
+        //given & when
+        when(meetingPaymentRepository.findByUserAndMeeting(user, meeting)).thenReturn(meetingPayment);
+
+        //then
+        assertThrows(IllegalStateException.class, () -> meetingPaymentService.isExistingPayment(user, meeting));
+    }
+
+    @Test
+    @DisplayName("isExistingPayment - 중복 결제 아님")
+    public void isExistingPayment_NonExistingPayment() {
+        //given & when
+        when(meetingPaymentRepository.findByUserAndMeeting(user, meeting)).thenReturn(null);
+
+        //then
+        assertDoesNotThrow(() -> meetingPaymentService.isExistingPayment(user, meeting));
+    }
+
+    @Test
+    @DisplayName("checkOrderId - 중복 주문")
+    public void checkOrderId_ExistingOrder() {
+        //given
+        String orderId = "testOrderId";
+
+        //when
+        when(meetingPaymentRepository.findByMeetingOrderId(orderId)).thenReturn(meetingPayment);
+
+        //then
+        assertTrue(meetingPaymentService.checkOrderId(orderId));
+    }
+
+    @Test
+    @DisplayName("checkOrderId - 중복 주문 아님")
+    public void checkOrderId_NonExistingOrder() {
+        //given
+        String orderId = "testOrderId";
+
+        //when
+        when(meetingPaymentRepository.findByMeetingOrderId(orderId)).thenReturn(null);
+
+        //then
+        assertFalse(meetingPaymentService.checkOrderId(orderId));
     }
 
     private static User createUser() {
