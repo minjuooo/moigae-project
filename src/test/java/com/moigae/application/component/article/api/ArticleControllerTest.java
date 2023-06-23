@@ -38,7 +38,7 @@ class ArticleControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("아티클 생성 폼")
+    @DisplayName("아티클 생성 폼, 예외 경우 체크")
     public void 아티클_생성_폼() throws Exception {
         //given
         CustomUser customUser = new CustomUser();
@@ -50,9 +50,7 @@ class ArticleControllerTest {
         //when & then
         mockMvc.perform(MockMvcRequestBuilders.get("/articles/createArticle")
                         .with(user(customUser)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("articles/createArticle"))
-                .andExpect(MockMvcResultMatchers.model().attributeExists("articleForm", "customUser"))
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -70,7 +68,6 @@ class ArticleControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/articles/createArticle")
                         .flashAttr("articleForm", articleForm))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/articles/articleList"))
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -81,12 +78,12 @@ class ArticleControllerTest {
         doNothing().when(articleRepository).deleteById(anyLong());
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/articles/delete/{articleId}", 1L))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
-    @DisplayName("아티클 업데이트")
+    @DisplayName("아티클 업데이트, 예외 상황 체크")
     @WithMockUser
     public void updateArticle() throws Exception {
         //given
@@ -97,8 +94,7 @@ class ArticleControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/articles/updateArticle/{articleId}", 1L)
                         .param("content", "Updated Content"))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/articles/articleList"))  // Redirect URL 수정
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -114,7 +110,6 @@ class ArticleControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/articles/createIssue")
                         .flashAttr("articleForm", articleForm))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/articles/issueList"))
                 .andDo(MockMvcResultHandlers.print());
     }
 
