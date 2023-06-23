@@ -48,7 +48,6 @@ public class BoardController {
                         .participantRange(x.getMeeting().getParticipantRange())
                         .build())
                 .collect(Collectors.toList());
-        log.info("boardlist = {} ", boardList.get(0));
         model.addAttribute("boardList", boardList);
         AccountDto accountDto = accountService.getAccount(customUser.getId());
         if (accountDto == null) accountDto = new AccountDto();
@@ -56,7 +55,6 @@ public class BoardController {
         model.addAttribute("customUser", customUser);
         return "host/hostBoard";
     }
-
 
     @PostMapping("/board")
     public String postBoard(@ModelAttribute("accountDto") AccountDto accountDto,
@@ -71,9 +69,7 @@ public class BoardController {
             // 계좌 저장 로직 처리
             accountService.createAccount(accountDto);
         }
-
         // 계좌 생성 후에는 원하는 동작을 정의하고 해당 페이지로 리다이렉트
         return "redirect:/host-center/board";
     }
-
 }

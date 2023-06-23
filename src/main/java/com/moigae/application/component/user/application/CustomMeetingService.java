@@ -43,7 +43,11 @@ public class CustomMeetingService {
         // MeetingDto를 Meeting 객체로 변환
         Meeting meeting = Converter.toMeeting(meetingDto);
 
-        // 모임을 저장하는 로직 추가
+        meetingRepository.save(meeting);
+    }
+
+    public void updateMeeting(MeetingDto meetingDto) {
+        Meeting meeting = Converter.toMeeting(meetingDto);
         meetingRepository.save(meeting);
     }
 }
