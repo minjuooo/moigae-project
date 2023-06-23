@@ -98,6 +98,8 @@ public class Converter {
                     return MeetingStatus.AVAILABLE;
                 case "인원 마감":
                     return MeetingStatus.PERSON_FULL;
+                case "모집 취소":
+                    return MeetingStatus.CANCELLED;
                 case "미팅 종료":
                     return MeetingStatus.END;
             }
