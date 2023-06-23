@@ -105,7 +105,7 @@
           <div><span>작성일 : </span> <span th:text="${#temporals.format(question.createTime, 'yyyy-MM-dd')}"></span> </div>
           <div><span>작성자 : </span> <span th:text="${user.email}"></span> </div>
           <div><span>조회수 : </span> <span th:text="${question.viewCount}"></span> </div>
-          <div><span>공감 : </span> <span th:text="${question.sym}"></span> </div>
+          <div><span>공감 : </span> <span id="miniSym" th:text="${question.sym}"></span> </div>
         </div>
         <hr style="border-width: 4px; border-color: #969696;"><br>
 
@@ -122,7 +122,7 @@
         <br><hr style="border-width: 4px; border-color: #969696;"><br>
         <div id="answer-list"></div>
         <br><br>
-        <div>
+        <div sec:authorize="isAuthenticated()">
             <div style="margin-bottom: 10px;font-weight: bold;font-size: 20px;">답변</div>
             <textarea class="form-control" id="answerContent" rows="3"
             placeholder="-서로 존중하며 예의를 갖추어 질문해요.
@@ -137,10 +137,12 @@
           <span>작성일 : </span>
           <span th:text="${#temporals.format(question.createTime, 'yyyy-MM-dd')}"></span>
           <br>
-          <button class="btn btn-outline-success btn-sm"
-                  th:onclick="'window.location.href=\'' + @{/questions/update/{questionId}(questionId = ${question.id})} + '\''">수정</button>
-          <button type="button" style="color: #FFFFFF"
+          <span th:if="${customUser.id == question.userId}">
+            <button class="btn btn-outline-success btn-sm"
+                    th:onclick="'window.location.href=\'' + @{/questions/update/{questionId}(questionId = ${question.id})} + '\''">수정</button>
+            <button type="button" style="color: #FFFFFF"
                   class="btn btn-danger btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">삭제</button>
+          </span>
         </div>
         <br><br>
         <div class="d-flex justify-content-center">
@@ -179,6 +181,9 @@
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
         crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:inline="javascript">
+  var currentUserEmail = [[${customUser.username}]];
+</script>
 <script>
   document.getElementById('confirmDelete').addEventListener('click', function() {
     let questionId = '[[${question.id}]]';
@@ -207,6 +212,7 @@
       success: function(response) {  // 서버로부터 성공적인 응답을 받았을 때의 동작을 정의합니다.
         // 응답으로부터 반환된 값으로 'sym' 요소의 텍스트를 업데이트합니다.
         $("#sym").text(response.newSymValue);
+        $("#miniSym").text(response.newSymValue);
         console.log("sym success");
         console.log(response.newSymValue);
       },
@@ -253,6 +259,21 @@
         if (day < 10) day = '0' + day;  // 일이 한 자리 수인 경우 앞에 0을 붙입니다.
 
         var formattedDate = year + '-' + month + '-' + day;  // 연월일을 결합하여 날짜 포맷을 완성합니다.
+        var editDeleteButtons = '';
+        if (currentUserEmail === answerDtos.email) { // userId를 댓글 작성자의 ID로 바꾸어야 합니다.
+          editDeleteButtons = `
+                        <span style="font-weight: bold;" class="justify-content-end">
+                            <span>
+                                <button onclick="editAnswer(this)" class="btn btn-warning">&emsp;수정&emsp;</button>
+                            </span>
+                            <span>&ensp;</span>
+                            <span>
+                                <button onclick="deleteAnswer(this)" class="btn btn-danger">&emsp;삭제&emsp;</button>
+                            </span>
+                        </span>
+                    `;
+        }
+
         var answerHtml = `
         <div class="container" data-id="${answerDtos.id}">
           <div style="margin-bottom: 10px; font-size: 20px;font-weight: bold;">답변</div>
@@ -269,15 +290,7 @@
                 <span>${answerDtos.email}</span>
               </div>
             </span>
-            <span style="font-weight: bold;" class="justify-content-end">
-              <span>
-                <button onclick="editAnswer(this)" class="btn btn-warning">&emsp;수정&emsp;</button>
-              </span>
-              <span>&ensp;</span>
-              <span>
-                <button onclick="deleteAnswer(this)" class="btn btn-danger">&emsp;삭제&emsp;</button>
-              </span>
-            </span>
+            ${editDeleteButtons}
           </div>
           <br>
           <div id="editContent" style="display: none;">
@@ -303,6 +316,9 @@
       console.log(error);
     }
   });
+
+
+
   function deleteAnswer(button) {
     // 댓글의 기본키를 가져옵니다.
     var answerId = $(button).closest('.container').data('id');

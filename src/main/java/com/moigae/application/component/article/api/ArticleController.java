@@ -75,6 +75,7 @@ public class ArticleController {
                               @AuthenticationPrincipal CustomUser customUser,
                               @PageableDefault(size = 12, sort = "createTime", direction = Sort.Direction.DESC) Pageable pageable
     ) {
+        model.addAttribute("customUser", customUser);
         return getArticleListByCategory(model, customUser, pageable, Category.STORY, "articles/articleList");
     }
 
@@ -83,6 +84,7 @@ public class ArticleController {
                             @AuthenticationPrincipal CustomUser customUser,
                             @PageableDefault(size = 6, sort = "createTime", direction = Sort.Direction.DESC) Pageable pageable
     ) {
+        model.addAttribute("customUser", customUser);
         return getArticleListByCategory(model, customUser, pageable, Category.ISSUE, "articles/issueList");
     }
 

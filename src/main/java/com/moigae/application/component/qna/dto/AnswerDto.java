@@ -1,5 +1,7 @@
 package com.moigae.application.component.qna.dto;
 
+import com.moigae.application.component.qna.repository.QuestionRepository;
+import com.moigae.application.component.question.domain.Question;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
