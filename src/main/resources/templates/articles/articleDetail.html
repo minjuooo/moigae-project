@@ -94,7 +94,7 @@
           <div>
             <h6 class="bold" onclick="window.location.href='/articles/aboutUs';" style="cursor: pointer;">ABOUT US</h6>
           </div>
-          <div th:if="${customUser.admin}">
+          <div th:if="${customUser!=null and customUser.admin}">
             <br>
             <div>
               <h6 class="bold" onclick="window.location.href='/articles/createArticle';" style="cursor: pointer;">게시글 작성</h6>
@@ -123,7 +123,7 @@
           <span>작성일 : </span>
           <span th:text="${#temporals.format(article.createTime, 'yyyy-MM-dd')}"></span>
           <br>
-          <span th:if="${customUser.admin}">
+          <span th:if="${customUser!=null and customUser.admin}">
             <button class="btn btn-outline-success btn-sm"
                     th:onclick="'window.location.href=\'' + @{/articles/update/{articleId}(articleId = ${article.id})} + '\''">수정</button>
             <button type="button" style="color: #FFFFFF"

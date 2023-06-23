@@ -84,14 +84,16 @@
                 style="cursor: pointer;">전체</h6>
           </div>
           <br>
-          <div>
-            <h6 class="bold" onclick="window.location.href='/questions/myQuestionList';"
-                style="cursor: pointer;">MY Q</h6>
-          </div>
-          <br>
-          <div>
-            <h6 class="bold" onclick="window.location.href='/questions/myAnswerList';"
-                style="cursor: pointer;">MY A</h6>
+          <div sec:authorize="isAuthenticated()">
+            <div>
+              <h6 class="bold" onclick="window.location.href='/questions/myQuestionList';"
+                  style="cursor: pointer;">MY Q</h6>
+            </div>
+            <br>
+            <div>
+              <h6 class="bold" onclick="window.location.href='/questions/myAnswerList';"
+                  style="cursor: pointer;">MY A</h6>
+            </div>
           </div>
         </nav>
       </aside>
@@ -137,7 +139,7 @@
           <span>작성일 : </span>
           <span th:text="${#temporals.format(question.createTime, 'yyyy-MM-dd')}"></span>
           <br>
-          <span th:if="${customUser != null and customUser.id == question.userId}">
+          <span th:if="${customUser != null and (customUser.id == question.userId or customUser.admin)}">
             <button class="btn btn-outline-success btn-sm"
                     th:onclick="'window.location.href=\'' + @{/questions/update/{questionId}(questionId = ${question.id})} + '\''">수정</button>
             <button type="button" style="color: #FFFFFF"
@@ -183,6 +185,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script th:inline="javascript">
   var currentUserEmail = /*[[${customUser != null ? customUser.username : null}]]*/ null;
+  var userId = /*[[${customUser != null ? customUser.id : null}]]*/ null;
+  var isAdmin = /*[[${customUser != null ? customUser.admin : false}]]*/ false;
+  /*]]>*/
 </script>
 <script>
   document.getElementById('confirmDelete').addEventListener('click', function() {
@@ -201,7 +206,6 @@
     });
   });
 
-  let userId = '[[${customUser.id}]]';
   let questionId = '[[${question.id}]]';
 
   $("#sympathy").click(function() {
@@ -260,7 +264,7 @@
 
         var formattedDate = year + '-' + month + '-' + day;  // 연월일을 결합하여 날짜 포맷을 완성합니다.
         var editDeleteButtons = '';
-        if (currentUserEmail === answerDtos.email) { // userId를 댓글 작성자의 ID로 바꾸어야 합니다.
+        if (currentUserEmail === answerDtos.email || isAdmin) { // userId를 댓글 작성자의 ID로 바꾸어야 합니다.
           editDeleteButtons = `
                         <span style="font-weight: bold;" class="justify-content-end">
                             <span>
