@@ -131,5 +131,6 @@ class MeetingPaymentTest {
         assertThat(meetingPayment.getPaidAmount()).isEqualTo(1000L);
         assertThat(meetingPayment.getCalculateAmount()).isEqualTo(1000L);
         assertThat(meetingPayment.getRefundStatus()).isEqualTo(RefundStatus.NONE);
+        assertThat(meetingPayment.getId()).isNull();
     }
 }

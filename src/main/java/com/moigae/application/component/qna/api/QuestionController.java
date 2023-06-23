@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,6 +47,7 @@ public class QuestionController {
     private final SymRepository symRepository;
 
     @GetMapping("/createQuestion")
+    @PreAuthorize("isAuthenticated() or (authentication.principal != null and authentication.principal.admin == true)")
     public String createQuestion(Model model,
                                  @AuthenticationPrincipal CustomUser customUser) {
 
@@ -55,6 +57,7 @@ public class QuestionController {
     }
 
     @PostMapping("/createQuestion")
+    @PreAuthorize("isAuthenticated() or (authentication.principal != null and authentication.principal.admin == true)")
     public String createQuestion(
             @ModelAttribute ArticleForm articleForm,
             @AuthenticationPrincipal CustomUser customUser
@@ -111,12 +114,16 @@ public class QuestionController {
     }
 
     @DeleteMapping("/delete/{questionId}")
-    public ResponseEntity<?> deleteQuestion(@PathVariable String questionId) {
+    @PreAuthorize("isAuthenticated() or (authentication.principal != null and authentication.principal.admin == true)")
+    public ResponseEntity<?> deleteQuestion(
+            @AuthenticationPrincipal CustomUser customUser,
+            @PathVariable String questionId) {
         questionRepository.deleteById(questionId);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/update/{questionId}")
+    @PreAuthorize("isAuthenticated() or (authentication.principal != null and authentication.principal.admin == true)")
     public String updateQuestion(
             Model model,
             @AuthenticationPrincipal CustomUser customUser,
@@ -131,7 +138,9 @@ public class QuestionController {
     }
 
     @PostMapping("/updateQuestion/{questionId}")
+    @PreAuthorize("isAuthenticated() or (authentication.principal != null and authentication.principal.admin == true)")
     public String updateQuestion(
+            @AuthenticationPrincipal CustomUser customUser,
             @PathVariable("questionId") String questionId,
             @ModelAttribute ArticleForm articleForm
     ) {
@@ -148,11 +157,13 @@ public class QuestionController {
     }
 
     @PostMapping("/symUp/{questionId}/{userId}")
+    @PreAuthorize("isAuthenticated() or (authentication.principal != null and authentication.principal.admin == true)")
     @ResponseBody
     @Transactional
     public Map<String, Long> symUp(
             @PathVariable("questionId") String questionId,
-            @PathVariable("userId") String userId
+            @PathVariable("userId") String userId,
+            @AuthenticationPrincipal CustomUser customUser
     ) {
 
         User user = userRepository.findById(userId)
@@ -179,11 +190,13 @@ public class QuestionController {
     }
 
     @PostMapping("/addAnswer/{questionId}/{userId}")
+    @PreAuthorize("isAuthenticated() or (authentication.principal != null and authentication.principal.admin == true)")
     @ResponseBody
     public Map<String, String> addAnswer(
             @PathVariable("questionId") String questionId,
             @PathVariable("userId") String userId,
-            @RequestParam("answerContent") String answerContent
+            @RequestParam("answerContent") String answerContent,
+            @AuthenticationPrincipal CustomUser customUser
     ) {
 
         User user = userRepository.findById(userId)
@@ -219,8 +232,11 @@ public class QuestionController {
     }
 
     @DeleteMapping("/deleteAnswer/{answerId}")
+    @PreAuthorize("isAuthenticated() or (authentication.principal != null and authentication.principal.admin == true)")
     @ResponseBody
-    public Map<String, String> deleteAnswer(@PathVariable String answerId) {
+    public Map<String, String> deleteAnswer(
+            @AuthenticationPrincipal CustomUser customUser,
+            @PathVariable String answerId) {
         answerRepository.deleteById(answerId);
         Map<String, String> response = new HashMap<>();
         response.put("status", "success");
@@ -229,9 +245,11 @@ public class QuestionController {
     }
 
     @PostMapping("/editAnswer/{id}")
+    @PreAuthorize("isAuthenticated() or (authentication.principal != null and authentication.principal.admin == true)")
     @ResponseBody
     @Transactional
     public Map<String, String> editAnswer(
+            @AuthenticationPrincipal CustomUser customUser,
             @PathVariable String id,
             @RequestParam String answerContent
     ) {

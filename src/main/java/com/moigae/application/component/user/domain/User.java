@@ -1,5 +1,12 @@
 package com.moigae.application.component.user.domain;
 
+import com.moigae.application.component.answer.domain.Answer;
+import com.moigae.application.component.cart.domain.Cart;
+import com.moigae.application.component.host.domain.Account;
+import com.moigae.application.component.meeting_payment.domain.MeetingPayment;
+import com.moigae.application.component.meeting_user.domain.MeetingUser;
+import com.moigae.application.component.qna.domain.Sym;
+import com.moigae.application.component.question.domain.Question;
 import com.moigae.application.component.user.domain.enumeration.Gender;
 import com.moigae.application.component.user.domain.enumeration.UserRole;
 import lombok.*;
@@ -8,6 +15,8 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user")

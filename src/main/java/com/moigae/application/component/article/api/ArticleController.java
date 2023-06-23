@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +33,7 @@ public class ArticleController {
     private final ArticleRepository articleRepository;
     private final FileService fileService;
     @GetMapping("/createArticle")
+    @PreAuthorize("(#customUser != null and #customUser.admin == true)")
     public String createArticle(Model model,
                         @AuthenticationPrincipal CustomUser customUser) {
         model.addAttribute("articleForm", new ArticleForm());
@@ -39,8 +41,10 @@ public class ArticleController {
         return "articles/createArticle";
     }
     @PostMapping("/createArticle")
+    @PreAuthorize("(#customUser != null and #customUser.admin == true)")
     public String createArticle(
-            @ModelAttribute ArticleForm articleForm
+            @ModelAttribute ArticleForm articleForm,
+            @AuthenticationPrincipal CustomUser customUser
             ) {
         articleForm.setCategory(Category.STORY);
         articleForm.setImgurl(fileService.getUrl(articleForm.getContent()));
@@ -75,6 +79,7 @@ public class ArticleController {
                               @AuthenticationPrincipal CustomUser customUser,
                               @PageableDefault(size = 12, sort = "createTime", direction = Sort.Direction.DESC) Pageable pageable
     ) {
+        model.addAttribute("customUser", customUser);
         return getArticleListByCategory(model, customUser, pageable, Category.STORY, "articles/articleList");
     }
 
@@ -83,6 +88,7 @@ public class ArticleController {
                             @AuthenticationPrincipal CustomUser customUser,
                             @PageableDefault(size = 6, sort = "createTime", direction = Sort.Direction.DESC) Pageable pageable
     ) {
+        model.addAttribute("customUser", customUser);
         return getArticleListByCategory(model, customUser, pageable, Category.ISSUE, "articles/issueList");
     }
 
@@ -102,11 +108,15 @@ public class ArticleController {
     }
 
     @DeleteMapping("/delete/{articleId}")
-    public ResponseEntity<?> deleteArticle(@PathVariable Long articleId) {
+    @PreAuthorize("(#customUser != null and #customUser.admin == true)")
+    public ResponseEntity<?> deleteArticle(
+            @AuthenticationPrincipal CustomUser customUser,
+            @PathVariable Long articleId) {
         articleRepository.deleteById(articleId);
         return ResponseEntity.ok().build();
     }
     @GetMapping("/update/{articleId}")
+    @PreAuthorize("(#customUser != null and #customUser.admin == true)")
     public String updateArticle(
             Model model,
             @AuthenticationPrincipal CustomUser customUser,
@@ -121,22 +131,30 @@ public class ArticleController {
     }
 
     @PostMapping("/updateArticle/{articleId}")
+    @PreAuthorize("(#customUser != null and #customUser.admin == true)")
     public String updateArticle(
             @PathVariable("articleId") Long articleId,
-            @ModelAttribute ArticleForm articleForm
+            @ModelAttribute ArticleForm articleForm,
+            @AuthenticationPrincipal CustomUser customUser
     ) {
-        Optional<Article> optionalArticle = articleRepository.findById(articleId);
-        if (optionalArticle.isPresent()) {
-            Article article = optionalArticle.get();
-            article.setArticleTitle(articleForm.getArticleTitle());
-            article.setContent(articleForm.getContent());
-            article.setImgurl(fileService.getUrl(articleForm.getContent()));
-            articleRepository.save(article);
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Article not found with id " + articleId));
+
+        article.setArticleTitle(articleForm.getArticleTitle());
+        article.setContent(articleForm.getContent());
+        article.setImgurl(fileService.getUrl(articleForm.getContent()));
+        articleRepository.save(article);
+
+        if(article.getCategory().equals(Category.STORY)){
+            return "redirect:/articles/articleList";
+        }else{
+            return "redirect:/articles/issueList";
         }
-        return "redirect:/articles/issueList";
+
     }
 
     @GetMapping("/createIssue")
+    @PreAuthorize("(#customUser != null and #customUser.admin == true)")
     public String createIssue(Model model,
                                 @AuthenticationPrincipal CustomUser customUser) {
         model.addAttribute("articleForm", new ArticleForm());
@@ -144,7 +162,9 @@ public class ArticleController {
         return "articles/createIssue";
     }
     @PostMapping("/createIssue")
+    @PreAuthorize("(#customUser != null and #customUser.admin == true)")
     public String createIssue(
+            @AuthenticationPrincipal CustomUser customUser,
             @ModelAttribute ArticleForm articleForm
     ) {
         articleForm.setCategory(Category.ISSUE);

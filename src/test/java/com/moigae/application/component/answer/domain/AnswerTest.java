@@ -33,6 +33,7 @@ class AnswerTest {
     void 답변_도메인_생성_테스트() {
         //given & when
         Answer answer = new Answer(question, user, ANSWER_CONTENT, SYM);
+        answer.setId("answerId");
         //then
         답변_도메인_검증(answer);
     }
@@ -69,6 +70,7 @@ class AnswerTest {
     }
 
     private static void 답변_도메인_검증(Answer answer) {
+        assertThat(answer.getId()).isEqualTo("answerId");
         assertThat(answer.getQuestion().getQuestionTitle()).isEqualTo(QUESTION_TITLE);
         assertThat(answer.getUser().getEmail()).isEqualTo(EMAIL);
         assertThat(answer.getAnswerContent()).isEqualTo(ANSWER_CONTENT);

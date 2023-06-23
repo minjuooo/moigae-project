@@ -1,21 +1,23 @@
 package com.moigae.application.component.user.api;
 
 import com.moigae.application.component.user.api.request.UserLoginForm;
+import com.moigae.application.component.user.api.service.MailSendService;
 import com.moigae.application.component.user.application.UserService;
 import com.moigae.application.component.user.domain.User;
+import com.moigae.application.component.user.domain.enumeration.Gender;
 import com.moigae.application.component.user.dto.CustomUser;
 import com.moigae.application.component.user.dto.UserDto;
 import com.moigae.application.component.user.repository.UserRepository;
 import com.moigae.application.core.config.PrimaryGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +30,8 @@ public class UserController {
     private final PrimaryGenerator primaryGenerator;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MailSendService mailSendService;
+
     @GetMapping("/login")
     public String login(Model model,
                         @AuthenticationPrincipal CustomUser customUser) {
@@ -44,46 +48,53 @@ public class UserController {
         userService.login(userLoginForm);
         return "redirect:/";
     }
+
     @GetMapping("/signup")
     public String signup(Model model,
-    @AuthenticationPrincipal CustomUser customUser) {
+                         @AuthenticationPrincipal CustomUser customUser) {
         model.addAttribute("userDto", new UserDto());
         model.addAttribute("customUser", customUser);
         return "users/signup";
     }
 
     @PostMapping("/signup")
-    public String signup(
-            @ModelAttribute UserDto userDto
+    @ResponseBody
+    public void signup(
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam String name,
+            @RequestParam String gender,
+            @RequestParam String phone
     ) {
-       System.out.println(userDto);
-       userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-       ModelMapper modelMapper = new ModelMapper();
-       User user = modelMapper.map(userDto, User.class);
-       System.out.println(user);
-       userRepository.save(user);
-       return "redirect:/";
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setUserName(name);
+        user.setGender(Gender.valueOf(gender.toUpperCase()));
+        user.setPhone(phone);
+        userRepository.save(user);
     }
 
     @GetMapping("/findId")
     public String findId(
             Model model,
             @AuthenticationPrincipal CustomUser customUser
-    ){
+    ) {
         model.addAttribute("customUser", customUser);
         return "users/findId";
     }
+
     @PostMapping("/findId")
     @ResponseBody
     public Map<String, String> findId(
             @RequestParam String name,
             @RequestParam String phone
-    ){
+    ) {
         User user = userRepository.findByUserNameAndPhone(name, phone);
         String message = "";
-        if(user == null){
+        if (user == null) {
             message = "해당하는 아이디를 찾을 수 없습니다.";
-        }else{
+        } else {
             message = "안녕하세요!<br/>" +
                     "회원님의 아이디는<br/><br/>" +
                     "<span style=\"color:red;\">" + user.getEmail() + "</span>" +
@@ -104,7 +115,6 @@ public class UserController {
 
         Map<String, Object> map = new HashMap<>();
 
-//        MemberDtoAddRole member = service.getByEmail(req.get("email"));
         User user = userRepository.findByEmail(req.get("email"));
 
         if (user == null) {
@@ -116,5 +126,73 @@ public class UserController {
         }
 
         return map;
+    }
+
+    @GetMapping("/findPassWord")
+    public String findPassWord(
+            Model model,
+            @AuthenticationPrincipal CustomUser customUser
+    ) {
+        model.addAttribute("customUser", customUser);
+        return "users/findPassWord";
+    }
+
+    @PostMapping("/findPassWord")
+    @ResponseBody
+    public Map<String, String> findPassWord(
+            @RequestBody Map<String, String> req) {
+        User user = userRepository
+                .findByEmailAndUserNameAndPhone(req.get("email"), req.get("name"), req.get("phone"));
+        String message = "";
+        if (user == null) {
+            message = "empty";
+        } else {
+            message = "present";
+        }
+
+        Map<String, String> response = new HashMap<>();
+        response.put("status", message);
+
+        return response;
+    }
+
+    @GetMapping("/permission/{email}")
+    public String permission(
+            Model model,
+            @AuthenticationPrincipal CustomUser customUser,
+            @PathVariable String email) {
+        model.addAttribute("customUser", customUser);
+        model.addAttribute("email");
+        return "users/permission";
+    }
+
+    @PostMapping("/permission")
+    @ResponseBody
+    public Map<String, String> permission(
+            @RequestBody Map<String, String> req) {
+        System.out.println(req.get("email"));
+        String auth = mailSendService.joinEmail(req.get("email"));
+
+        Map<String, String> response = new HashMap<>();
+        response.put("number", auth);
+
+        return response;
+    }
+
+    @PostMapping("/newPassword")
+    @ResponseBody
+    @Transactional
+    public Map<String, String> newPassword(
+            @RequestBody Map<String, String> req) {
+        String email = req.get("email");
+        String password = req.get("password");
+
+        User user = userRepository.findByEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "success");
+
+        return response;
     }
 }
