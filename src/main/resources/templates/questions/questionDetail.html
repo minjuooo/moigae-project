@@ -137,7 +137,7 @@
           <span>작성일 : </span>
           <span th:text="${#temporals.format(question.createTime, 'yyyy-MM-dd')}"></span>
           <br>
-          <span th:if="${customUser.id == question.userId}">
+          <span th:if="${customUser != null and customUser.id == question.userId}">
             <button class="btn btn-outline-success btn-sm"
                     th:onclick="'window.location.href=\'' + @{/questions/update/{questionId}(questionId = ${question.id})} + '\''">수정</button>
             <button type="button" style="color: #FFFFFF"
@@ -182,7 +182,7 @@
         crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script th:inline="javascript">
-  var currentUserEmail = [[${customUser.username}]];
+  var currentUserEmail = /*[[${customUser != null ? customUser.username : null}]]*/ null;
 </script>
 <script>
   document.getElementById('confirmDelete').addEventListener('click', function() {
