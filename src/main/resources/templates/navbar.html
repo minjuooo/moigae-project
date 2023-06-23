@@ -1,44 +1,46 @@
-<nav class="navbar navbar-expand-md navbar-light"
-     xmlns:th="http://www.thymeleaf.org"
-     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-  <div class="container">
-    <a class="navbar-brand" onclick="window.location.href='/'">모이개</a>
-    <span>&nbsp;</span>
+<!--<nav class="navbar navbar-expand-md navbar-light" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">-->
+<!--  <div class="container">-->
+<!--    <a class="navbar-brand" onclick="window.location.href='/'">모이개</a>-->
+<!--    <span>&nbsp;</span>-->
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/meetings">모임</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/questions/questionList">Q&A</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/articles/articleList">멍멍이야기</a>
-        </li>
-      </ul>
-    </div>
+<!--    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--      <span class="navbar-toggler-icon"></span>-->
+<!--    </button>-->
 
-    <div sec:authorize="isAnonymous()" class="form-inline my-2 my-lg-0 ml-auto">
-      <button class="btn btn-dark btn-sm my-2 my-sm-0" onclick="window.location.href='/users/signup'">회원가입</button>
-      <span>&nbsp;</span>
-      <button class="btn btn-warning btn-sm my-2 my-sm-0 ml-5" onclick="window.location.href='/users/login'">로그인</button>
-    </div>
-    <div sec:authorize="isAuthenticated()" class="form-inline my-2 my-lg-0 ml-auto">
-      <button class="btn btn-dark btn-sm my-2 my-sm-0">호스트센터</button>
-      <span>&emsp;</span>
-      <span style="margin-top: 5px;"><i class="fas fa-shopping-cart fa-2x"></i></span>
-      <span>&ensp;</span>
-      <div class="btn-group">
-        <button style="background-color: #ffffff; color: #000000; border: none;font-weight: bold; font-size: 20px;"
-                class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <span style="font-weight: bold; font-size: 20px;" th:text="${ customUser.name }+님"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" href="#">마이페이지</a></li>
-          <li><a class="dropdown-item" onclick="window.location.href='/users/logout'">로그아웃</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</nav>
+<!--    <div class="collapse navbar-collapse" id="navbarNav">-->
+<!--      <ul class="navbar-nav mr-auto">-->
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link" href="/meetings">모임</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link" href="/questions/questionList">Q&A</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link" href="/articles/articleList">멍멍이야기</a>-->
+<!--        </li>-->
+<!--      </ul>-->
+
+<!--      <div sec:authorize="isAnonymous()" class="form-inline my-2 my-lg-0 ml-auto">-->
+<!--        <button class="btn btn-dark btn-sm my-2 my-sm-0" onclick="window.location.href='/users/signup'">회원가입</button>-->
+<!--        <span>&nbsp;</span>-->
+<!--        <button class="btn btn-warning btn-sm my-2 my-sm-0 ml-5" onclick="window.location.href='/users/login'">로그인</button>-->
+<!--      </div>-->
+
+<!--      <div sec:authorize="isAuthenticated()" class="form-inline my-2 my-lg-0 ml-auto">-->
+<!--        <button class="btn btn-dark btn-sm my-2 my-sm-0">호스트센터</button>-->
+<!--        <span>&emsp;</span>-->
+<!--        <span style="margin-top: 5px;"><i class="fas fa-shopping-cart fa-2x"></i></span>-->
+<!--        <span>&ensp;</span>-->
+<!--        <div class="btn-group">-->
+<!--          <button style="background-color: #ffffff; color: #000000; border: none;font-weight: bold; font-size: 20px;" class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--            <span style="font-weight: bold; font-size: 20px;" th:text="${ customUser.name }+님"></span>-->
+<!--          </button>-->
+<!--          <ul class="dropdown-menu dropdown-menu-end">-->
+<!--            <li><a class="dropdown-item" href="#">마이페이지</a></li>-->
+<!--            <li><a class="dropdown-item" onclick="window.location.href='/users/logout'">로그아웃</a></li>-->
+<!--          </ul>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</nav>-->
