@@ -1,12 +1,9 @@
 package com.moigae.application.component.user.dto;
 
-import com.moigae.application.component.user.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-
-import static com.moigae.application.component.user.domain.QUser.user;
 
 public class CustomUser implements UserDetails {
 
