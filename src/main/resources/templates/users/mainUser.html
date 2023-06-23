@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Meeting Payment Details</title>
+</head>
+<body>
+<h1>MainUser</h1>
+<table>
+  <tr>
+    <th>ID</th>
+    <th>User</th>
+    <th>Meeting</th>
+    <th>Trade Status</th>
+    <th>Meeting Order ID</th>
+    <th>Paid Amount</th>
+    <th>Calculate Amount</th>
+    <th>Refund Status</th>
+  </tr>
+  <tr th:object="${meetingPayment}">
+    <td th:text="*{id}"></td>
+    <td th:text="*{user.username}"></td>
+    <td th:text="*{meeting.title}"></td>
+    <td th:text="*{tradeStatus}"></td>
+    <td th:text="*{meetingOrderId}"></td>
+    <td th:text="*{paidAmount}"></td>
+    <td th:text="*{calculateAmount}"></td>
+    <td th:text="*{refundStatus}"></td>
+  </tr>
+</table>
+</body>
+</html>

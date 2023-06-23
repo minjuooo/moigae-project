@@ -38,4 +38,11 @@ public class MeetingService {
         MeetingDto meetingDto = MeetingDto.toMeetingDto(meeting);
         return meetingDto;
     }
+
+    private Meeting convertToMeeting(MeetingDto meetingDto) {
+        Meeting meeting = new Meeting();
+        meeting.setId(meetingDto.getId());
+        // 다른 필드들도 마찬가지로 복사
+        return meeting;
+    }
 }

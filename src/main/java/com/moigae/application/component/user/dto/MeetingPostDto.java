@@ -28,7 +28,7 @@ public class MeetingPostDto {
     private String meetingDescription;
     private LocalDateTime recruitmentStartDateTime;
     private LocalDateTime recruitmentEndDateTime;
-    private ParticipantRange participantRange;  //json을 쓰면 해결가능, 그리고 본인이 만든거니까 본인이 설정하든가 정수로
+    private ParticipantRange participantRange;
     private LocalDateTime meetingStartDateTime;
     private LocalDateTime meetingEndDateTime;
     private MeetingAddress meetingAddress;

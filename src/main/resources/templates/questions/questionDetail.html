@@ -109,7 +109,7 @@
           <div><span>조회수 : </span> <span th:text="${question.viewCount}"></span> </div>
           <div><span>공감 : </span> <span id="miniSym" th:text="${question.sym}"></span> </div>
         </div>
-        <hr style="border-width: 4px; border-color: #969696;"><br>
+        <hr style="border-width: 2px; border-color: #969696;"><br>
 
         <div th:utext="${question.questionContent}"></div>
         <br>
@@ -121,7 +121,7 @@
             <span id="sym" th:text="${question.sym}"></span>
           </div>
         </div>
-        <br><hr style="border-width: 4px; border-color: #969696;"><br>
+        <br><hr style="border-width: 2px; border-color: #969696;"><br>
         <div id="answer-list"></div>
         <br><br>
         <div sec:authorize="isAuthenticated()">
