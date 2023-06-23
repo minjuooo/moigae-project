@@ -93,7 +93,7 @@
             <h6 class="bold" onclick="window.location.href='/articles/aboutUs';"
                 style="cursor: pointer;">ABOUT US</h6>
           </div>
-          <div>
+          <div th:if="${customUser !=null and customUser.admin}">
             <br>
             <div>
               <h6 class="bold" onclick="window.location.href='/articles/createArticle';"
@@ -124,10 +124,13 @@
           <span>작성일 : </span>
           <span th:text="${#temporals.format(article.createTime, 'yyyy-MM-dd')}"></span>
           <br>
-          <button class="btn btn-outline-success btn-sm"
-                  th:onclick="'window.location.href=\'' + @{/articles/update/{articleId}(articleId = ${article.id})} + '\''">수정</button>
-          <button type="button" style="color: #FFFFFF"
+          <span th:if="${customUser!=null and customUser.admin}">
+            <button class="btn btn-outline-success btn-sm"
+                    th:onclick="'window.location.href=\'' + @{/articles/update/{articleId}(articleId = ${article.id})} + '\''">수정</button>
+            <button type="button" style="color: #FFFFFF"
                   class="btn btn-danger btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">삭제</button>
+
+          </span>
         </div>
 
         <br><br>

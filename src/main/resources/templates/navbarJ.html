@@ -40,7 +40,15 @@
               style="background-color:#005abf; font-weight: normal;color:#FFFFFF; border: none"
               onclick="window.location.href='/users/signup'">회원가입</button>
     </div>
+
     <div sec:authorize="isAuthenticated()" class="form-inline my-2 my-lg-0 ml-auto">
+      <span th:if="${customUser.admin}">
+        <button class="btn btn-dark btn-sm my-2 my-sm-0"
+                style="background-color:#1E90FF	; font-weight: bolder;color:#FFFFFF; border: none"
+                onclick="window.location.href = 'http://www.moigae.shop:3000'">관리자 페이지
+        </button>
+        <span>&emsp;</span>
+      </span>
       <button class="btn btn-dark btn-sm my-2 my-sm-0"
               style="background-color:#ffee64; font-weight: bolder;color:#000000; border: none"
               onclick="window.location.href='users/host-centerMain'">호스트센터
