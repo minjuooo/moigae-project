@@ -65,6 +65,9 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
+<form action="/meeting-payment/{id}" method="get">
+    <input type="hidden" name="id" value="{meetingPayment.id}">
+</form>
 <div>
     <!--네비게이션바 양정아-->
     <header style="margin: 0">
@@ -94,10 +97,15 @@
                         <div>
                             <h6 class="bold" onclick="window.location.href='/users/mypageUnJoin';" style="cursor: pointer;">탈퇴하기</h6>
                         </div>
+                        <tr>
+                            <td th:text="${meetingPayment.meeting}"></td>
+                            <td th:text="${meetingPayment.paidAmount}"></td>
+                        </tr>
                     </div>
                 </nav>
             </aside>
     </div>
+        ㅇ기여기
 </div>
 </div>
 <!--부트스트랩 스크립트-->

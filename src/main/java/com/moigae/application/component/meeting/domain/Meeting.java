@@ -6,6 +6,7 @@ import com.moigae.application.core.common.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @Table(name = "meeting")
 @NoArgsConstructor
 @Getter
+@Setter
 public class Meeting extends BaseEntity {
     @Id
     @Column(length = 191)
