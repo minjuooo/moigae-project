@@ -7,6 +7,7 @@ import com.moigae.application.component.meeting.domain.ParticipantRange;
 import com.moigae.application.component.meeting.repository.MeetingRepository;
 import com.moigae.application.component.meeting_user.api.request.MeetingCreateRequest;
 import com.moigae.application.component.meeting_user.domain.MeetingUser;
+import com.moigae.application.component.meeting_user.dto.CalculationDto;
 import com.moigae.application.component.meeting_user.repositroy.MeetingUserRepository;
 import com.moigae.application.component.user.domain.User;
 import com.moigae.application.component.user.dto.CustomUser;
@@ -14,6 +15,10 @@ import com.moigae.application.component.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +35,20 @@ public class MeetingUserService {
         meetingRepository.save(meeting);
         meetingUserRepository.save(createMeetingUser(user, meeting));
         return meeting;
+    }
+
+    //정산 조회
+    @Transactional(readOnly = true)
+    public List<CalculationDto> calculationDtoList() {
+        List<Object[]> results = meetingUserRepository.findCalculations();
+        List<CalculationDto> calculationDtos = new ArrayList<>();
+
+        for (Object[] result : results) {
+            CalculationDto dto = new CalculationDto((String) result[0],
+                    (LocalDateTime) result[1], (Integer) result[2], (Integer) result[3], (Long) result[4]);
+            calculationDtos.add(dto);
+        }
+        return calculationDtos;
     }
 
     public static MeetingUser createMeetingUser(User user, Meeting meeting) {

@@ -30,7 +30,7 @@ public class MeetingController {
     public String meetings(Model model,
                            @AuthenticationPrincipal CustomUser customUser,
                            @ModelAttribute MeetingCategoryRequest meetingCategoryRequest,
-                           @PageableDefault(size = 4) Pageable pageable) {
+                           @PageableDefault(size = 12, sort = "createTime") Pageable pageable) {
         Page<MeetingDto> meetingDtoPage = meetingService.Meetings(meetingCategoryRequest, pageable);
         log.info(String.valueOf("📌📌📌📌📌 데이터 페이지 개수 : " + meetingDtoPage.getTotalPages()));
         model.addAttribute("meetingDtoPage", meetingDtoPage);
