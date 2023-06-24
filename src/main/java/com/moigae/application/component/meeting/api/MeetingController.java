@@ -2,11 +2,18 @@ package com.moigae.application.component.meeting.api;
 
 import com.moigae.application.component.meeting.api.request.MeetingCategoryRequest;
 import com.moigae.application.component.meeting.application.MeetingService;
+import com.moigae.application.component.meeting.domain.Meeting;
+import com.moigae.application.component.meeting.domain.MeetingSym;
 import com.moigae.application.component.meeting.dto.MeetingDto;
+import com.moigae.application.component.meeting.repository.MeetingRepository;
+import com.moigae.application.component.meeting.repository.MeetingSymRepository;
 import com.moigae.application.component.meeting_payment.application.MeetingPaymentService;
 import com.moigae.application.component.user.application.UserService;
+import com.moigae.application.component.user.domain.User;
 import com.moigae.application.component.user.dto.CustomUser;
 import com.moigae.application.component.user.dto.UserDto;
+import com.moigae.application.component.user.repository.UserRepository;
+import com.moigae.application.core.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,6 +24,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -25,7 +36,9 @@ public class MeetingController {
     private final MeetingService meetingService;
     private final UserService userService;
     private final MeetingPaymentService meetingPaymentService;
-
+    private final MeetingSymRepository meetingSymRepository;
+    private final UserRepository userRepository;
+    private final MeetingRepository meetingRepository;
     @GetMapping
     public String meetings(Model model,
                            @AuthenticationPrincipal CustomUser customUser,
@@ -44,13 +57,26 @@ public class MeetingController {
                                 @AuthenticationPrincipal CustomUser customUser,
                                 @PathVariable String meetingId) {
         MeetingDto meetingDto = meetingService.meetingFindByUUIDPay(meetingId);
+
+        boolean sym = false;
+        if(customUser !=null){
+            MeetingSym meetingSym = meetingSymRepository.findByUserIdAndMeetingId(customUser.getId(), meetingDto.getId());
+            if(meetingSym == null || !meetingSym.isSym()){
+                sym = false;
+            }else{
+                sym = true;
+            }
+        }
+
         if (meetingDto.getPrice() > 0) {
             model.addAttribute("meetingDto", meetingDto);
             model.addAttribute("customUser", customUser);
+            model.addAttribute("sym", sym);
             return "meetings/meeting_detail_pay";
         }
         model.addAttribute("meetingDto", meetingDto);
         model.addAttribute("customUser", customUser);
+        model.addAttribute("sym", sym);
         return "meetings/meeting_detail_free";
     }
 
@@ -85,5 +111,32 @@ public class MeetingController {
         }
         meetingPaymentService.meetingFreeCreate(meetingId, customUser, meetingId);
         return "redirect:/meetings/{meetingId}";
+    }
+
+    @PostMapping("/symUp")
+    @ResponseBody
+    public Map<String, Boolean> findPassWord(
+            @RequestBody Map<String, String> req) {
+        String userId = req.get("userId");
+        String meetingId = req.get("meetingId");
+        System.out.println(userId);
+        System.out.println(meetingId);
+        MeetingSym meetingSym = meetingSymRepository.findByUserIdAndMeetingId(userId, meetingId);
+
+        if(meetingSym == null){
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
+            Meeting meeting = meetingRepository.findById(meetingId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Meeting not found with id " + meetingId));
+            meetingSym = new MeetingSym(meeting, user, true);
+        }else{
+            meetingSym.setSym(!meetingSym.isSym());
+        }
+
+        meetingSymRepository.save(meetingSym);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("statusSym", meetingSym.isSym());
+
+        return response;
     }
 }
