@@ -266,11 +266,12 @@
           editDeleteButtons = `
                         <span style="font-weight: bold;" class="justify-content-end">
                             <span>
-                                <button onclick="editAnswer(this)" class="btn btn-warning">&emsp;수정&emsp;</button>
+                                <button onclick="editAnswer(this)" class="btn btn-outline-success btn-sm">&emsp;수정&emsp;</button>
                             </span>
                             <span>&ensp;</span>
                             <span>
-                                <button onclick="deleteAnswer(this)" class="btn btn-danger">&emsp;삭제&emsp;</button>
+                                <button onclick="deleteAnswer(this)"
+                                style="color: #FFFFFF" class="btn btn-danger btn-sm btn-outline-danger">&emsp;삭제&emsp;</button>
                             </span>
                         </span>
                     `;
@@ -299,9 +300,9 @@
             <textarea class="form-control" rows="3"></textarea>
             <div class="d-flex justify-content-end">
               <span>
-                <button onclick="cancelEdit(this)" id="cancel" style="margin-top: 10px;" class="btn btn-secondary">취소</button>
+                <button onclick="cancelEdit(this)" id="cancel" style="margin-top: 10px;" class="btn btn-outline-danger btn-sm">취소</button>
                 <span>&ensp;</span>
-                <button onclick="submitEdit(this)" id="answerEdit" style="margin-top: 10px;" class="btn btn-warning">댓글 수정</button>
+                <button onclick="submitEdit(this)" id="answerEdit" style="margin-top: 10px;" class="btn btn-outline-warning btn-sm"">수정완료</button>
               </span>
             </div>
           </div>
