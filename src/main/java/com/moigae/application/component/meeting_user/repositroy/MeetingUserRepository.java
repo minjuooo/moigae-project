@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface MeetingUserRepository extends JpaRepository<MeetingUser, Long> {
-    @Query("SELECT m.meetingTitle, m.meetingEndDateTime, m.meetingAmount, m.participantRange.currentParticipants, " +
+    @Query("SELECT DISTINCT m.meetingTitle, m.meetingEndDateTime, m.meetingAmount, m.participantRange.currentParticipants, " +
             "mp.calculateAmount " +
             "FROM MeetingUser mu " +
             "JOIN mu.meeting m " +

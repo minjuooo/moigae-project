@@ -23,10 +23,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import java.time.ZoneId;
+import java.util.Date;
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
+
 
 @Controller
 @Slf4j
@@ -67,7 +69,7 @@ public class MeetingController {
                 sym = true;
             }
         }
-
+      
         if (meetingDto.getPrice() > 0) {
             model.addAttribute("meetingDto", meetingDto);
             model.addAttribute("customUser", customUser);

@@ -10,7 +10,8 @@ public enum RefundStatus {
     PROCESSING("환불 처리 중"),
     COMPLETED("환불 완료"),
     DENIED("환불 거부"),
-    NONE("없음");
+    NONE("없음"),
+    CANCEL("모임 신청 취소");
 
     private final String value;
 }
