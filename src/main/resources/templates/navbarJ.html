@@ -2,17 +2,30 @@
   .nav-link:hover {
     color: #005abf;
   }
+  .dropdown-item:hover {
+    color: #005abf;
+  }
+  .custom-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url('/images/menu.png');
+    background-size: cover;
+  }
 </style>
 <nav class="navbar navbar-expand-md navbar-light"
      xmlns:th="http://www.thymeleaf.org"
      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
      style="width: 100%; padding:0; height: 80px; position: fixed; top: 0; z-index: 9999; background-color: #FFFFFF">
-  <div class="container" style="">
+  <div class="container" style="background-color: #FFFFFF">
     <a class="navbar-brand" onclick="window.location.href='/'">
       <img src="/images/logo.png" alt="로고" class="logo"
            style=" margin-left: 35px; margin-right: 40px; width: 90px; height: auto; cursor: pointer;">
     </a>
-    <span>&nbsp;</span>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="custom-icon"></span>
+    </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mr-auto">
@@ -52,6 +65,7 @@
       <button class="btn btn-dark btn-sm my-2 my-sm-0"
               style="background-color:#ffee64; font-weight: bolder;color:#000000; border: none"
               onclick="window.location.href='/host-center/meetings/main'">호스트센터
+
       </button>
       <span>&emsp;</span>
       <div class="btn-group">
@@ -74,6 +88,3 @@
     </div>
   </div>
 </nav>
-
-
-

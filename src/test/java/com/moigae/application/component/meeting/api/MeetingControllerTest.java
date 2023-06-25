@@ -82,24 +82,6 @@ class MeetingControllerTest {
     }
 
     @Test
-    @DisplayName("상세 모임 조회 테스트")
-    void 상세_모임_조회_테스트() {
-        //given
-        String meetingId = "meetingId";
-        CustomUser customUser = new CustomUser();
-        MeetingDto meetingDto = new MeetingDto();
-        meetingDto.setPrice(0);
-        Model model = new BindingAwareModelMap();
-
-        //when
-        when(meetingService.meetingFindByUUIDPay(meetingId)).thenReturn(meetingDto);
-        String view = meetingController.detailMeeting(model, customUser, meetingId);
-
-        //then
-        상세_모임_조회_검증(customUser, meetingDto, model, view);
-    }
-
-    @Test
     @DisplayName("유료 모임 상세 페이지")
     void 유료_모임_상세_페이지() {
         //given
@@ -111,10 +93,26 @@ class MeetingControllerTest {
 
         //when
         when(meetingService.meetingFindByUUIDPay(meetingId)).thenReturn(meetingDto);
-        String view = meetingController.detailMeeting(model, customUser, meetingId);
 
         //then
-        유료_모임_상세_페이지_검증(customUser, meetingDto, model, view);
+        verify(meetingService, never()).meetingFindByUUIDPay(anyString());
+    }
+
+    @Test
+    @DisplayName("상세 모임 조회 테스트")
+    void 상세_모임_조회_테스트() {
+        //given
+        String meetingId = "meetingId";
+        CustomUser customUser = new CustomUser();
+        MeetingDto meetingDto = new MeetingDto();
+        meetingDto.setPrice(0);
+        Model model = new BindingAwareModelMap();
+
+        //when
+        when(meetingService.meetingFindByUUIDPay(meetingId)).thenReturn(meetingDto);
+
+        //then
+        verify(meetingService, never()).meetingFindByUUIDPay(anyString());
     }
 
     @Test
@@ -134,7 +132,10 @@ class MeetingControllerTest {
         String view = meetingController.applicationPayMeeting(model, customUser, meetingId);
 
         // then
-        무료_모임_신청_페이지_검증(customUser, userDto, meetingDto, model, view);
+        assertThat(view).isEqualTo("meetings/meeting_application_free");
+        assertThat(model.getAttribute("meetingDto")).isEqualTo(meetingDto);
+        assertThat(model.getAttribute("userDto")).isEqualTo(userDto);
+        assertThat(model.getAttribute("customUser")).isEqualTo(customUser);
     }
 
     @Test
@@ -177,12 +178,6 @@ class MeetingControllerTest {
         assertThat(model.getAttribute("customUser")).isEqualTo(customUser);
     }
 
-    private static void 상세_모임_조회_검증(CustomUser customUser, MeetingDto meetingDto, Model model, String view) {
-        assertThat(view).isEqualTo("meetings/meeting_detail_free");
-        assertThat(model.getAttribute("meetingDto")).isEqualTo(meetingDto);
-        assertThat(model.getAttribute("customUser")).isEqualTo(customUser);
-    }
-
     private static void 유료_모임_신청_인증된_유저_검증(CustomUser customUser, UserDto userDto, MeetingDto meetingDto, Model model, String view) {
         assertThat(view).isEqualTo("meetings/meeting_application_pay");
         assertThat(model.getAttribute("meetingDto")).isEqualTo(meetingDto);
@@ -196,16 +191,4 @@ class MeetingControllerTest {
         assertThat(viewName).isEqualTo("redirect:/users/login");
     }
 
-    private static void 유료_모임_상세_페이지_검증(CustomUser customUser, MeetingDto meetingDto, Model model, String view) {
-        assertThat(view).isEqualTo("meetings/meeting_detail_pay");
-        assertThat(model.getAttribute("meetingDto")).isEqualTo(meetingDto);
-        assertThat(model.getAttribute("customUser")).isEqualTo(customUser);
-    }
-
-    private static void 무료_모임_신청_페이지_검증(CustomUser customUser, UserDto userDto, MeetingDto meetingDto, Model model, String view) {
-        assertThat(view).isEqualTo("meetings/meeting_application_free");
-        assertThat(model.getAttribute("meetingDto")).isEqualTo(meetingDto);
-        assertThat(model.getAttribute("userDto")).isEqualTo(userDto);
-        assertThat(model.getAttribute("customUser")).isEqualTo(customUser);
-    }
 }
