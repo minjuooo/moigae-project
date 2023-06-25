@@ -5,7 +5,6 @@ import com.moigae.application.component.meeting.domain.Meeting;
 import com.moigae.application.component.meeting.domain.enumeraion.MeetingStatus;
 import com.moigae.application.component.meeting.dto.MeetingDto;
 import com.moigae.application.component.meeting.repository.MeetingRepository;
-import com.moigae.application.component.meeting_image.service.MeetingImageService;
 import com.moigae.application.component.meeting_user.api.request.MeetingUpdateRequest;
 import com.moigae.application.component.meeting_user.application.MeetingUserService;
 import com.moigae.application.component.meeting_user.util.Converter;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -29,7 +29,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @RequestMapping("/host-center")
 public class MeetingUpdateController {
-    private final MeetingImageService meetingImageService;
     private final MeetingUserService meetingUserService;
     private final MeetingService meetingService;
     private final CustomMeetingService hostService;
@@ -60,26 +59,45 @@ public class MeetingUpdateController {
         return "redirect:/host-center/meetings/{meetingId}/edit";
     }
 
-    //모임삭제
+    //모임취소
     @GetMapping("/meetings/{meetingId}/cancel")
     @Transactional
-    public String cancelMeeting(@PathVariable("meetingId") String meetingId) {
-        Meeting meeting = meetingRepository.findById(meetingId).get();
-        log.info("===========Meeting = {} ", meeting);
-        // 현재 날짜와 모집 종료 날짜를 비교하여 모집 기간인지 확인
-        LocalDate currentDate = LocalDate.now();
-        LocalDateTime recruitmentEndDateTime = meeting.getRecruitmentEndDateTime();
+    public String cancelMeeting(@PathVariable("meetingId") String meetingId, RedirectAttributes redirectAttributes) {
+        Meeting meeting = meetingRepository.findById(meetingId).orElse(null);
+        if (meeting != null) {
+            // 현재 날짜와 모집 종료 날짜를 비교하여 모집 기간인지 확인
+            LocalDate currentDate = LocalDate.now();
+            LocalDateTime recruitmentEndDateTime = meeting.getRecruitmentEndDateTime();
 
-        if (currentDate.isBefore(recruitmentEndDateTime.toLocalDate())) {
-            // 모집 기간 내에만 취소가 가능하므로 모임 상태를 "CANCELLED"로 설정
-            meeting.setMeetingStatus(MeetingStatus.CANCELLED);
-            log.info("MeetingStatus = {} {} ", meeting.getMeetingStatus());
-
-            return "redirect:/host-center/board";
-        } else {
-            // 모집 기간이 지났으므로 취소할 수 없음
-            // 다른 처리 로직을 구현하거나 오류 메시지를 반환할 수 있습니다.
-            return "redirect:/host-center/meetings/main";
+            if (currentDate.isBefore(recruitmentEndDateTime.toLocalDate())) {
+                // 모집 기간 내에만 취소가 가능하므로 모임 상태를 "CANCELLED"로 설정
+                meeting.setMeetingStatus(MeetingStatus.CANCELLED);
+                meetingRepository.save(meeting);
+            } else {
+                // 모집 기간이 지났으므로 취소할 수 없음
+                redirectAttributes.addFlashAttribute("errorMessage", "모집 기간이 지났으므로 취소할 수 없습니다.");
+                return "redirect:/host-center/board";
+            }
         }
+        return "redirect:/host-center/board";
     }
+
+//    @GetMapping("/meetings/{meetingId}/cancel")
+//    @Transactional
+//    public String cancelMeeting(@PathVariable("meetingId") String meetingId) {
+//        Meeting meeting = meetingRepository.findById(meetingId).get();
+//        // 현재 날짜와 모집 종료 날짜를 비교하여 모집 기간인지 확인
+//        LocalDate currentDate = LocalDate.now();
+//        LocalDateTime recruitmentEndDateTime = meeting.getRecruitmentEndDateTime();
+//
+//        if (currentDate.isBefore(recruitmentEndDateTime.toLocalDate())) {
+//            // 모집 기간 내에만 취소가 가능하므로 모임 상태를 "CANCELLED"로 설정
+//            meeting.setMeetingStatus(MeetingStatus.CANCELLED);
+//            return "redirect:/host-center/board";
+//        } else {
+//            // 모집 기간이 지났으므로 취소할 수 없음
+//            // 다른 처리 로직을 구현하거나 오류 메시지를 반환할 수 있습니다.
+//            return "redirect:/host-center/meetings/main";
+//        }
+//    }
 }
