@@ -1,12 +1,10 @@
-package com.moigae.application.component;
+package com.moigae.application.component.user.api;
 
 import com.moigae.application.component.meeting.application.MeetingPaymentCustomService;
 import com.moigae.application.component.meeting.domain.Meeting;
-import com.moigae.application.component.meeting_payment.domain.MeetingPayment;
 import com.moigae.application.component.meeting.repository.MeetingSymRepository;
+import com.moigae.application.component.meeting_payment.domain.MeetingPayment;
 import com.moigae.application.component.qna.api.service.QuestionService;
-import com.moigae.application.component.qna.dto.QuestionWithSymCountDto;
-
 import com.moigae.application.component.user.domain.User;
 import com.moigae.application.component.user.dto.CustomUser;
 import com.moigae.application.component.user.dto.MeetingSymDto;
@@ -24,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/users")
@@ -74,30 +73,18 @@ public class MypageController {
         return "users/mypageUnJoin";
     }
 
-
-    @GetMapping("/mypageFix")
-    public String myPageFix(Model model, @AuthenticationPrincipal CustomUser customUser) {
-        User user = userRepository.findById(customUser.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id"));
-
-//    @GetMapping("/mypageCart")
-//    public String myPageCart(Model model, @AuthenticationPrincipal CustomUser customUser){
-//        model.addAttribute("customUser", customUser);
-//        return "users/mypageCart";
-//    }
-
     public String getMyMeetingSymList(Model model,
-                                    @AuthenticationPrincipal CustomUser customUser,
-                                    @PageableDefault(size = 10) Pageable pageable,
-                                    String viewName) {
+                                      @AuthenticationPrincipal CustomUser customUser,
+                                      @PageableDefault(size = 10) Pageable pageable,
+                                      String viewName) {
         model.addAttribute("customUser", customUser);
         return viewName;
     }
 
-    @GetMapping("/mypageCart")
+    @GetMapping("/mypageCartSymList")
     public String myMeetingSymList(Model model,
-                                 @AuthenticationPrincipal CustomUser customUser,
-                                 @PageableDefault(size = 6, sort = "updateTime", direction = Sort.Direction.DESC) Pageable pageable) {
+                                   @AuthenticationPrincipal CustomUser customUser,
+                                   @PageableDefault(size = 6, sort = "updateTime", direction = Sort.Direction.DESC) Pageable pageable) {
 
         return getMyMeetingSymList(model, customUser, pageable, "users/mypageCart");
     }

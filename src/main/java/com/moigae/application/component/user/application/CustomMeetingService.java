@@ -33,21 +33,21 @@ public class CustomMeetingService {
         return Converter.toMeetingDto(newMeeting);
     }
 
-    public MeetingDto disableMeeting(MeetingUpdateRequest updateRequest) {
-        Meeting meeting = Converter.fromUpdateRequestToMeeting(updateRequest);
-        Meeting newMeeting = meetingRepository.save(meeting);
-        return Converter.toMeetingDto(newMeeting);
-    }
+//    public MeetingDto disableMeeting(MeetingUpdateRequest updateRequest) {
+//        Meeting meeting = Converter.fromUpdateRequestToMeeting(updateRequest);
+//        Meeting newMeeting = meetingRepository.save(meeting);
+//        return Converter.toMeetingDto(newMeeting);
+//    }
 
-    public void saveMeeting(MeetingDto meetingDto) {
-        // MeetingDto를 Meeting 객체로 변환
-        Meeting meeting = Converter.toMeeting(meetingDto);
-
-        meetingRepository.save(meeting);
-    }
-
-    public void updateMeeting(MeetingDto meetingDto) {
-        Meeting meeting = Converter.toMeeting(meetingDto);
-        meetingRepository.save(meeting);
-    }
+//    public void saveMeeting(MeetingDto meetingDto) {
+//        // MeetingDto를 Meeting 객체로 변환
+//        Meeting meeting = Converter.toMeeting(meetingDto);
+//
+//        meetingRepository.save(meeting);
+//    }
+//
+//    public void updateMeeting(MeetingDto meetingDto) {
+//        Meeting meeting = Converter.toMeeting(meetingDto);
+//        meetingRepository.save(meeting);
+//    }
 }

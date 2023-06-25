@@ -165,7 +165,8 @@ jacocoTestReport {
                             '**/Index**',
                             '**/Conver**',
                             '**/MypageContro**',
-                            '**/repository/**'
+                            '**/repository/**',
+                            '**/meeting_user/**'
                     ])
                 })
         )
