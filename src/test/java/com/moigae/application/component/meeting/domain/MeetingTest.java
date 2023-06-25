@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -55,6 +57,50 @@ class MeetingTest {
     void 모임_도메인_디폴트_생성자_테스트() {
         Meeting meeting = new Meeting();
         log.info(meeting.getId());
+    }
+
+    @Test
+    @DisplayName("모임 도메인 setter 테스트")
+    void 모임_도메인_setter_테스트() {
+        //given
+        Meeting meeting = new Meeting();
+
+        //when
+        meeting.setMeetingTitle("New Title");
+        meeting.setMeetingType(MeetingType.OFFLINE);
+        meeting.setMeetingCategory(MeetingCategory.PARTY);
+        meeting.setNickName("New Nickname");
+        meeting.setMeetingImage(createMeetingImage());
+        meeting.setMeetingDescription("New Description");
+        meeting.setRecruitmentStartDateTime(LocalDateTime.now().minusDays(5));
+        meeting.setRecruitmentEndDateTime(LocalDateTime.now().plusDays(5));
+        meeting.setParticipantRange(ParticipantRange.of(1, 20));
+        meeting.setMeetingStartDateTime(LocalDateTime.now().plusDays(10));
+        meeting.setMeetingEndDateTime(LocalDateTime.now().plusDays(20));
+        meeting.setMeetingAddress(MeetingAddress.of("New Address", "New Detail Address", "New Location Description"));
+        meeting.setMeetingPrice(MeetingPrice.FREE);
+        meeting.setMeetingAmount(100);
+        meeting.setPetAllowedStatus(PetAllowedStatus.WITH_OUT);
+        meeting.setMeetingContact(createMeetingContact());
+        meeting.setMeetingFreeFormDetails("New Free Form Details");
+        meeting.setMeetingStatus(MeetingStatus.AVAILABLE);
+
+        //then
+        assertThat(meeting.getMeetingTitle()).isEqualTo("New Title");
+        assertThat(meeting.getMeetingType()).isEqualTo(MeetingType.OFFLINE);
+        assertThat(meeting.getMeetingCategory()).isEqualTo(MeetingCategory.PARTY);
+        assertThat(meeting.getNickName()).isEqualTo("New Nickname");
+        assertThat(meeting.getMeetingImage()).isNotNull();
+        assertThat(meeting.getMeetingDescription()).isEqualTo("New Description");
+        assertThat(meeting.getParticipantRange().getCurrentParticipants()).isEqualTo(1);
+        assertThat(meeting.getParticipantRange().getMaxParticipants()).isEqualTo(20);
+        assertThat(meeting.getMeetingAddress().getAddress()).isEqualTo("New Address");
+        assertThat(meeting.getMeetingPrice()).isEqualTo(MeetingPrice.FREE);
+        assertThat(meeting.getMeetingAmount()).isEqualTo(100);
+        assertThat(meeting.getPetAllowedStatus()).isEqualTo(PetAllowedStatus.WITH_OUT);
+        assertThat(meeting.getMeetingContact()).isNotNull();
+        assertThat(meeting.getMeetingFreeFormDetails()).isEqualTo("New Free Form Details");
+        assertThat(meeting.getMeetingStatus()).isEqualTo(MeetingStatus.AVAILABLE);
     }
 
     private static MeetingImage createMeetingImage() {
