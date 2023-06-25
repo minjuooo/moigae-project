@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Setter
 @NoArgsConstructor
@@ -40,7 +41,7 @@ public class MeetingDto {
     private MeetingContact meetingContact;
     private String meetingFreeFormDetails;
     private String meetingStatus;
-
+    /*private Date rsDate;*/
     @Builder
     public MeetingDto(String id, String meetingTitle, MeetingType meetingType, MeetingCategory meetingCategory,
                       String nickName, String path, String meetingDescription, LocalDateTime recruitmentStartDateTime,
@@ -173,4 +174,12 @@ public class MeetingDto {
     public int getPrice() {
         return price;
     }
+
+/*    public Date getRsDate() {
+        return rsDate;
+    }
+
+    public void setRsDate(Date rsDate) {
+        this.rsDate = rsDate;
+    }*/
 }

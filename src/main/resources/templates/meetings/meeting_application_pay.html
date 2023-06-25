@@ -1,75 +1,119 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
+    <style>
+        @keyframes down { 0%{
+            transform: translateY(-50px)
+        }
+            100
+            %
+            {
+                transform
+                :
+                        translateY(
+                                0px
+                        )
+            }
+        }
+        @font-face {
+            font-family: 'NanumSquareNeo-Variable';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: 'NanumSquareNeo-Variable','Palatino Linotype' !important;
+        }
+    </style>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>모임 신청 - 유료</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>무료 모임 신청</title>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+            crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+          integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-dbszL+y3o9GMQQ3ik8yYwtI4ne/9orhz6aqrKIjjb0S1asKo49Jg4kot+UamYNlt"
+            crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <link rel="stylesheet" th:href="@{/css/meeting-application.css}">
 </head>
 <body>
-<div th:include="navbarJ"></div>
-<br/>
-<div class="container">
+<header style="margin: 0">
+    <div th:include="navbarJ"></div>
+</header>
+<br><br>
+<!--  컨텐츠 시작-->
+<div class="container-md" style="margin-top: 70px; padding: 0" >
     <div class="row">
-        <div class="col-md-6">
-            <img th:src="${meetingDto.path}"/>
+        <div class="col-md-5 d-flex">
+            <img class="img-fluid" th:src="${meetingDto.path}">
         </div>
-        <div class="col-md-6">
-            <h3 th:text="${meetingDto.meetingTitle}"></h3>
+        <div class="col-md-6" style="margin-left: 30px">
+            <h3 style="font-weight: bold" th:text="${meetingDto.meetingTitle}"></h3>
             <p th:text="${meetingDto.meetingDescription}"></p>
-            <br/>
             <div class="info">
-                <h5>카테고리</h5>
-                <label th:text="${meetingDto.meetingCategory.getValue()}"> </label>
+                <p style="font-size: 15px; color: #5c636a"> 작성인 :
+                    <span><label th:text="${meetingDto.nickName}"></label></span></p>
             </div>
-            <br/>
             <div class="info">
-                <h5>온라인/오프라인</h5>
-                <label th:text="${meetingDto.meetingType.getValue()}"> </label>
+                <p style="font-size: 18px; font-weight: bold; margin-bottom: 10px; margin-top: 10px">카테고리 :
+                    <span><label style="font-size: 18px; color: #6f42c1" th:text="${meetingDto.meetingCategory.getValue()}">
+                </label></span></p>
+            </div>
+            <div class="info">
+                <p style="font-size: 18px; font-weight: bold; margin-bottom: 10px; margin-top: 10px">모임유형 :
+                    <span><label style="font-size: 18px" th:text="${meetingDto.meetingType.getValue()}"></label>
+                    </span></p>
+            </div>
+            <div class="info">
+                <p style="font-size: 18px; font-weight: bold; margin-bottom: 10px; margin-top: 10px">모임날짜 :
+                    <span><label th:text="${#temporals.format(meetingDto.meetingStartDateTime, 'yy-MM-dd HH:mm:ss')}"> </label>
+                    </span></p>
             </div>
         </div>
     </div>
-    <br/>
-    <hr>
-    <br/><br/>
-    <div class="info">
-        <h5>호스트 닉네임</h5>
-        <label th:text="${meetingDto.nickName}"> </label>
+    <hr style="border-width: 2px; margin-top: 40px; margin-bottom: 40px">
+    <div class="info" style="margin: 10px">
+        <h6 style="font-weight: bold">MOIM - HOST</h6>
+        <label th:text="${meetingDto.nickName}"></label>
     </div>
-    <br/>
-    <div class="info">
-        <h5>모집 기간</h5>
+    <div class="info" style="margin: 10px">
+        <h6 style="font-weight: bold">모집 기간</h6>
         <label th:text="${#temporals.format(meetingDto.recruitmentStartDateTime, 'yy-MM-dd HH:mm:ss')} + ' ~ ' + ${#temporals.format(meetingDto.recruitmentEndDateTime, 'yy-MM-dd HH:mm:ss')}"> </label>
     </div>
-    <br/>
-    <div class="info">
-        <h5>모임 시작 시간</h5>
+    <div class="info" style="margin: 10px">
+        <h6 style="font-weight: bold">모임 시작 시간</h6>
         <label th:text="${#temporals.format(meetingDto.meetingStartDateTime, 'yy-MM-dd HH:mm:ss')}"> </label>
     </div>
-    <br/>
-    <div class="info">
-        <h5>장소</h5>
-        <label th:text="'주소 : ' + ${meetingDto.meetingAddress.getAddress()}"> </label> <br/>
-        <label th:text="'상세 주소 : ' + ${meetingDto.meetingAddress.getDetailAddress()}"> </label> <br/>
-        <label th:text="'위치 설명 : ' + ${meetingDto.meetingAddress.getLocationDescription()}"> </label> <br/>
+    <div class="info" style="margin: 10px">
+        <h6 style="font-weight: bold">장소</h6>
+        <label th:text="'주소 : ' + ${meetingDto.meetingAddress.getAddress()}"> </label>
+        <br>
+        <label th:text="'상세주소 : ' + ${meetingDto.meetingAddress.getDetailAddress()}"> </label>
+        <br>
+        <label th:text="'위치설명 : ' + ${meetingDto.meetingAddress.getLocationDescription()}"> </label>
     </div>
-    <br/>
-    <div class="info">
-        <h5>인원 제한</h5>
-        <label th:text="${meetingDto.participantRange.getMaxParticipants()}"> </label>
+    <div class="info" style="margin: 10px">
+        <h6 style="font-weight: bold">모집인원</h6>
+        <label th:text="'최대'+ ${meetingDto.participantRange.getMaxParticipants()}  + '명'"></label>
     </div>
-    <br/>
-    <div class="info">
-        <h5>반려견 동반 유무</h5>
-        <label th:text="${meetingDto.petAllowedStatus.value}"> </label>
+    <div class="info" style="margin: 10px">
+        <h6 style="font-weight: bold">참가비</h6>
+        <label th:text="${meetingDto.getPrice()} + '원'"></label>
     </div>
-    <br/>
-    <div class="info">
-        <h5>연락수단</h5>
+    <div class="info" style="margin: 10px">
+        <h6 style="font-weight: bold">반려견 동반 유무</h6>
+        <label th:text="${meetingDto.petAllowedStatus.value}"></label>
+    </div>
+    <div class="info" style="margin: 10px">
+        <h6 style="font-weight: bold">연락수단</h6>
         <div th:if="${meetingDto.meetingContact.phone} != null">
             <label>전화번호: </label>
             <label th:text="${meetingDto.meetingContact.phone}"> </label>
@@ -83,7 +127,7 @@
             <label th:text="${meetingDto.meetingContact.kakaoId}"> </label>
         </div>
         <div th:if="${meetingDto.meetingContact.link} != null">
-            <label>링크: </label>
+            <label>url 링크: </label>
             <label th:text="${meetingDto.meetingContact.link}"> </label>
         </div>
         <div th:if="${meetingDto.meetingContact.otherLink} != null">
@@ -91,11 +135,7 @@
             <label th:text="${meetingDto.meetingContact.otherLink}"> </label>
         </div>
     </div>
-    <br/>
-    <hr>
-    <br/><br/><br/>
     <script src="https://js.tosspayments.com/v1"></script>
-
     <script th:inline="javascript">
         /*<![CDATA[*/
         const currentParticipants = [[${meetingDto.getParticipantRange().getCurrentParticipants()}]];
@@ -153,8 +193,12 @@
             }
         }
     </script>
-    <div>
-        <button id="applyButton" onclick="payment()" class="btn btn-sm btn-primary">결제 하기</button>
+    <div style="margin-bottom: 40px; margin-top: 30px; display: flex; justify-content: center;">
+        <br>
+        <h5 style="color: red">조건을 빠짐없이 확인해주세요</h5>
+        <br>
+        <button class="btn btn-primary" id="applyButton" onclick="payment()"
+                style="background-color: #ffee64; color: black; outline: none; border: none; border-radius: 10px; padding: 5px 10px;">결제 하기</button>
     </div>
     <div id="warningModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -194,8 +238,6 @@
             });
         });
     </script>
-</div>
-<br/><br/><br/><br/><br/><br/><br/><br/>
 </div>
 </body>
 </html>

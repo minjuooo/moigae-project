@@ -95,12 +95,13 @@
     <div class="container-md" style="margin-top: 70px; padding: 0">
         <h2 class="text-center" style="margin-top: 0; margin-bottom: 30px">모임등록</h2>
         <div>
-            <hr style="border-width: 2px; border-color: #969696;">
-            <br>
-            <div class="col-md-10" style="display: flex; justify-content: center; align-items: center;">
+            <hr style="border-width: 2px; border-color: #969696;"><br>
+            <div class="col-md-12" style="display: flex; align-items: center;">
+                <div class="container col-md-10">
+
                 <form th:action="@{/host-center/meetings/create}" method="post" th:object="${meetingCreateRequest}"
                       enctype="multipart/form-data">
-                    <div style="margin-bottom: 20px; margin-top: 10px">
+                    <div  style="margin-bottom: 20px; margin-top: 10px">
                         <h5>모임 <span style="color: #005abf;font-weight: bold">이름</span>을 설정하세요</h5>
                         <p style="color: #797979">한눈에 들어오는 이름으로 설정하면 좋아요!</p>
                         <label for="meetingTitle">
@@ -148,7 +149,7 @@
                         <p style="color: #797979">특정한 조건이나 제한이 있을 경우 꼭 기입해주세요.</p>
                         <label for="meetingDescription">
                             <textarea class="form-control" id="meetingDescription" name="meetingDescription"
-                                      th:field="*{meetingDescription}" placeholder="최대 100자(공백 포함)"></textarea>
+                                      th:field="*{meetingDescription}" placeholder="최대 100자(공백 포함)" rows="6" cols="50"></textarea>
                         </label>
                     </div>
                     <div style="margin-bottom: 20px; margin-top: 10px">
@@ -202,7 +203,7 @@
                         </div>
                         <label for="detailAddress">상세 주소</label>
                         <input id="detailAddress" name="detailAddress" th:field="*{detailAddress}" type="text"
-                               class="form-control" placeholder="건물명/동/호수를 정확히 입력하세요."><br/>
+                               class="form-control" placeholder="건물명/동/호수를 정확히 입력하세요.">
                         <label for="locationDescription">위치 설명</label>
                         <input class="form-control" id="locationDescription" name="locationDescription"
                                th:field="*{locationDescription}" type="text" placeholder="예:카페앞 주차장 입구">
@@ -264,17 +265,17 @@
                         <label for="meetingFreeFormDetails">
                             <textarea class="form-control" id="meetingFreeFormDetails" name="meetingFreeFormDetails"
                                       th:field="*{meetingFreeFormDetails}"
-                                      placeholder="모임과 관련된 자세한 정보를 자유롭게 작성할 수 있어요"></textarea>
+                                      placeholder="모임과 관련된 자세한 정보를 자유롭게 작성할 수 있어요"
+                                      rows="6" cols="50"></textarea>
                         </label>
                     </div>
-                    <div style="margin-bottom: 30px">
-                        <button class="btn btn-secondary px-5" style="background-color: #005abf; color: #FFFFFF">
-                            모임등록하기
-                        </button>
-                        <input th:onclick="|location.href='@{/meetings}'|" type="button" value="취소">
-                    </div>
 
+                    <div class="d-flex justify-content-center" style="margin-bottom: 50px;margin-top: 50px">
+                        <button class="btn btn-secondary px-5" style="background-color: #005abf; color: #FFFFFF">모임등록하기</button>
+                        <input style="margin-left: 20px" class="btn btn-danger" onclick="confirmCancel()" type="button" value="취소">
+                    </div>
                 </form>
+                </div>
             </div>
         </div>
     </div>
@@ -323,6 +324,18 @@
             priceInput.style.display = "block";  // 유료 선택 시 input 태그 보이기
         } else if (selectElement.value == "FREE") {
             priceInput.style.display = "none";  // 무료 선택 시 input 태그 숨기기
+        }
+    }
+</script>
+<script>
+    function confirmCancel() {
+        // 사용자에게 확인 메시지를 표시합니다.
+        if (confirm("입력하신 내용이 모두 삭제됩니다. 그래도 취소하시겠습니까?")) {
+            // 확인 버튼을 클릭한 경우, 메인 페이지로 리다이렉트합니다.
+            window.location.href = "/host/hostCenterMain";
+        } else {
+            // 취소 버튼을 클릭한 경우, 아무 작업도 수행하지 않습니다.
+            return;
         }
     }
 </script>

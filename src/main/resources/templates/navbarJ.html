@@ -16,17 +16,16 @@
 <nav class="navbar navbar-expand-md navbar-light"
      xmlns:th="http://www.thymeleaf.org"
      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
-     style="width: 100%; padding:0; height: 80px; position: fixed; top: 0; z-index: 9999; background-color: #FFFFFF">
+     style="width: 100%; padding:0; height: 80px; position: fixed; top: 0; z-index: 9999">
   <div class="container" style="background-color: #FFFFFF">
     <a class="navbar-brand" onclick="window.location.href='/'">
       <img src="/images/logo.png" alt="로고" class="logo"
            style=" margin-left: 35px; margin-right: 40px; width: 90px; height: auto; cursor: pointer;">
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" onclick="toggleNavbarBackground()">
       <span class="sr-only">Toggle navigation</span>
       <span class="custom-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -88,3 +87,14 @@
     </div>
   </div>
 </nav>
+<script>
+  function toggleNavbarBackground() {
+    var navbar = document.querySelector('.navbar');
+    navbar.style.backgroundColor = '#FFFFFF';
+  }
+
+  function resetNavbarBackground() {
+    var navbar = document.querySelector('.navbar');
+    navbar.style.backgroundColor = '';
+  }
+</script>
