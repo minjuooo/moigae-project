@@ -67,4 +67,8 @@ public class MeetingPayment extends BaseEntity {
         this.calculateAmount = calculateAmount;
         this.refundStatus = refundStatus;
     }
+
+    public void setMeeting(Meeting meeting) {
+        this.meeting = meeting;
+    }
 }
