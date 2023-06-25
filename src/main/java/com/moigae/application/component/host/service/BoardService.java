@@ -20,9 +20,9 @@ public class BoardService {
         return all;
     }
 
-    public Board getBoardById(String id) {
-        return boardRepository.findById(id).orElse(null);
-    }
+//    public Board getBoardById(String id) {
+//        return boardRepository.findById(id).orElse(null);
+//    }
 
 //    public void createBoard(BankAccountDto boardDto) {
 //        Board board = Board.builder()

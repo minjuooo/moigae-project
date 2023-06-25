@@ -199,7 +199,7 @@
                                         </div>
                                         <div style="font-size: 15px;">
                                             <span>참가 비용 : </span>
-                                            <span>${meetingAmount}</span>
+                                            <span>${meetingAmount ? meetingAmount : '없음'}</span>
                                         </div>
                                         <div style="font-size: 15px;">
                                             ${meetingPrice === 'PAY' ? '유료 모임' : meetingPrice === 'FREE' ? '무료 모임' : meetingPrice}
