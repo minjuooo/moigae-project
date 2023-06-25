@@ -26,6 +26,7 @@ public class MeetingRepositoryImpl implements MeetingRepositoryCustom {
             //쿼리
             QueryResults<Meeting> results = queryFactory
                     .selectFrom(QMeeting.meeting)
+                    .orderBy(QMeeting.meeting.createTime.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetchResults();
@@ -42,6 +43,7 @@ public class MeetingRepositoryImpl implements MeetingRepositoryCustom {
         QueryResults<Meeting> results = queryFactory
                 .selectFrom(QMeeting.meeting)
                 .where(isCategories(meetingCategoryRequest))
+                .orderBy(QMeeting.meeting.createTime.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
