@@ -1,10 +1,13 @@
 package com.moigae.application.component.article.api;
 
+import com.moigae.application.component.article.api.dto.FileUploadDTO;
 import com.moigae.application.component.article.api.request.ArticleForm;
 import com.moigae.application.component.article.api.service.FileService;
+import com.moigae.application.component.article.api.service.GptService;
 import com.moigae.application.component.article.domain.Article;
 import com.moigae.application.component.article.domain.enumeration.Category;
 import com.moigae.application.component.article.repository.ArticleRepository;
+import com.moigae.application.component.user.domain.User;
 import com.moigae.application.component.user.dto.CustomUser;
 import com.moigae.application.core.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +23,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -32,6 +40,7 @@ public class ArticleController {
 
     private final ArticleRepository articleRepository;
     private final FileService fileService;
+    private final GptService gptService;
     @GetMapping("/createArticle")
     @PreAuthorize("(#customUser != null and #customUser.admin == true)")
     public String createArticle(Model model,
@@ -195,5 +204,43 @@ public class ArticleController {
                               @AuthenticationPrincipal CustomUser customUser) {
         model.addAttribute("customUser", customUser);
         return "articles/aboutUs";
+    }
+
+    @PostMapping("/gpt")
+    @ResponseBody
+    public Map<String, String> aiArticle(
+            @RequestBody Map<String, String> req,
+            Principal principal) throws Exception {
+        String subject = req.get("subject");
+        String text = gptService.getGpt(subject);
+        List<String> textList = gptService.listing(text);
+        StringBuilder sb = new StringBuilder();
+        for (String s : textList){
+            String en = gptService.getGptEnglish(s);
+            //System.out.println("en : "+en);
+
+            String dalle = gptService.generateImage(en);
+            //System.out.println("dalle : "+dalle);
+
+            MultipartFile tmp = gptService.downloadAsMultipartFile(dalle, String.valueOf(en.length())+".jpg");
+            //System.out.println("tmp : "+tmp);
+
+            FileUploadDTO fileUploadDTO = fileService.fileUpload(tmp, principal);
+            String url = fileUploadDTO.getUrl();
+            //System.out.println("url : "+url);
+
+            String detail = gptService.getGptDetail(s);
+            //System.out.println(detail);
+
+            sb.append("<p><span style=\"font-size:20px\"><strong>"+s+"</strong></span>&nbsp;<br />").append("\n");
+            sb.append("<p><img src=\""+url+"\" /></p>").append("\n").append("\n");
+            sb.append("<p>"+detail+"</p>").append("\n").append("\n");
+        }
+        System.out.println(sb);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("status", sb.toString());
+
+        return response;
     }
 }

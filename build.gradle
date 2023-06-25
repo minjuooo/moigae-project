@@ -33,6 +33,10 @@ repositories {
 }
 
 dependencies {
+    //common file uploader
+    implementation 'commons-fileupload:commons-fileupload:1.4'
+    //simple json
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     //자바기반 이메일
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     //spring-context
