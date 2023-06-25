@@ -98,7 +98,6 @@
     <div class="container-md">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <div class="col-md-6">
                     <div class="form-floating">
                         <p id="bank" style="font-size: 20px; font-weight: bold;">은행</p>
                         <label for="bankName">은행</label>
@@ -123,27 +122,6 @@
         document.getElementById("hostCenterForm").submit();
     }
 </script>
-<script>
-    function isAccountExists() {
-        // 계좌 존재 여부를 확인하는 로직 작성
-        var bankInput = document.getElementById("floatingTextarea1");
-        var accountInput = document.getElementById("floatingTextarea");
-
-        // 계좌 정보를 가져와서 유효성을 검사하고 계좌가 존재하는지 확인
-        var bank = bankInput.value.trim();
-        var account = accountInput.value.trim();
-
-        // 예시로 bank 값이 '은행'이고 account 값이 '1234567890'인 경우에 계좌가 존재한다고 가정
-        if (bank === "은행" && account === "1234567890") {
-            return true;  // 계좌가 존재하는 경우 true 반환
-        } else {
-            return false;  // 계좌가 존재하지 않는 경우 false 반환
-        }
-    }
-</script>
-
-<!--<a th:action="@{/host-center/meetings/{meetingId}/info/userNow(meetingId=${meetingId})}" method="get"/>-->
-<!--    <input type="hidden" th:name="meetingId" th:value="${meetingId}" />-->
 
 <div class="container">
     <h2 class="mt-5">정산&모임신청현황</h2>
@@ -161,15 +139,12 @@
                             <p th:text="${BankAccountDto.price}"></p>
                             <p th:text="${BankAccountDto.participantRange.getMaxParticipants()}"></p>
                             <p th:text="${BankAccountDto.meetingStatus.getValue()}" readonly></p>
-                            <!-- <p th:text="${boardDto.totalAmount}"></p>-->
-<!--                            <p th:text="${boardDto.getTotalAmount()}"></p>-->
                             <a th:href="@{/host-center/meetings/{meetingId}/edit(meetingId=${BankAccountDto.id})}" class="btn btn-primary">모임 수정</a>
                             <br>
                             <a th:href="@{/host-center/meetings/{meetingId}/info/userNow(meetingId=${BankAccountDto.id})}" class="btn btn-primary">신청자 현황</a>
                             <form th:action="@{/host-center/meetings/{meetingId}/cancel(meetingId=${BankAccountDto.id})}" method="get" style="display: inline;">
                                 <button id="cancelButton" class="btn btn-primary" type="submit" onclick="return confirm('정말로 모임을 취소하시겠습니까?')">모집 취소</button>
                             </form>
-
                         </li>
                     </ul>
 
@@ -180,14 +155,15 @@
 
 </div>
 </form>
+
     <script>
         document.getElementById("cancelButton").addEventListener("click", function() {
         this.disabled = true; // 버튼을 비활성화
     });
 </script>
 <!-- 에러 메시지 -->
-<p th:if="${param.error == 'existingAccount'}" th:text="${existingAccount}"></p>
-<p th:if="${param.error == 'loginRequired'}" th:text="${loginRequired}"></p>
+<!--<p th:if="${param.error == 'existingAccount'}" th:text="${existingAccount}"></p>-->
+<!--<p th:if="${param.error == 'loginRequired'}" th:text="${loginRequired}"></p>-->
 </body>
 
 </div>
