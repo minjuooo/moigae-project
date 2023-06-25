@@ -4,6 +4,7 @@ import com.moigae.application.component.meeting.api.request.MeetingCategoryReque
 import com.moigae.application.component.meeting.domain.Meeting;
 import com.moigae.application.component.meeting.dto.MeetingDto;
 import com.moigae.application.component.meeting.repository.MeetingRepositoryCustom;
+import com.moigae.application.component.meeting_payment.repository.MeetingPaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MeetingService {
     private final MeetingRepositoryCustom meetingRepositoryCustom;
+    private final MeetingPaymentRepository meetingPaymentRepository;
 
     @Transactional(readOnly = true)
     public Page<MeetingDto> Meetings(MeetingCategoryRequest meetingCategoryRequest, Pageable pageable) {
@@ -39,10 +41,4 @@ public class MeetingService {
         return meetingDto;
     }
 
-    private Meeting convertToMeeting(MeetingDto meetingDto) {
-        Meeting meeting = new Meeting();
-        meeting.setId(meetingDto.getId());
-        // 다른 필드들도 마찬가지로 복사
-        return meeting;
-    }
 }

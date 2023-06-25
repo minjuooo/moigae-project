@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>모임생성완료</title>
-    <link rel="stylesheet" href="completeMeeting.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="completeMeeting.js"></script>
-    <link rel="stylesheet" href="../../static/css/completeMeeting.css">
+    <link rel="stylesheet" th:href="@{/css/completeMeeting.css}">
 </head>
 <body>
 <h1>호스트센터</h1>
@@ -18,12 +17,12 @@
     <a href="#" class="btn custom-btn">메인으로</a>
 </div>
 
-
 <div class="center-text">
     <div class="message" style="position: relative; top: 250px;">
-        <p id="place" class="bold">모임이 성공적으로 만들어졌어요!</p>
+        <p id="place" class="bold" th:text="${message}">모임이 성공적으로 만들어졌어요!</p>
         <div style="display: flex; flex-direction: column; align-items: center;">
-            <img src="https://image.dongascience.com/Photo/2022/06/6982fdc1054c503af88bdefeeb7c8fa8.jpg" class="img-thumbnail square-image" alt="..." style="margin-bottom: 20px;">
+            <img src="https://image.dongascience.com/Photo/2022/06/6982fdc1054c503af88bdefeeb7c8fa8.jpg"
+                 class="img-thumbnail square-image" alt="..." style="margin-bottom: 20px;">
             <button type="button" class="btn btn-primary btn-lg">자세히 보기</button>
             <br>
             <button type="button" class="btn btn-secondary btn-lg">목록으로 돌아가기</button>

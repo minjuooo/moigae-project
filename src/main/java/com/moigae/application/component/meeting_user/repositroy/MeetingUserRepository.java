@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MeetingUserRepository extends JpaRepository<MeetingUser, Long> {
+
     List<MeetingUser> findByHostId(String hostId);
 }

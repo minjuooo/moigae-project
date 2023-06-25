@@ -14,7 +14,9 @@ public interface MeetingPaymentRepository extends JpaRepository<MeetingPayment, 
 
     MeetingPayment findByMeetingOrderId(String orderId);
 
-    List<MeetingPayment> findByMeeting(Meeting meeting);
+    MeetingPayment findByMeetingId(Long meetingId);
 
     List<MeetingPayment> findByMeetingId(String meetingId);
+
+//    Optional<MeetingPayment> findById(Long id);
 }
