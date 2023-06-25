@@ -31,6 +31,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Controller
 @RequestMapping("/articles")
@@ -215,27 +218,44 @@ public class ArticleController {
         String text = gptService.getGpt(subject);
         List<String> textList = gptService.listing(text);
         StringBuilder sb = new StringBuilder();
-        for (String s : textList){
-            String en = gptService.getGptEnglish(s);
-            //System.out.println("en : "+en);
 
-            String dalle = gptService.generateImage(en);
-            //System.out.println("dalle : "+dalle);
+        ExecutorService executorService = Executors.newFixedThreadPool(2); // 2개의 스레드를 사용하는 스레드 풀 생성
 
-            MultipartFile tmp = gptService.downloadAsMultipartFile(dalle, String.valueOf(en.length())+".jpg");
-            //System.out.println("tmp : "+tmp);
+        for (String s : textList) {
 
-            FileUploadDTO fileUploadDTO = fileService.fileUpload(tmp, principal);
-            String url = fileUploadDTO.getUrl();
-            //System.out.println("url : "+url);
+            // 첫번째 작업을 스레드 풀에 제출
+            Future<FileUploadDTO> future1 = executorService.submit(() -> {
+                String en = gptService.getGptEnglish(s);
+                String dalle = gptService.generateImage(en);
+                MultipartFile tmp = gptService.downloadAsMultipartFile(dalle, String.valueOf(en.length()) + ".jpg");
+                return fileService.fileUpload(tmp, principal);
+            });
 
-            String detail = gptService.getGptDetail(s);
-            //System.out.println(detail);
+            // 두번째 작업을 스레드 풀에 제출
+            Future<String> future2 = executorService.submit(() -> {
+                return gptService.getGptDetail(s);
+            });
 
-            sb.append("<p><span style=\"font-size:20px\"><strong>"+s+"</strong></span>&nbsp;<br />").append("\n");
-            sb.append("<p><img src=\""+url+"\" /></p>").append("\n").append("\n");
-            sb.append("<p>"+detail+"</p>").append("\n").append("\n");
+            // 결과를 받아오기
+            FileUploadDTO fileUploadDTO;
+            String detail;
+            try {
+                fileUploadDTO = future1.get(); // 첫번째 작업의 결과
+                String url = fileUploadDTO.getUrl();
+                detail = future2.get(); // 두번째 작업의 결과
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
+
+            // 결과를 사용하여 StringBuilder에 추가
+            sb.append("<p><span style=\"font-size:20px\"><strong>" + s + "</strong></span>&nbsp;<br />").append("\n");
+            sb.append("<p><img src=\"" + fileUploadDTO.getUrl() + "\" /></p>").append("\n").append("\n");
+            sb.append("<p>" + detail + "</p>").append("\n").append("\n");
         }
+
+        executorService.shutdown();
+
         System.out.println(sb);
 
         Map<String, String> response = new HashMap<>();
