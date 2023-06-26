@@ -45,7 +45,9 @@ public class MeetingUpdateController {
         MeetingUpdateRequest updateRequest = Converter.toUpdateRequest(meeting);
         model.addAttribute("meetingUpdateRequest", updateRequest);
         model.addAttribute("customUser", customUser);
-        return "host/meeting_edit";
+//        return "host/meeting_edit";
+//        return "redirect:/host-center/meetings/{meetingId}/edit";
+        return "host/hostCenterMain";
     }
 
     @PutMapping("/meetings/{meetingId}/edit")
@@ -56,7 +58,8 @@ public class MeetingUpdateController {
                                 @AuthenticationPrincipal CustomUser customUser) {
         MeetingDto meetingDto = meetingService.meetingFindByUUID(meetingId);
         hostService.updateMeeting(updateRequest);
-        return "redirect:/host-center/meetings/{meetingId}/edit";
+//        return "redirect:/host-center/meetings/{meetingId}/edit";
+        return "host/hostCenterMain";
     }
 
     //모임취소
