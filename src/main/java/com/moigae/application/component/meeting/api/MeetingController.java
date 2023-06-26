@@ -18,14 +18,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import java.time.ZoneId;
-import java.util.Date;
-import javax.transaction.Transactional;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,11 +40,12 @@ public class MeetingController {
     private final MeetingSymRepository meetingSymRepository;
     private final UserRepository userRepository;
     private final MeetingRepository meetingRepository;
+
     @GetMapping
     public String meetings(Model model,
                            @AuthenticationPrincipal CustomUser customUser,
                            @ModelAttribute MeetingCategoryRequest meetingCategoryRequest,
-                           @PageableDefault(size = 12, sort = "createTime") Pageable pageable) {
+                           @PageableDefault(size = 12, sort = "createTime", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<MeetingDto> meetingDtoPage = meetingService.Meetings(meetingCategoryRequest, pageable);
         log.info(String.valueOf("📌📌📌📌📌 데이터 페이지 개수 : " + meetingDtoPage.getTotalPages()));
         model.addAttribute("meetingDtoPage", meetingDtoPage);
@@ -61,15 +61,15 @@ public class MeetingController {
         MeetingDto meetingDto = meetingService.meetingFindByUUIDPay(meetingId);
 
         boolean sym = false;
-        if(customUser !=null){
+        if (customUser != null) {
             MeetingSym meetingSym = meetingSymRepository.findByUserIdAndMeetingId(customUser.getId(), meetingDto.getId());
-            if(meetingSym == null || !meetingSym.isSym()){
+            if (meetingSym == null || !meetingSym.isSym()) {
                 sym = false;
-            }else{
+            } else {
                 sym = true;
             }
         }
-      
+
         if (meetingDto.getPrice() > 0) {
             model.addAttribute("meetingDto", meetingDto);
             model.addAttribute("customUser", customUser);
@@ -125,13 +125,13 @@ public class MeetingController {
         System.out.println(meetingId);
         MeetingSym meetingSym = meetingSymRepository.findByUserIdAndMeetingId(userId, meetingId);
 
-        if(meetingSym == null){
+        if (meetingSym == null) {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
             Meeting meeting = meetingRepository.findById(meetingId)
                     .orElseThrow(() -> new ResourceNotFoundException("Meeting not found with id " + meetingId));
             meetingSym = new MeetingSym(meeting, user, true);
-        }else{
+        } else {
             meetingSym.setSym(!meetingSym.isSym());
         }
 

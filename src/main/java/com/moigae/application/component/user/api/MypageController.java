@@ -54,8 +54,18 @@ public class MypageController {
         String id = customUser.getId();
         List<MeetingPayment> meetingPayments = meetingPaymentService.fetchMeetingPaymentsByUserId(id);
         MeetingPayment meetingPayment = meetingPaymentService.fetchMeetingPaymentByUserId(id);
-        Meeting meeting = meetingPayment.getMeeting();
-        Long paidAmount = meetingPayment.getPaidAmount();
+
+        if (meetingPayment == null) {
+            System.out.println("imnull");
+            model.addAttribute("isMeetingPaymentNull", true);
+        } else {
+            Meeting meeting = meetingPayment.getMeeting();
+            Long paidAmount = meetingPayment.getPaidAmount();
+
+            model.addAttribute("meetingPayment", meetingPayment);
+            model.addAttribute("meeting", meeting);
+            model.addAttribute("paidAmount", paidAmount);
+        }
 
         model.addAttribute("customUser", customUser);
         model.addAttribute("meetingPayments", meetingPayments);
@@ -66,21 +76,8 @@ public class MypageController {
     }
 
 
-//    @GetMapping("/mypageMoim")
-//    public String myPageMoim(Model model, @AuthenticationPrincipal CustomUser customUser) {
-////        List<MeetingUser> meetingUsers = meetingUserRepository.findByHostId(customUser.getId());
-//        List<MeetingPayment> meetingPayments = meetingPaymentService.fetchMeetingPaymentsByUserId(id);
-//        String id = customUser.getId();
-//        MeetingPayment meetingPayment = meetingPaymentService.fetchMeetingPaymentByUserId(id);
-//        Meeting meeting = meetingPayment.getMeeting();
-//        Long paidAmount = meetingPayment.getPaidAmount();
-//
-//        model.addAttribute("customUser", customUser);
-//        model.addAttribute("meetingPayment", meetingPayment);
-//        model.addAttribute("meeting", meeting);
-//        model.addAttribute("paidAmount", paidAmount);
-//        return "users/mypageMoim";
-//    }
+
+
 
     @GetMapping("/mypageCart")
     public String myPageCart(Model model, @AuthenticationPrincipal CustomUser customUser) {
