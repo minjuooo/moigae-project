@@ -16,7 +16,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.transaction.Transactional;
@@ -46,20 +45,50 @@ public class MeetingUpdateController {
         model.addAttribute("meetingUpdateRequest", updateRequest);
         model.addAttribute("customUser", customUser);
 //        return "host/meeting_edit";
-//        return "redirect:/host-center/meetings/{meetingId}/edit";
-        return "host/hostCenterMain";
+        return "redirect:/host-center/meetings/{meetingId}/edit";
+//        return "/meetings/{meetingId}/edit";
     }
+
+//    @PostMapping("/meetings/{meetingId}/edit")
+//    @Transactional
+//    public String updateMeeting(@PathVariable("meetingId") String meetingId,
+//                                @ModelAttribute("meetingUpdateRequest") MeetingUpdateRequest updateRequest,
+//                                @AuthenticationPrincipal CustomUser customUser) {
+//        MeetingDto meetingDto = meetingService.meetingFindByUUID(meetingId);
+//        hostService.updateMeeting(updateRequest);
+//        return "redirect:/host-center/meetings/{meetingId}/edit";
+////        return "host/hostCenterMain";
+//    }
+
+//    @PutMapping("/meetings/{meetingId}/edit")
+//    @Transactional
+//    public String updateMeeting(@PathVariable("meetingId") String meetingId,
+//                                @ModelAttribute("meetingUpdateRequest") MeetingUpdateRequest updateRequest,
+//                                @RequestParam("path") MultipartFile path,
+//                                @AuthenticationPrincipal CustomUser customUser) {
+//        MeetingDto meetingDto = meetingService.meetingFindByUUID(meetingId);
+//        Meeting meeting = Converter.toMeeting(meetingDto);
+//
+//        // 업데이트할 데이터를 설정
+//        meeting.setMeetingTitle(updateRequest.getMeetingTitle());
+//        meeting.setMeetingType(updateRequest.getMeetingType());
+//        meeting.setMeetingCategory(updateRequest.getMeetingCategory());
+//
+//        meetingService.updateMeeting(meeting);
+//
+//        return "host/hostCenterMain";
+//    }
+
 
     @PutMapping("/meetings/{meetingId}/edit")
     @Transactional
     public String updateMeeting(@PathVariable("meetingId") String meetingId,
                                 @ModelAttribute("meetingUpdateRequest") MeetingUpdateRequest updateRequest,
-                                @RequestParam("path") MultipartFile path,
                                 @AuthenticationPrincipal CustomUser customUser) {
         MeetingDto meetingDto = meetingService.meetingFindByUUID(meetingId);
         hostService.updateMeeting(updateRequest);
-//        return "redirect:/host-center/meetings/{meetingId}/edit";
-        return "host/hostCenterMain";
+        return "redirect:/host-center/meetings/{meetingId}/edit";
+//        return "host/hostCenterMain";
     }
 
     //모임취소

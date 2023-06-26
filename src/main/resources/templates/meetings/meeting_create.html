@@ -95,191 +95,208 @@
     <div class="container-md" style="margin-top: 70px; padding: 0">
         <h2 class="text-center" style="margin-top: 0; margin-bottom: 30px">모임등록</h2>
         <div>
-            <hr style="border-width: 2px; border-color: #969696;"><br>
+            <hr style="border-width: 2px; border-color: #969696;">
+            <br>
             <div class="col-md-12" style="display: flex; align-items: center;">
                 <div class="container col-md-10">
 
-                <form th:action="@{/host-center/meetings/create}" method="post" th:object="${meetingCreateRequest}"
-                      enctype="multipart/form-data">
-                    <div  style="margin-bottom: 20px; margin-top: 10px">
-                        <h5>모임 <span style="color: #005abf;font-weight: bold">이름</span>을 설정하세요</h5>
-                        <p style="color: #797979">한눈에 들어오는 이름으로 설정하면 좋아요!</p>
-                        <label for="meetingTitle">
-                            <input class="form-control" id="meetingTitle" name="meetingTitle" th:field="*{meetingTitle}"
-                                   type="text"
-                                   placeholder="최대 35자(공백포함)" maxlength="35">
-                        </label>
-                    </div>
-                    <div style="margin-bottom: 20px; margin-top: 10px">
-                        <h5>모임 <span style="color: #005abf;font-weight: bold">유형</span>을 설정하세요</h5>
-                        <p style="color: #797979">오프라인의 경우 아래의 주소를 지정해주세요</p>
-                        <label for="meetingType">
-                            <select class="form-select" id="meetingType" name="meetingType" th:field="*{meetingType}">
-                                <option selected value="">오프라인/온라인</option>
-                                <option th:each="type : ${T(com.moigae.application.component.meeting.domain.enumeraion.MeetingType).values()}"
-                                        th:value="${type}" th:text="${type.value}"></option>
-                            </select>
-                        </label>
-                    </div>
-                    <div style="margin-bottom: 20px; margin-top: 10px">
-                        <h5><span style="color: #005abf;font-weight: bold">카테고리</span>를 지정해주세요</h5>
-                        <label for="meetingCategory">
-                            <select class="form-select" id="meetingCategory" name="meetingCategory"
-                                    th:field="*{meetingCategory}">
-                                <option selected value="">하나를 선택해주세요</option>
-                                <option th:each="type : ${T(com.moigae.application.component.meeting.domain.enumeraion.MeetingCategory).values()}"
-                                        th:value="${type}" th:text="${type.value}"></option>
-                            </select>
-                        </label>
-                    </div>
-                    <div style="margin-bottom: 20px; margin-top: 10px">
-                        <h5>모임에서 소개할 나의 <span style="color: #005abf;font-weight: bold">닉네임</span>을 설정해주세요.</h5>
-                        <label for="nickName">
-                            <input class="form-control" id="nickName" name="nickName" th:field="*{nickName}" type="text"
-                                   placeholder="최대 10자(공백 포함)" maxlength="10">
-                        </label>
-                    </div>
-                    <div style="margin-bottom: 20px; margin-top: 10px">
-                        <h5>모임 <span style="color: #005abf;font-weight: bold">대표사진</span>을 첨부하세요</h5>
-                        <p style="color: #797979">사진은 1장만 선택 가능하며, 모임 목록에 노출됩니다.</p>
-                        <input id="path" name="path" th:field="*{path}" type="file">
-                    </div>
-                    <div style="margin-bottom: 20px; margin-top: 10px">
-                        <h5>모임에 대한<span style="color: #005abf;font-weight: bold">소개글</span>을 작성하세요</h5>
-                        <p style="color: #797979">특정한 조건이나 제한이 있을 경우 꼭 기입해주세요.</p>
-                        <label for="meetingDescription">
-                            <textarea class="form-control" id="meetingDescription" name="meetingDescription"
-                                      th:field="*{meetingDescription}" placeholder="최대 100자(공백 포함)" rows="6" cols="50"></textarea>
-                        </label>
-                    </div>
-                    <div style="margin-bottom: 20px; margin-top: 10px">
-                        <h5><span style="color: #005abf;font-weight: bold">모집기간</span>을 설정하세요</h5>
-                        <p style="flex: 0 0 100%; color: #797979; margin-bottom: 5px;">시작 날짜/시간</p>
-                        <label for="recruitmentStartDateTime">
-                            <input class="form-control" id="recruitmentStartDateTime" name="recruitmentStartDateTime"
-                                   th:field="*{recruitmentStartDateTime}" type="datetime-local"
-                                   style="flex: 0 0 100%; margin-bottom: 10px;">
-                        </label>
-                        <p style="flex: 0 0 100%; color: #797979; margin-bottom: 5px;">종료 날짜/시간</p>
-                        <label for="recruitmentEndDateTime">
-                            <input class="form-control" id="recruitmentEndDateTime" name="recruitmentEndDateTime"
-                                   th:field="*{recruitmentEndDateTime}" type="datetime-local"
-                                   style="flex: 0 0 100%; margin-bottom: 10px;">
-                        </label>
-                    </div>
-                    <div style="margin-bottom: 20px; margin-top: 10px">
-                        <h5><span style="color: #005abf;font-weight: bold">참가인원</span>을 설정하세요</h5>
-                        <p style="flex: 0 0 100%; color: #797979; margin-bottom: 5px;">본인을 제외한 1명이상을 모집해야합니다</p>
-                        <label for="maxParticipants">
-                            <input class="form-control" id="maxParticipants" name="maxParticipants"
-                                   th:field="*{maxParticipants}" type="number">
-                        </label>
-                    </div>
-                    <div style="margin-bottom: 20px; margin-top: 10px">
-                        <h5><span style="color: #005abf;font-weight: bold">모임날짜</span>를 설정하세요</h5>
-                        <p style="flex: 0 0 100%; color: #797979; margin-bottom: 5px;">시작 날짜/시간</p>
-                        <label for="meetingStartDateTime">
-                            <input class="form-control" id="meetingStartDateTime" name="meetingStartDateTime"
-                                   th:field="*{meetingStartDateTime}"
-                                   type="datetime-local" style="flex: 0 0 100%; margin-bottom: 10px;">
-                        </label>
-                        <p style="flex: 0 0 100%; color: #797979; margin-bottom: 5px;">종료 날짜/시간</p>
-                        <label for="meetingEndDateTime">
-                            <input class="form-control" id="meetingEndDateTime" name="meetingEndDateTime"
-                                   th:field="*{meetingEndDateTime}"
-                                   type="datetime-local" style="flex: 0 0 100%; margin-bottom: 10px;">
-                        </label>
-                    </div>
-                    <div style="margin-bottom: 20px; margin-top: 10px">
-                        <h5>오프라인<span style="color: #005abf;font-weight: bold">모임주소</span>를 설정하세요</h5>
-                        <p style="flex: 0 0 100%; color: #797979; margin-bottom: 5px;">참가자들을 위해 최대한 자세히 기입해주세요!</p>
-                        <div class="info-address">
-                            <label for="address">
-                                <input class="form-control" id="address" readonly th:field="*{address}" type="text"
-                                       placeholder="도로명 주소로 입력하세요.">
+                    <form th:action="@{/host-center/meetings/create}" method="post" th:object="${meetingCreateRequest}"
+                          enctype="multipart/form-data">
+                        <div style="margin-bottom: 20px; margin-top: 10px">
+                            <h5>모임 <span style="color: #005abf;font-weight: bold">이름</span>을 설정하세요</h5>
+                            <p style="color: #797979">한눈에 들어오는 이름으로 설정하면 좋아요!</p>
+                            <label for="meetingTitle">
+                                <input class="form-control" id="meetingTitle" name="meetingTitle"
+                                       th:field="*{meetingTitle}"
+                                       type="text"
+                                       placeholder="최대 35자(공백포함)" maxlength="35">
                             </label>
-                            <input onclick="findAddr()" type="button" value="주소 검색">
-                            <div class="field-error" th:errors="*{address}"></div>
                         </div>
-                        <label for="detailAddress">상세 주소</label>
-                        <input id="detailAddress" name="detailAddress" th:field="*{detailAddress}" type="text"
-                               class="form-control" placeholder="건물명/동/호수를 정확히 입력하세요.">
-                        <label for="locationDescription">위치 설명</label>
-                        <input class="form-control" id="locationDescription" name="locationDescription"
-                               th:field="*{locationDescription}" type="text" placeholder="예:카페앞 주차장 입구">
-                    </div>
-                    <div style="margin-bottom: 20px; margin-top: 10px">
-                        <h5>모임의 <span style="color: #005abf;font-weight: bold">참가비용</span>을 설정하세요</h5>
-                        <label for="meetingPrice">
-                            <select class="form-select" id="meetingPrice" name="meetingPrice" th:field="*{meetingPrice}"
-                                    onchange="displayPriceInput(this)">
-                                <option th:each="type : ${T(com.moigae.application.component.meeting.domain.enumeraion.MeetingPrice).values()}"
-                                        th:value="${type}" th:text="${type.value}"></option>
-                            </select>
-                            <input class="form-control" id="price" name="price" type="number" style="display: none;"
-                                   placeholder="가격을 입력하세요">
-                        </label>
-                    </div>
-                    <div style="margin-bottom: 20px; margin-top: 10px">
-                        <h5><span style="color: #005abf;font-weight: bold">반려견동반유무</span>를 설정하세요</h5>
-                        <label for="petAllowedStatus">
-                            <select class="form-select" id="petAllowedStatus" name="petAllowedStatus"
-                                    th:field="*{petAllowedStatus}">
-                                <option th:each="type : ${T(com.moigae.application.component.meeting.domain.enumeraion.PetAllowedStatus).values()}"
-                                        th:value="${type}" th:text="${type.value}"></option>
-                            </select>
-                        </label>
-                    </div>
-                    <div style="margin-bottom: 20px; margin-top: 10px">
-                        <h5><span style="color: #005abf;font-weight: bold">연락수단</span>을 선택하여 입력해주세요.</h5>
-                        <p style="flex: 0 0 100%; color: #797979; margin-bottom: 5px;">원활한 모임을 위해 여러개 등록해놓는걸 추천해요!</p>
-                        <h6>전화번호</h6>
-                        <label for="phone">
-                            <input class="form-control" id="phone" name="phone" th:field="*{phone}" type="text"
-                                   placeholder="010-xxxx-xxxx 형식으로 입력해주세요">
-                        </label>
-                        <h6>이메일</h6>
-                        <label for="email">
-                            <input class="form-control" id="email" name="email" th:field="*{email}" type="text"
-                                   placeholder="이메일 형식으로 입력해 주세요."><br/>
-                        </label>
-                        <h6>카카오톡</h6>
-                        <label for="kakaoId">
-                            <input class="form-control" id="kakaoId" name="kakaoId" th:field="*{kakaoId}" type="text"
-                                   placeholder="아이디를 입력해 주세요.">
-                        </label>
-                        <h6>url 링크</h6>
-                        <label for="link">
-                            <input class="form-control" id="link" name="link" th:field="*{link}" type="text"
-                                   placeholder="url 링크를 붙여 넣어주세요.">
-                        </label>
-                        <h6>기타</h6>
-                        <label for="otherLink">
-                            <input class="form-control" id="otherLink" name="otherLink" th:field="*{otherLink}"
-                                   type="text"
-                                   placeholder="기타 연락수단을 기입해주세요">
-                        </label>
-                    </div>
-                    <div style="margin-bottom: 20px; margin-top: 10px">
-                        <h5>모임의 <span style="color: #005abf;font-weight: bold">추가정보</span>를 자유롭게 작성하세요</h5>
-                        <label for="meetingFreeFormDetails">
+                        <div style="margin-bottom: 20px; margin-top: 10px">
+                            <h5>모임 <span style="color: #005abf;font-weight: bold">유형</span>을 설정하세요</h5>
+                            <p style="color: #797979">오프라인의 경우 아래의 주소를 지정해주세요</p>
+                            <label for="meetingType">
+                                <select class="form-select" id="meetingType" name="meetingType"
+                                        th:field="*{meetingType}">
+                                    <option selected value="">오프라인/온라인</option>
+                                    <option th:each="type : ${T(com.moigae.application.component.meeting.domain.enumeraion.MeetingType).values()}"
+                                            th:value="${type}" th:text="${type.value}"></option>
+                                </select>
+                            </label>
+                        </div>
+                        <div style="margin-bottom: 20px; margin-top: 10px">
+                            <h5><span style="color: #005abf;font-weight: bold">카테고리</span>를 지정해주세요</h5>
+                            <label for="meetingCategory">
+                                <select class="form-select" id="meetingCategory" name="meetingCategory"
+                                        th:field="*{meetingCategory}">
+                                    <option selected value="">하나를 선택해주세요</option>
+                                    <option th:each="type : ${T(com.moigae.application.component.meeting.domain.enumeraion.MeetingCategory).values()}"
+                                            th:value="${type}" th:text="${type.value}"></option>
+                                </select>
+                            </label>
+                        </div>
+                        <div style="margin-bottom: 20px; margin-top: 10px">
+                            <h5>모임에서 소개할 나의 <span style="color: #005abf;font-weight: bold">닉네임</span>을 설정해주세요.</h5>
+                            <label for="nickName">
+                                <input class="form-control" id="nickName" name="nickName" th:field="*{nickName}"
+                                       type="text"
+                                       placeholder="최대 10자(공백 포함)" maxlength="10">
+                            </label>
+                        </div>
+                        <div style="margin-bottom: 20px; margin-top: 10px">
+                            <h5>모임 <span style="color: #005abf;font-weight: bold">대표사진</span>을 첨부하세요</h5>
+                            <p style="color: #797979">사진은 1장만 선택 가능하며, 모임 목록에 노출됩니다.</p>
+                            <input id="path" name="path" th:field="*{path}" type="file">
+                        </div>
+                        <div style="margin-bottom: 20px; margin-top: 10px">
+                            <h5>모임에 대한<span style="color: #005abf;font-weight: bold">소개글</span>을 작성하세요</h5>
+                            <p style="color: #797979">특정한 조건이나 제한이 있을 경우 꼭 기입해주세요.</p>
+                            <label for="meetingDescription">
+                            <textarea class="form-control" id="meetingDescription" name="meetingDescription"
+                                      th:field="*{meetingDescription}" placeholder="최대 100자(공백 포함)" rows="6"
+                                      cols="50"></textarea>
+                            </label>
+                        </div>
+                        <div style="margin-bottom: 20px; margin-top: 10px">
+                            <h5><span style="color: #005abf;font-weight: bold">모집기간</span>을 설정하세요</h5>
+                            <p style="flex: 0 0 100%; color: #797979; margin-bottom: 5px;">시작 날짜/시간</p>
+                            <label for="recruitmentStartDateTime">
+                                <input class="form-control" id="recruitmentStartDateTime"
+                                       name="recruitmentStartDateTime"
+                                       th:field="*{recruitmentStartDateTime}" type="datetime-local"
+                                       style="flex: 0 0 100%; margin-bottom: 10px;">
+                            </label>
+                            <p style="flex: 0 0 100%; color: #797979; margin-bottom: 5px;">종료 날짜/시간</p>
+                            <label for="recruitmentEndDateTime">
+                                <input class="form-control" id="recruitmentEndDateTime" name="recruitmentEndDateTime"
+                                       th:field="*{recruitmentEndDateTime}" type="datetime-local"
+                                       style="flex: 0 0 100%; margin-bottom: 10px;">
+                            </label>
+                        </div>
+                        <div style="margin-bottom: 20px; margin-top: 10px">
+                            <h5><span style="color: #005abf;font-weight: bold">참가인원</span>을 설정하세요</h5>
+                            <p style="flex: 0 0 100%; color: #797979; margin-bottom: 5px;">본인을 제외한 1명이상을 모집해야합니다</p>
+                            <label for="maxParticipants">
+                                <input class="form-control" id="maxParticipants" name="maxParticipants"
+                                       th:field="*{maxParticipants}" type="number">
+                            </label>
+                        </div>
+                        <div style="margin-bottom: 20px; margin-top: 10px">
+                            <h5><span style="color: #005abf;font-weight: bold">모임날짜</span>를 설정하세요</h5>
+                            <p style="flex: 0 0 100%; color: #797979; margin-bottom: 5px;">시작 날짜/시간</p>
+                            <label for="meetingStartDateTime">
+                                <input class="form-control" id="meetingStartDateTime" name="meetingStartDateTime"
+                                       th:field="*{meetingStartDateTime}"
+                                       type="datetime-local" style="flex: 0 0 100%; margin-bottom: 10px;">
+                            </label>
+                            <p style="flex: 0 0 100%; color: #797979; margin-bottom: 5px;">종료 날짜/시간</p>
+                            <label for="meetingEndDateTime">
+                                <input class="form-control" id="meetingEndDateTime" name="meetingEndDateTime"
+                                       th:field="*{meetingEndDateTime}"
+                                       type="datetime-local" style="flex: 0 0 100%; margin-bottom: 10px;">
+                            </label>
+                        </div>
+                        <div style="margin-bottom: 20px; margin-top: 10px">
+                            <h5>오프라인<span style="color: #005abf;font-weight: bold">모임주소</span>를 설정하세요</h5>
+                            <p style="flex: 0 0 100%; color: #797979; margin-bottom: 5px;">참가자들을 위해 최대한 자세히 기입해주세요!</p>
+                            <div class="info-address">
+                                <label for="address">
+                                    <input class="form-control" id="address" readonly th:field="*{address}" type="text"
+                                           placeholder="도로명 주소로 입력하세요.">
+                                </label>
+                                <input onclick="findAddr()" type="button" value="주소 검색">
+                                <div class="field-error" th:errors="*{address}"></div>
+                            </div>
+                            <label for="detailAddress">상세 주소</label>
+                            <input id="detailAddress" name="detailAddress" th:field="*{detailAddress}" type="text"
+                                   class="form-control" placeholder="건물명/동/호수를 정확히 입력하세요.">
+                            <label for="locationDescription">위치 설명</label>
+                            <input class="form-control" id="locationDescription" name="locationDescription"
+                                   th:field="*{locationDescription}" type="text" placeholder="예:카페앞 주차장 입구">
+                        </div>
+                        <div style="margin-bottom: 20px; margin-top: 10px">
+                            <h5>모임의 <span style="color: #005abf;font-weight: bold">참가비용</span>을 설정하세요</h5>
+                            <label for="meetingPrice">
+                                <select class="form-select" id="meetingPrice" name="meetingPrice"
+                                        th:field="*{meetingPrice}"
+                                        onchange="displayPriceInput(this)">
+                                    <option th:each="type : ${T(com.moigae.application.component.meeting.domain.enumeraion.MeetingPrice).values()}"
+                                            th:value="${type}" th:text="${type.value}"></option>
+                                </select>
+                                <input class="form-control" id="price" name="price" type="number" style="display: none;"
+                                       placeholder="가격을 입력하세요">
+                            </label>
+                        </div>
+                        <div style="margin-bottom: 20px; margin-top: 10px">
+                            <h5><span style="color: #005abf;font-weight: bold">반려견동반유무</span>를 설정하세요</h5>
+                            <label for="petAllowedStatus">
+                                <select class="form-select" id="petAllowedStatus" name="petAllowedStatus"
+                                        th:field="*{petAllowedStatus}">
+                                    <option th:each="type : ${T(com.moigae.application.component.meeting.domain.enumeraion.PetAllowedStatus).values()}"
+                                            th:value="${type}" th:text="${type.value}"></option>
+                                </select>
+                            </label>
+                        </div>
+                        <div style="margin-bottom: 20px; margin-top: 10px">
+                            <h5><span style="color: #005abf;font-weight: bold">연락수단</span>을 선택하여 입력해주세요.</h5>
+                            <p style="flex: 0 0 100%; color: #797979; margin-bottom: 5px;">원활한 모임을 위해 여러개 등록해놓는걸
+                                추천해요!</p>
+                            <h6>전화번호</h6>
+                            <label for="phone">
+                                <input class="form-control" id="phone" name="phone" th:field="*{phone}" type="text"
+                                       placeholder="010-xxxx-xxxx 형식으로 입력해주세요">
+                            </label>
+                            <h6>이메일</h6>
+                            <label for="email">
+                                <input class="form-control" id="email" name="email" th:field="*{email}" type="text"
+                                       placeholder="이메일 형식으로 입력해 주세요."><br/>
+                            </label>
+                            <h6>카카오톡</h6>
+                            <label for="kakaoId">
+                                <input class="form-control" id="kakaoId" name="kakaoId" th:field="*{kakaoId}"
+                                       type="text"
+                                       placeholder="아이디를 입력해 주세요.">
+                            </label>
+                            <h6>url 링크</h6>
+                            <label for="link">
+                                <input class="form-control" id="link" name="link" th:field="*{link}" type="text"
+                                       placeholder="url 링크를 붙여 넣어주세요.">
+                            </label>
+                            <h6>기타</h6>
+                            <label for="otherLink">
+                                <input class="form-control" id="otherLink" name="otherLink" th:field="*{otherLink}"
+                                       type="text"
+                                       placeholder="기타 연락수단을 기입해주세요">
+                            </label>
+                        </div>
+                        <div style="margin-bottom: 20px; margin-top: 10px">
+                            <h5>모임의 <span style="color: #005abf;font-weight: bold">추가정보</span>를 자유롭게 작성하세요</h5>
+                            <label for="meetingFreeFormDetails">
                             <textarea class="form-control" id="meetingFreeFormDetails" name="meetingFreeFormDetails"
                                       th:field="*{meetingFreeFormDetails}"
                                       placeholder="모임과 관련된 자세한 정보를 자유롭게 작성할 수 있어요"
                                       rows="6" cols="50"></textarea>
-                        </label>
-                    </div>
+                            </label>
+                        </div>
 
-                    <div class="d-flex justify-content-center" style="margin-bottom: 50px;margin-top: 50px">
-                        <button class="btn btn-secondary px-5" style="background-color: #005abf; color: #FFFFFF">모임등록하기</button>
-                        <input style="margin-left: 20px" class="btn btn-danger" onclick="confirmCancel()" type="button" value="취소">
-                    </div>
-                </form>
+                        <div class="d-flex justify-content-center" style="margin-bottom: 50px;margin-top: 50px">
+                            <button class="btn btn-secondary px-5" style="background-color: #005abf; color: #FFFFFF">
+                                모임등록하기
+                            </button>
+                            <input style="margin-left: 20px" class="btn btn-danger" onclick="confirmCancel()"
+                                   type="button" value="취소">
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function showModal() {
+        $('#myModal').modal('show');
+    }
+</script>
 <script>
     //참가 비용 이벤트
     window.onload = function () {

@@ -41,4 +41,7 @@ public class MeetingService {
         return meetingDto;
     }
 
+    public void updateMeeting(Meeting meeting) {
+
+    }
 }
