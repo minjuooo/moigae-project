@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -50,16 +52,35 @@ public class MypageController {
     @GetMapping("/mypageMoim")
     public String myPageMoim(Model model, @AuthenticationPrincipal CustomUser customUser) {
         String id = customUser.getId();
+        List<MeetingPayment> meetingPayments = meetingPaymentService.fetchMeetingPaymentsByUserId(id);
         MeetingPayment meetingPayment = meetingPaymentService.fetchMeetingPaymentByUserId(id);
         Meeting meeting = meetingPayment.getMeeting();
         Long paidAmount = meetingPayment.getPaidAmount();
 
         model.addAttribute("customUser", customUser);
+        model.addAttribute("meetingPayments", meetingPayments);
         model.addAttribute("meetingPayment", meetingPayment);
         model.addAttribute("meeting", meeting);
         model.addAttribute("paidAmount", paidAmount);
         return "users/mypageMoim";
     }
+
+
+//    @GetMapping("/mypageMoim")
+//    public String myPageMoim(Model model, @AuthenticationPrincipal CustomUser customUser) {
+////        List<MeetingUser> meetingUsers = meetingUserRepository.findByHostId(customUser.getId());
+//        List<MeetingPayment> meetingPayments = meetingPaymentService.fetchMeetingPaymentsByUserId(id);
+//        String id = customUser.getId();
+//        MeetingPayment meetingPayment = meetingPaymentService.fetchMeetingPaymentByUserId(id);
+//        Meeting meeting = meetingPayment.getMeeting();
+//        Long paidAmount = meetingPayment.getPaidAmount();
+//
+//        model.addAttribute("customUser", customUser);
+//        model.addAttribute("meetingPayment", meetingPayment);
+//        model.addAttribute("meeting", meeting);
+//        model.addAttribute("paidAmount", paidAmount);
+//        return "users/mypageMoim";
+//    }
 
     @GetMapping("/mypageCart")
     public String myPageCart(Model model, @AuthenticationPrincipal CustomUser customUser) {

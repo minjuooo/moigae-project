@@ -106,14 +106,11 @@
                 </nav>
             </aside>
             <div class="col-md-10 col-sm-12">
-                <table>
-                    <tr>
-                        <td>모임제목: <span th:text="${meeting.meetingTitle}"></span></td>
-                    </tr>
-                    <tr>
-                        <td>비용: <span th:text="${paidAmount}"></span></td>
-                    </tr>
-                </table>
+                <!-- MeetingPayment 리스트 출력 -->
+                <div th:each="payment : ${meetingPayments}">
+                    <p>모임명: <span th:text="${payment.meeting}"></span></p>
+                    <p>결제 금액: <span th:text="${payment.paidAmount}"></span></p>
+                </div>
             </div>
         </div>
     </div>

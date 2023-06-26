@@ -24,5 +24,9 @@ public class MeetingPaymentCustomService {
                 .orElseThrow(() -> new RuntimeException("Matching user does not exist in meeting payment info, user id : " + id));
     }
 
+    public List<MeetingPayment> fetchMeetingPaymentsByUserId(String userId) {
+        return meetingPaymentRepository.findByUserId(userId);
+    }
+
 }
 
