@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -50,6 +52,7 @@ public class MypageController {
     @GetMapping("/mypageMoim")
     public String myPageMoim(Model model, @AuthenticationPrincipal CustomUser customUser) {
         String id = customUser.getId();
+        List<MeetingPayment> meetingPayments = meetingPaymentService.fetchMeetingPaymentsByUserId(id);
         MeetingPayment meetingPayment = meetingPaymentService.fetchMeetingPaymentByUserId(id);
 
         if (meetingPayment == null) {
@@ -65,8 +68,15 @@ public class MypageController {
         }
 
         model.addAttribute("customUser", customUser);
+        model.addAttribute("meetingPayments", meetingPayments);
+        model.addAttribute("meetingPayment", meetingPayment);
+        model.addAttribute("meeting", meeting);
+        model.addAttribute("paidAmount", paidAmount);
         return "users/mypageMoim";
     }
+
+
+
 
 
     @GetMapping("/mypageCart")

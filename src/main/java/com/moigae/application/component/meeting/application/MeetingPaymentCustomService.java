@@ -24,6 +24,9 @@ public class MeetingPaymentCustomService {
                 .orElse(null);
     }
 
+    public List<MeetingPayment> fetchMeetingPaymentsByUserId(String userId) {
+        return meetingPaymentRepository.findByUserId(userId);
+    }
 
 }
 
