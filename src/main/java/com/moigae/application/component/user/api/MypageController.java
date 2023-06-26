@@ -51,15 +51,23 @@ public class MypageController {
     public String myPageMoim(Model model, @AuthenticationPrincipal CustomUser customUser) {
         String id = customUser.getId();
         MeetingPayment meetingPayment = meetingPaymentService.fetchMeetingPaymentByUserId(id);
-        Meeting meeting = meetingPayment.getMeeting();
-        Long paidAmount = meetingPayment.getPaidAmount();
+
+        if (meetingPayment == null) {
+            System.out.println("imnull");
+            model.addAttribute("isMeetingPaymentNull", true);
+        } else {
+            Meeting meeting = meetingPayment.getMeeting();
+            Long paidAmount = meetingPayment.getPaidAmount();
+
+            model.addAttribute("meetingPayment", meetingPayment);
+            model.addAttribute("meeting", meeting);
+            model.addAttribute("paidAmount", paidAmount);
+        }
 
         model.addAttribute("customUser", customUser);
-        model.addAttribute("meetingPayment", meetingPayment);
-        model.addAttribute("meeting", meeting);
-        model.addAttribute("paidAmount", paidAmount);
         return "users/mypageMoim";
     }
+
 
     @GetMapping("/mypageCart")
     public String myPageCart(Model model, @AuthenticationPrincipal CustomUser customUser) {

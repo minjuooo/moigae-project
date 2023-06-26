@@ -107,10 +107,10 @@
             </aside>
             <div class="col-md-10 col-sm-12">
                 <table>
-                    <tr>
+                    <tr th:if="${meeting != null}">
                         <td>모임제목: <span th:text="${meeting.meetingTitle}"></span></td>
                     </tr>
-                    <tr>
+                    <tr th:if="${paidAmount != null}">
                         <td>비용: <span th:text="${paidAmount}"></span></td>
                     </tr>
                 </table>

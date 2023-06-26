@@ -21,8 +21,9 @@ public class MeetingPaymentCustomService {
                 .filter(x -> Objects.nonNull(x.getUser()))
                 .filter(x -> id.equals(x.getUser().getId()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Matching user does not exist in meeting payment info, user id : " + id));
+                .orElse(null);
     }
+
 
 }
 

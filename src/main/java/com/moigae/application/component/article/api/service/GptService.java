@@ -34,7 +34,9 @@ public class GptService {
 
         JSONObject messageUser = new JSONObject();
         messageUser.put("role", "user");
-        messageUser.put("content", "<"+subject+">라는 질문에 효과적으로 답변하기 위해 거쳐야 할 단계를 알려줘. 제시할 수 있는 단계는 5단계로 고정이야." +
+
+        messageUser.put("content", "<"+subject+">라는 질문에 효과적으로 답변하기 위해 거쳐야 할 단계를 알려줘. 제시할 수 있는 단계는 3단계로 고정이야." +
+
                 "단계만 간략하게 알려주고 세부 설명은 안해도 돼");
 
         JSONArray messages = new JSONArray();
